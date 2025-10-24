@@ -155,9 +155,9 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: #5ba3ff;
-            box-shadow: 0 0 15px rgba(91, 163, 255, 0.7);
-            border: 2px solid white;
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
 
         .service-ball.inactive {
@@ -373,6 +373,24 @@
             }
         }
 
+        // Actualizar servicio automáticamente según reglas de tenis de mesa
+        function updateService() {
+            const totalPoints = gameState.player1.points + gameState.player2.points;
+            const p1 = gameState.player1.points;
+            const p2 = gameState.player2.points;
+
+            // En deuce (10-10 o más), servicio cambia cada punto
+            if (p1 >= 10 && p2 >= 10) {
+                gameState.player1.service = (totalPoints % 2) === 0;
+                gameState.player2.service = !gameState.player1.service;
+            } else {
+                // Servicio normal: cada 2 puntos
+                const serviceBlock = Math.floor(totalPoints / 2) % 2;
+                gameState.player1.service = serviceBlock === 0;
+                gameState.player2.service = serviceBlock === 1;
+            }
+        }
+
         // Escuchar cambios desde otros tabs/ventanas
         window.addEventListener('storage', (e) => {
             if (e.key === 'gameState') {
@@ -390,6 +408,7 @@
                     gameState.player1.points = 0;
                     gameState.player2.points = 0;
                 }
+                updateService();
                 updateDisplay();
             } else if (e.key === '2') {
                 gameState.player2.points++;
@@ -398,6 +417,7 @@
                     gameState.player1.points = 0;
                     gameState.player2.points = 0;
                 }
+                updateService();
                 updateDisplay();
             } else if (e.key === 's' || e.key === 'S') {
                 gameState.player1.service = !gameState.player1.service;

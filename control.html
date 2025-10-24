@@ -658,9 +658,28 @@
             updateDisplay();
         }
 
+        // Actualizar servicio automáticamente según reglas de tenis de mesa
+        function updateService() {
+            const totalPoints = gameState.player1.points + gameState.player2.points;
+            const p1 = gameState.player1.points;
+            const p2 = gameState.player2.points;
+
+            // En deuce (10-10 o más), servicio cambia cada punto
+            if (p1 >= 10 && p2 >= 10) {
+                gameState.player1.service = (totalPoints % 2) === 0;
+                gameState.player2.service = !gameState.player1.service;
+            } else {
+                // Servicio normal: cada 2 puntos
+                const serviceBlock = Math.floor(totalPoints / 2) % 2;
+                gameState.player1.service = serviceBlock === 0;
+                gameState.player2.service = serviceBlock === 1;
+            }
+        }
+
         // Cambiar puntos
         function changePoints(player, delta) {
             gameState['player' + player].points = Math.max(0, gameState['player' + player].points + delta);
+            updateService();
             updateDisplay();
         }
 
