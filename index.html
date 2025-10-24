@@ -256,21 +256,22 @@
 
         // Aplicar color de fondo dinámicamente
         function applyBackground() {
-            const scoreboard = document.querySelector('.scoreboard');
+            const body = document.body;
             const bg = gameState.background;
 
             if (!bg) {
-                // Si no hay configuración de fondo, usar el gradiente por defecto
-                scoreboard.style.background = 'linear-gradient(135deg, #003d8c 0%, #0052CC 100%)';
+                // Si no hay configuración de fondo, usar transparente por defecto
+                body.style.background = 'transparent';
                 return;
             }
 
             if (bg.type === 'solid') {
-                scoreboard.style.background = bg.color;
+                body.style.background = bg.color;
             } else if (bg.type === 'gradient') {
-                scoreboard.style.background = 'linear-gradient(135deg, #003d8c 0%, #0052CC 100%)';
+                // Gradiente sutil para el fondo
+                body.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)';
             } else if (bg.type === 'transparent') {
-                scoreboard.style.background = 'transparent';
+                body.style.background = 'transparent';
             }
         }
 
