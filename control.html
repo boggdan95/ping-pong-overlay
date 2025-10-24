@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
     <style>
         * {
             margin: 0;
@@ -320,7 +321,7 @@
                     </div>
                     <div class="form-group">
                         <label>Bandera</label>
-                        <input type="text" id="player1Flag" value="🇪🇸" maxlength="2" onchange="updateData()">
+                        <input type="text" id="player1Flag" value="ESP" maxlength="3" onchange="updateData()" placeholder="GUA" style="text-transform: uppercase;">
                     </div>
                 </div>
 
@@ -356,7 +357,7 @@
                     </div>
                     <div class="form-group">
                         <label>Bandera</label>
-                        <input type="text" id="player2Flag" value="🇦🇷" maxlength="2" onchange="updateData()">
+                        <input type="text" id="player2Flag" value="ARG" maxlength="3" onchange="updateData()" placeholder="ESA" style="text-transform: uppercase;">
                     </div>
                 </div>
 
@@ -428,10 +429,28 @@
     </div>
 
     <script>
+        // Mapeo de códigos de 3 letras a códigos ISO 3166-1 alpha-2
+        const countryCodeMap = {
+            'GUA': 'gt', 'ESA': 'sv', 'NCA': 'ni', 'HON': 'hn', 'PAN': 'pa',
+            'CRC': 'cr', 'BLZ': 'bz', 'MEX': 'mx', 'USA': 'us', 'CAN': 'ca',
+            'ESP': 'es', 'ARG': 'ar', 'BRA': 'br', 'CHI': 'cl', 'COL': 'co',
+            'URU': 'uy', 'VEN': 've', 'PER': 'pe', 'ECU': 'ec', 'BOL': 'bo',
+            'PAR': 'py', 'CUB': 'cu', 'DOM': 'do', 'PRI': 'pr', 'JAM': 'jm',
+            'CHN': 'cn', 'JPN': 'jp', 'KOR': 'kr', 'IND': 'in', 'THA': 'th',
+            'FRA': 'fr', 'GER': 'de', 'ITA': 'it', 'GBR': 'gb', 'POR': 'pt',
+            'NED': 'nl', 'BEL': 'be', 'SWE': 'se', 'NOR': 'no', 'DEN': 'dk',
+            'AUS': 'au', 'NZL': 'nz', 'RSA': 'za', 'EGY': 'eg', 'NGA': 'ng'
+        };
+
+        // Función para convertir código de 3 letras a código ISO de 2 letras
+        function getISO2Code(code3) {
+            return countryCodeMap[code3.toUpperCase()] || code3.toLowerCase().slice(0, 2);
+        }
+
         // Estado global
         let gameState = {
-            player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: '🇪🇸' },
-            player2: { name: 'Susana Martínez', points: 5, sets: 0, service: false, flag: '🇦🇷' },
+            player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: 'ESP' },
+            player2: { name: 'Susana Martínez', points: 5, sets: 0, service: false, flag: 'ARG' },
             background: {
                 type: 'solid',     // 'solid', 'gradient', 'transparent'
                 color: '#00FF00'   // Verde por defecto para chroma key
@@ -498,8 +517,8 @@
         function updateData() {
             gameState.player1.name = document.getElementById('player1Name').value || 'Jugador 1';
             gameState.player2.name = document.getElementById('player2Name').value || 'Jugador 2';
-            gameState.player1.flag = document.getElementById('player1Flag').value || '🇪🇸';
-            gameState.player2.flag = document.getElementById('player2Flag').value || '🇦🇷';
+            gameState.player1.flag = (document.getElementById('player1Flag').value || 'ESP').toUpperCase().slice(0, 3);
+            gameState.player2.flag = (document.getElementById('player2Flag').value || 'ARG').toUpperCase().slice(0, 3);
             updateDisplay();
         }
 
@@ -555,8 +574,8 @@
         function resetAll() {
             if (confirm('¿Reiniciar todo?')) {
                 gameState = {
-                    player1: { name: 'Héctor López', points: 0, sets: 0, service: true, flag: '🇪🇸' },
-                    player2: { name: 'Susana Martínez', points: 0, sets: 0, service: false, flag: '🇦🇷' },
+                    player1: { name: 'Héctor López', points: 0, sets: 0, service: true, flag: 'ESP' },
+                    player2: { name: 'Susana Martínez', points: 0, sets: 0, service: false, flag: 'ARG' },
                     background: {
                         type: 'solid',
                         color: '#00FF00'  // Verde por defecto

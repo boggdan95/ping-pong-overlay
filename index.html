@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
     <style>
         * {
             margin: 0;
@@ -59,14 +60,14 @@
         .flag {
             width: 60px;
             height: 60px;
-            background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 40px;
             border: 2px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
         }
 
         .player-details {
@@ -170,7 +171,9 @@
         <!-- Jugador 1 -->
         <div class="player-row">
             <div class="player-info">
-                <div class="flag" id="flag1">🇪🇸</div>
+                <div class="flag">
+                    <span id="flag1" class="fi fi-es"></span>
+                </div>
                 <div class="player-details">
                     <div class="player-name" id="player1Name">Héctor López</div>
                 </div>
@@ -196,7 +199,9 @@
         <!-- Jugador 2 -->
         <div class="player-row">
             <div class="player-info">
-                <div class="flag" id="flag2">🇦🇷</div>
+                <div class="flag">
+                    <span id="flag2" class="fi fi-ar"></span>
+                </div>
                 <div class="player-details">
                     <div class="player-name" id="player2Name">Susana Martínez</div>
                 </div>
@@ -221,10 +226,28 @@
     </div>
 
     <script>
+        // Mapeo de códigos de 3 letras a códigos ISO 3166-1 alpha-2
+        const countryCodeMap = {
+            'GUA': 'gt', 'ESA': 'sv', 'NCA': 'ni', 'HON': 'hn', 'PAN': 'pa',
+            'CRC': 'cr', 'BLZ': 'bz', 'MEX': 'mx', 'USA': 'us', 'CAN': 'ca',
+            'ESP': 'es', 'ARG': 'ar', 'BRA': 'br', 'CHI': 'cl', 'COL': 'co',
+            'URU': 'uy', 'VEN': 've', 'PER': 'pe', 'ECU': 'ec', 'BOL': 'bo',
+            'PAR': 'py', 'CUB': 'cu', 'DOM': 'do', 'PRI': 'pr', 'JAM': 'jm',
+            'CHN': 'cn', 'JPN': 'jp', 'KOR': 'kr', 'IND': 'in', 'THA': 'th',
+            'FRA': 'fr', 'GER': 'de', 'ITA': 'it', 'GBR': 'gb', 'POR': 'pt',
+            'NED': 'nl', 'BEL': 'be', 'SWE': 'se', 'NOR': 'no', 'DEN': 'dk',
+            'AUS': 'au', 'NZL': 'nz', 'RSA': 'za', 'EGY': 'eg', 'NGA': 'ng'
+        };
+
+        // Función para convertir código de 3 letras a código ISO de 2 letras
+        function getISO2Code(code3) {
+            return countryCodeMap[code3.toUpperCase()] || code3.toLowerCase().slice(0, 2);
+        }
+
         // Estado global
         let gameState = {
-            player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: '🇪🇸' },
-            player2: { name: 'Susana Martínez', points: 5, sets: 0, service: false, flag: '🇦🇷' },
+            player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: 'ESP' },
+            player2: { name: 'Susana Martínez', points: 5, sets: 0, service: false, flag: 'ARG' },
             background: {
                 type: 'solid',     // 'solid', 'gradient', 'transparent'
                 color: '#00FF00'   // Verde por defecto para chroma key
@@ -239,8 +262,12 @@
             document.getElementById('points2').textContent = gameState.player2.points;
             document.getElementById('sets1').textContent = gameState.player1.sets;
             document.getElementById('sets2').textContent = gameState.player2.sets;
-            document.getElementById('flag1').textContent = gameState.player1.flag;
-            document.getElementById('flag2').textContent = gameState.player2.flag;
+
+            // Actualizar banderas usando códigos de país
+            const flag1Code = getISO2Code(gameState.player1.flag);
+            const flag2Code = getISO2Code(gameState.player2.flag);
+            document.getElementById('flag1').className = `fi fi-${flag1Code}`;
+            document.getElementById('flag2').className = `fi fi-${flag2Code}`;
 
             // Actualizar indicadores de servicio
             document.getElementById('serviceBall1').className = gameState.player1.service ? 'service-ball' : 'service-ball inactive';
