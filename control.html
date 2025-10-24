@@ -785,6 +785,14 @@
             }
         }
 
+        // Escuchar cambios desde otros tabs/ventanas (ej: atajos de teclado en overlay)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'gameState') {
+                gameState = JSON.parse(e.newValue);
+                updateDisplay();
+            }
+        });
+
         // Iniciar
         loadState();
     </script>
