@@ -15,56 +15,71 @@
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 10px 8px;
+            padding: 8px;
         }
 
         .container {
-            max-width: 320px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
         h1 {
             text-align: center;
             color: white;
-            margin-bottom: 8px;
-            font-size: 16px;
+            margin-bottom: 6px;
+            font-size: 14px;
         }
 
         .panel {
             background: white;
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 8px;
+            padding: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .player-section {
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #eee;
+        .players-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
-        .player-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        .player-section {
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr;
+            gap: 8px;
         }
 
         .player-title {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
             color: #0052CC;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            text-align: center;
         }
 
         .form-group {
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .compact-row {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 6px;
-            margin-bottom: 6px;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .points-sets-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
         }
 
         label {
@@ -138,13 +153,13 @@
             background: #f0f5ff;
             padding: 8px;
             border-radius: 6px;
-            margin-top: 10px;
         }
 
         .service-section h3 {
             margin-bottom: 4px;
             color: #0052CC;
-            font-size: 11px;
+            font-size: 10px;
+            text-align: center;
         }
 
         .service-buttons {
@@ -178,14 +193,14 @@
             background: #fff3e0;
             padding: 8px;
             border-radius: 6px;
-            margin-top: 10px;
             border: 1px solid #ff9800;
         }
 
         .reset-section h3 {
             margin-bottom: 4px;
             color: #ff6f00;
-            font-size: 11px;
+            font-size: 10px;
+            text-align: center;
         }
 
         .btn-reset {
@@ -204,14 +219,14 @@
             background: #f0f0f0;
             padding: 8px;
             border-radius: 6px;
-            margin-top: 10px;
             border: 1px solid #9e9e9e;
         }
 
         .background-section h3 {
             margin-bottom: 4px;
             color: #424242;
-            font-size: 11px;
+            font-size: 10px;
+            text-align: center;
         }
 
         .color-grid {
@@ -444,8 +459,8 @@
             player1: { name: 'Héctor López', role: 'Jugador 1', points: 7, sets: 1, service: true, flag: '🇪🇸' },
             player2: { name: 'Susana Martínez', role: 'Jugador 2', points: 5, sets: 0, service: false, flag: '🇦🇷' },
             background: {
-                type: 'gradient',  // 'solid', 'gradient', 'transparent'
-                color: '#00FF00'   // color para tipo 'solid'
+                type: 'solid',     // 'solid', 'gradient', 'transparent'
+                color: '#00FF00'   // Verde por defecto para chroma key
             }
         };
 
@@ -586,8 +601,8 @@
                     player1: { name: 'Héctor López', role: 'Jugador 1', points: 0, sets: 0, service: true, flag: '🇪🇸' },
                     player2: { name: 'Susana Martínez', role: 'Jugador 2', points: 0, sets: 0, service: false, flag: '🇦🇷' },
                     background: {
-                        type: 'gradient',
-                        color: '#00FF00'
+                        type: 'solid',
+                        color: '#00FF00'  // Verde por defecto
                     }
                 };
                 updateDisplay();
