@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Overlay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: transparent;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .scoreboard {
+            background: linear-gradient(135deg, #003d8c 0%, #0052CC 100%);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        .player-row {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 30px 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .player-row:last-child {
+            border-bottom: none;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .flag {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .player-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .player-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        .player-role {
+            font-size: 13px;
+            color: #5ba3ff;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+
+        .stats-section {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-left: auto;
+            padding-left: 30px;
+        }
+
+        .stat-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .service-ball {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #5ba3ff;
+            box-shadow: 0 0 15px rgba(91, 163, 255, 0.7);
+            border: 2px solid white;
+        }
+
+        .service-ball.inactive {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 1000px) {
+            .player-row {
+                padding: 22px 30px;
+                gap: 20px;
+            }
+
+            .player-name {
+                font-size: 22px;
+            }
+
+            .player-role {
+                font-size: 11px;
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+
+            .stats-section {
+                gap: 35px;
+            }
+
+            .flag {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scoreboard">
+        <!-- Jugador 1 -->
+        <div class="player-row">
+            <div class="player-info">
+                <div class="flag" id="flag1">🇪🇸</div>
+                <div class="player-details">
+                    <div class="player-name" id="player1Name">Héctor López</div>
+                    <div class="player-role" id="player1Role">Jugador 1</div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-block">
+                    <span class="stat-label">Puntos</span>
+                    <span class="stat-value" id="points1">7</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">Sets</span>
+                    <span class="stat-value" id="sets1">1</span>
+                </div>
+
+                <div class="stat-block">
+                    <div class="service-ball" id="serviceBall1"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jugador 2 -->
+        <div class="player-row">
+            <div class="player-info">
+                <div class="flag" id="flag2">🇦🇷</div>
+                <div class="player-details">
+                    <div class="player-name" id="player2Name">Susana Martínez</div>
+                    <div class="player-role" id="player2Role">Jugador 2</div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-block">
+                    <span class="stat-label">Puntos</span>
+                    <span class="stat-value" id="points2">5</span>
+                </div>
+
+                <div class="stat-block">
+                    <span class="stat-label">Sets</span>
+                    <span class="stat-value" id="sets2">0</span>
+                </div>
+
+                <div class="stat-block">
+                    <div class="service-ball inactive" id="serviceBall2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado global
+        let gameState = {
+            player1: { name: 'Héctor López', role: 'Jugador 1', points: 7, sets: 1, service: true, flag: '🇪🇸' },
+            player2: { name: 'Susana Martínez', role: 'Jugador 2', points: 5, sets: 0, service: false, flag: '🇦🇷' }
+        };
+
+        // Función para actualizar la pantalla
+        function updateDisplay() {
+            document.getElementById('player1Name').textContent = gameState.player1.name;
+            document.getElementById('player2Name').textContent = gameState.player2.name;
+            document.getElementById('player1Role').textContent = gameState.player1.role;
+            document.getElementById('player2Role').textContent = gameState.player2.role;
+            document.getElementById('points1').textContent = gameState.player1.points;
+            document.getElementById('points2').textContent = gameState.player2.points;
+            document.getElementById('sets1').textContent = gameState.player1.sets;
+            document.getElementById('sets2').textContent = gameState.player2.sets;
+            document.getElementById('flag1').textContent = gameState.player1.flag;
+            document.getElementById('flag2').textContent = gameState.player2.flag;
+
+            // Actualizar indicadores de servicio
+            document.getElementById('serviceBall1').className = gameState.player1.service ? 'service-ball' : 'service-ball inactive';
+            document.getElementById('serviceBall2').className = gameState.player2.service ? 'service-ball' : 'service-ball inactive';
+
+            // Guardar en localStorage
+            localStorage.setItem('gameState', JSON.stringify(gameState));
+        }
+
+        // Cargar estado guardado
+        function loadState() {
+            const saved = localStorage.getItem('gameState');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                updateDisplay();
+            } else {
+                updateDisplay();
+            }
+        }
+
+        // Escuchar cambios desde otros tabs/ventanas
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'gameState') {
+                gameState = JSON.parse(e.newValue);
+                updateDisplay();
+            }
+        });
+
+        // Atajos de teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '1') {
+                gameState.player1.points++;
+                if (gameState.player1.points >= 11 && gameState.player1.points - gameState.player2.points >= 2) {
+                    gameState.player1.sets++;
+                    gameState.player1.points = 0;
+                    gameState.player2.points = 0;
+                }
+                updateDisplay();
+            } else if (e.key === '2') {
+                gameState.player2.points++;
+                if (gameState.player2.points >= 11 && gameState.player2.points - gameState.player1.points >= 2) {
+                    gameState.player2.sets++;
+                    gameState.player1.points = 0;
+                    gameState.player2.points = 0;
+                }
+                updateDisplay();
+            } else if (e.key === 's' || e.key === 'S') {
+                gameState.player1.service = !gameState.player1.service;
+                gameState.player2.service = !gameState.player2.service;
+                updateDisplay();
+            }
+        });
+
+        // Cargar estado al iniciar
+        loadState();
+    </script>
+</body>
+</html>

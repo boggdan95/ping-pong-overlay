@@ -1,0 +1,24 @@
+{
+  "name": "ping-pong-overlay",
+  "version": "1.0.0",
+  "description": "Professional overlay for table tennis streaming with OBS integration",
+  "main": "index.html",
+  "keywords": [
+    "ping-pong",
+    "table-tennis",
+    "overlay",
+    "obs",
+    "streaming",
+    "scoreboard"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/ping-pong-overlay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tu-usuario/ping-pong-overlay/issues"
+  },
+  "homepage": "https://github.com/tu-usuario/ping-pong-overlay#readme"
+}
