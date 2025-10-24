@@ -15,32 +15,32 @@
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 15px 10px;
+            padding: 10px 8px;
         }
 
         .container {
-            max-width: 450px;
+            max-width: 320px;
             margin: 0 auto;
         }
 
         h1 {
             text-align: center;
             color: white;
-            margin-bottom: 15px;
-            font-size: 22px;
+            margin-bottom: 8px;
+            font-size: 16px;
         }
 
         .panel {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .player-section {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
         }
 
         .player-section:last-child {
@@ -50,31 +50,39 @@
         }
 
         .player-title {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
             color: #0052CC;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
 
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+        }
+
+        .compact-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 6px;
+            margin-bottom: 6px;
         }
 
         label {
             display: block;
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             color: #333;
-            font-size: 11px;
+            font-size: 9px;
+            text-transform: uppercase;
         }
 
         input[type="text"],
         input[type="number"] {
             width: 100%;
-            padding: 8px 10px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 13px;
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
             transition: border-color 0.3s;
         }
 
@@ -88,24 +96,24 @@
         .row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 6px;
         }
 
         .btn-group {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 4px;
+            margin-top: 4px;
         }
 
         button {
             flex: 1;
-            padding: 8px;
+            padding: 5px;
             border: none;
-            border-radius: 6px;
-            font-size: 12px;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .btn-plus {
@@ -128,33 +136,33 @@
 
         .service-section {
             background: #f0f5ff;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 10px;
         }
 
         .service-section h3 {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             color: #0052CC;
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .service-buttons {
             display: flex;
-            gap: 10px;
+            gap: 4px;
         }
 
         .btn-service {
             flex: 1;
-            padding: 8px;
+            padding: 6px;
             border: 2px solid #0052CC;
             background: white;
             color: #0052CC;
-            border-radius: 6px;
+            border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 12px;
+            transition: all 0.2s;
+            font-size: 11px;
         }
 
         .btn-service:hover {
@@ -168,24 +176,24 @@
 
         .reset-section {
             background: #fff3e0;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border: 2px solid #ff9800;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border: 1px solid #ff9800;
         }
 
         .reset-section h3 {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             color: #ff6f00;
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .btn-reset {
             width: 100%;
             background: #ff9800;
             color: white;
-            padding: 8px;
-            font-size: 12px;
+            padding: 6px;
+            font-size: 11px;
         }
 
         .btn-reset:hover {
@@ -194,44 +202,44 @@
 
         .background-section {
             background: #f0f0f0;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border: 2px solid #9e9e9e;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border: 1px solid #9e9e9e;
         }
 
         .background-section h3 {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             color: #424242;
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .color-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 10px;
+            gap: 4px;
+            margin-bottom: 6px;
         }
 
         .btn-color {
-            padding: 8px;
+            padding: 6px 4px;
             border: 2px solid transparent;
-            border-radius: 6px;
+            border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 11px;
+            transition: all 0.2s;
+            font-size: 10px;
             text-align: center;
         }
 
         .btn-color:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
             border-color: #333;
         }
 
         .btn-color.active {
             border-color: #0052CC;
-            box-shadow: 0 0 10px rgba(0, 82, 204, 0.5);
+            box-shadow: 0 0 6px rgba(0, 82, 204, 0.5);
         }
 
         .btn-color.green {
@@ -272,20 +280,22 @@
 
         .custom-color-row {
             display: flex;
-            gap: 10px;
+            gap: 4px;
             align-items: center;
         }
 
         .custom-color-row input[type="color"] {
-            width: 60px;
-            height: 40px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            width: 40px;
+            height: 28px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             cursor: pointer;
         }
 
         .custom-color-row button {
             flex: 1;
+            font-size: 9px;
+            padding: 4px;
         }
     </style>
 </head>
@@ -298,19 +308,20 @@
             <div class="player-section">
                 <div class="player-title">Jugador 1</div>
 
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" id="player1Name" value="Héctor López" onchange="updateData()">
+                <div class="compact-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="player1Name" value="Héctor López" onchange="updateData()">
+                    </div>
+                    <div class="form-group">
+                        <label>Bandera</label>
+                        <input type="text" id="player1Flag" value="🇪🇸" maxlength="2" onchange="updateData()">
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label>Rol / Descripción</label>
                     <input type="text" id="player1Role" value="Jugador 1" onchange="updateData()">
-                </div>
-
-                <div class="form-group">
-                    <label>Bandera (emoji)</label>
-                    <input type="text" id="player1Flag" value="🇪🇸" maxlength="2" onchange="updateData()">
                 </div>
 
                 <div class="row">
@@ -338,19 +349,20 @@
             <div class="player-section">
                 <div class="player-title">Jugador 2</div>
 
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" id="player2Name" value="Susana Martínez" onchange="updateData()">
+                <div class="compact-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="player2Name" value="Susana Martínez" onchange="updateData()">
+                    </div>
+                    <div class="form-group">
+                        <label>Bandera</label>
+                        <input type="text" id="player2Flag" value="🇦🇷" maxlength="2" onchange="updateData()">
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label>Rol / Descripción</label>
                     <input type="text" id="player2Role" value="Jugador 2" onchange="updateData()">
-                </div>
-
-                <div class="form-group">
-                    <label>Bandera (emoji)</label>
-                    <input type="text" id="player2Flag" value="🇦🇷" maxlength="2" onchange="updateData()">
                 </div>
 
                 <div class="row">
