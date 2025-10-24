@@ -13,14 +13,23 @@ Este proyecto proporciona:
 
 ## ✨ Características
 
+### Core Features
 - ✅ Dos filas verticales (una por jugador)
-- ✅ Bandera por país (customizable)
-- ✅ Nombre y descripción del jugador
+- ✅ Bandera por país (customizable con códigos de 3 letras)
+- ✅ Nombre del jugador
 - ✅ Contador de puntos y sets
 - ✅ Indicador visual de servicio (pelota azul)
-- ✅ Fondo transparente para captura en OBS
+- ✅ Fondo transparente o chroma key para captura en OBS
 - ✅ Controles rápidos por teclado (1, 2, S)
 - ✅ Almacenamiento local (localStorage)
+
+### ✨ NEW in v0.2.1
+- 🎬 **Animaciones**: Efectos visuales al anotar puntos, ganar sets y cambiar servicio
+- 🎮 **Panel de Control Mejorado**: Interfaz con 2 tabs (Partido/Configuración)
+- 👁️ **Toggle de Visibilidad**: Oculta el overlay mientras configuras
+- 🖼️ **Sistema de Logo**: Sube logos que se adaptan automáticamente
+- 📱 **Diseño Responsive**: Panel compacto para usar en cuarto de pantalla
+- 🎨 **Botones Grandes**: Controles optimizados para uso en vivo
 
 ## 📁 Estructura del Proyecto
 
@@ -191,6 +200,41 @@ Sí: OBS, StreamLabs, Twitch Studio, etc.
 
 **¿Puedo tener múltiples partidos simultáneos?**
 Actualmente no, pero puedes abrir en navegadores diferentes.
+
+## 📋 Changelog
+
+### v0.2.1 (2024-10-24)
+**🎬 Animaciones y Panel de Control Mejorado**
+
+- ✨ Sistema de animaciones para puntos, sets y cambios de servicio
+- 🎮 Panel de control rediseñado con tabs (Partido/Configuración)
+- 👁️ Toggle para ocultar overlay durante configuración
+- 🖼️ Sistema de logo con auto-expansión del scoreboard
+- 📱 Diseño responsive y compacto para cuarto de pantalla
+- 🎨 Botones optimizados para uso operativo en vivo
+- 🐛 Múltiples correcciones de bugs y mejoras de UX
+
+### v0.2.0 (2024-10-23)
+**🎨 Colores Dinámicos y Sistema de Logo**
+
+- Selector de color de fondo (chroma key: verde, azul, magenta, rojo)
+- Opción de fondo transparente o degradado
+- Sistema de logo con posicionamiento (izquierda/derecha)
+- Carga de logo por archivo o URL
+- Panel de control ultra-compacto
+- Banderas con códigos de 3 letras (GUA, ESA, NCA, etc.)
+- Rotación automática de servicio
+- Fuente Montserrat
+
+### v0.1.0 (2024-10-22)
+**🚀 Lanzamiento Inicial**
+
+- Overlay básico con dos jugadores
+- Contador de puntos y sets
+- Indicador de servicio
+- Panel de control simple
+- Sincronización vía localStorage
+- Diseño responsive
 
 ## 📚 Documentación Adicional
 
