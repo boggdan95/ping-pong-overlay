@@ -35,13 +35,17 @@ Este proyecto proporciona:
 
 ```
 ping-pong-overlay/
+├── 📄 LEEME.txt            # ⭐ Instrucciones rápidas (empieza aquí)
+├── 🌐 hub.html             # ⭐ Página de inicio con botones
+├── 🖥️ index.html           # Overlay principal (capturar en OBS)
+├── 🎮 control.html         # Panel de control
 ├── docs/                   # Documentación técnica y guías
+│   ├── GUIA_OBS.md        # Guía completa de OBS
 │   ├── DESCARGAR.txt      # Guía de descarga
 │   ├── PROMPT.md          # Guía para desarrolladores
+│   ├── ROADMAP_v0.3.0.md  # Roadmap de desarrollo
 │   ├── SETUP_GITHUB.md    # Configuración de GitHub
 │   └── START.md           # Guía de inicio rápido
-├── index.html             # Overlay principal (capturar en OBS)
-├── control.html           # Panel de control
 ├── CLAUDE.md              # Guía para Claude Code AI
 ├── CONTRIBUTING.md        # Guía de contribución
 ├── LICENSE                # Licencia MIT
@@ -50,6 +54,10 @@ ping-pong-overlay/
 ```
 
 ## 🚀 Cómo Usar en OBS
+
+### 🎯 Punto de Entrada
+
+**Primera vez**: Abre `hub.html` o lee `LEEME.txt` para instrucciones rápidas.
 
 ### ⚡ Configuración Rápida (5 minutos)
 

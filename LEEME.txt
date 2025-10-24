@@ -1,0 +1,109 @@
+═══════════════════════════════════════════════════════════════
+🏓 PING PONG OVERLAY v0.2.1
+═══════════════════════════════════════════════════════════════
+
+¡Gracias por usar Ping Pong Overlay!
+
+Este es un sistema profesional para transmisiones de tenis de mesa
+con OBS Studio u otros programas de streaming.
+
+═══════════════════════════════════════════════════════════════
+📋 ARCHIVOS IMPORTANTES
+═══════════════════════════════════════════════════════════════
+
+  📄 hub.html       → Página de inicio (abre esto primero)
+  🖥️ index.html     → Overlay (configurar en OBS)
+  🎮 control.html   → Panel de control (abrir en navegador)
+  📖 README.md      → Documentación completa
+
+═══════════════════════════════════════════════════════════════
+🚀 INICIO RÁPIDO
+═══════════════════════════════════════════════════════════════
+
+PRIMERA VEZ (Configurar OBS):
+-------------------------------
+1. Abre OBS Studio
+2. Agrega fuente → Browser (Fuente de Navegador)
+3. Marca "Local file" ✓
+4. Selecciona: index.html
+5. Width: 1920, Height: 1080
+6. Click OK
+
+Ya está configurado! No necesitas repetir esto.
+
+
+CADA VEZ QUE TRANSMITAS:
+-------------------------------
+1. Abre OBS (ya tiene el overlay configurado)
+2. Abre "control.html" en tu navegador
+3. ¡Listo para transmitir!
+
+
+═══════════════════════════════════════════════════════════════
+💡 CONSEJOS
+═══════════════════════════════════════════════════════════════
+
+✓ Usa el Panel de Control para cambiar puntos en vivo
+✓ El overlay se actualiza automáticamente en OBS
+✓ Configura nombres y banderas en el tab "Configuración"
+✓ Usa el tab "Partido" durante la transmisión
+✓ Los atajos de teclado: 1 (punto J1), 2 (punto J2), S (servicio)
+
+
+═══════════════════════════════════════════════════════════════
+📱 USO EN VARIAS COMPUTADORAS
+═══════════════════════════════════════════════════════════════
+
+Solo copia esta carpeta completa a cualquier PC:
+  • No necesita instalación
+  • No necesita Internet
+  • Funciona con cualquier navegador moderno
+  • Compatible con Windows, Mac y Linux
+
+
+═══════════════════════════════════════════════════════════════
+📚 MÁS INFORMACIÓN
+═══════════════════════════════════════════════════════════════
+
+Guía completa de OBS:     docs/GUIA_OBS.md
+Documentación técnica:    README.md
+Guía de inicio:           docs/START.md
+GitHub del proyecto:      https://github.com/boggdan95/ping-pong-overlay
+
+
+═══════════════════════════════════════════════════════════════
+❓ PREGUNTAS FRECUENTES
+═══════════════════════════════════════════════════════════════
+
+P: ¿Necesito instalar algo?
+R: No, solo necesitas un navegador web moderno.
+
+P: ¿Funciona sin Internet?
+R: Sí, funciona completamente offline (excepto la carga de banderas).
+
+P: ¿Cómo cambio los colores?
+R: En control.html → tab Configuración → Color Fondo
+
+P: ¿Cómo agrego un logo?
+R: En control.html → tab Configuración → Logo → Subir
+
+P: El overlay no se actualiza en OBS
+R: Asegúrate de que ambos (OBS y control.html) usen el mismo navegador
+   o que localStorage esté habilitado.
+
+
+═══════════════════════════════════════════════════════════════
+📞 SOPORTE
+═══════════════════════════════════════════════════════════════
+
+Si tienes problemas o sugerencias:
+→ GitHub Issues: https://github.com/boggdan95/ping-pong-overlay/issues
+
+
+═══════════════════════════════════════════════════════════════
+
+Desarrollado con ❤️ para streamers de tenis de mesa
+
+Licencia MIT - Uso libre para proyectos personales y comerciales
+
+═══════════════════════════════════════════════════════════════
