@@ -36,6 +36,13 @@
             gap: 0;
             overflow: hidden;
             position: relative;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .scoreboard.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .logo-container {
@@ -291,7 +298,8 @@
                 url: '',           // URL de la imagen o data URI
                 position: 'left',  // 'left' o 'right'
                 enabled: false     // mostrar/ocultar logo
-            }
+            },
+            overlayVisible: true   // Mostrar/ocultar overlay completo
         };
 
         // Función para actualizar la pantalla
@@ -318,6 +326,14 @@
 
             // Aplicar color de fondo
             applyBackground();
+
+            // Mostrar/ocultar overlay
+            const scoreboard = document.querySelector('.scoreboard');
+            if (gameState.overlayVisible) {
+                scoreboard.classList.remove('hidden');
+            } else {
+                scoreboard.classList.add('hidden');
+            }
 
             // Guardar en localStorage
             localStorage.setItem('gameState', JSON.stringify(gameState));

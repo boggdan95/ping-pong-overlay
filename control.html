@@ -35,6 +35,35 @@
             font-weight: 600;
         }
 
+        .visibility-toggle {
+            background: #2196F3;
+            color: white;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-bottom: 6px;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+        }
+
+        .visibility-toggle:hover {
+            background: #1976D2;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        }
+
+        .visibility-toggle.hidden {
+            background: #f44336;
+        }
+
+        .visibility-toggle.hidden:hover {
+            background: #d32f2f;
+        }
+
         .panel {
             background: white;
             border-radius: 6px;
@@ -417,6 +446,11 @@
     <div class="container">
         <h1>⚙️ Panel de Control</h1>
 
+        <!-- Botón de Visibilidad del Overlay -->
+        <button id="visibilityToggle" class="visibility-toggle" onclick="toggleOverlayVisibility()">
+            👁️ Ocultar Overlay
+        </button>
+
         <div class="panel">
             <!-- Jugador 1 -->
             <div class="player-section">
@@ -587,7 +621,8 @@
                 url: '',           // URL de la imagen o data URI
                 position: 'left',  // 'left' o 'right'
                 enabled: false     // mostrar/ocultar logo
-            }
+            },
+            overlayVisible: true   // Mostrar/ocultar overlay completo
         };
 
         // Cargar estado
@@ -620,8 +655,29 @@
             // Actualizar logo UI
             updateLogoUI();
 
+            // Actualizar botón de visibilidad
+            updateVisibilityButton();
+
             // Guardar
             localStorage.setItem('gameState', JSON.stringify(gameState));
+        }
+
+        // Actualizar botón de visibilidad
+        function updateVisibilityButton() {
+            const btn = document.getElementById('visibilityToggle');
+            if (gameState.overlayVisible) {
+                btn.textContent = '🙈 Ocultar Overlay';
+                btn.classList.remove('hidden');
+            } else {
+                btn.textContent = '👁️ Mostrar Overlay';
+                btn.classList.add('hidden');
+            }
+        }
+
+        // Toggle visibilidad del overlay
+        function toggleOverlayVisibility() {
+            gameState.overlayVisible = !gameState.overlayVisible;
+            updateDisplay();
         }
 
         // Actualizar botones de color activos
@@ -798,7 +854,8 @@
                         url: '',
                         position: 'left',
                         enabled: false
-                    }
+                    },
+                    overlayVisible: true  // Mostrar overlay por defecto
                 };
                 updateDisplay();
             }
