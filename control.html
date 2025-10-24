@@ -669,7 +669,7 @@
                     <div class="logo-options">
                         <button class="btn-logo-option active" id="logoLeft" onclick="setLogoPosition('left')">⬅️ Izquierda</button>
                         <button class="btn-logo-option" id="logoRight" onclick="setLogoPosition('right')">Derecha ➡️</button>
-                        <button class="btn-logo-option" id="logoToggle" onclick="toggleLogo()">🚫 Desactivar</button>
+                        <button class="btn-logo-option" id="logoToggle" onclick="toggleLogo()">🚫 Desactivado</button>
                     </div>
                     <div id="logoPreview" class="logo-preview">
                         <img id="logoPreviewImg" src="" alt="Vista previa del logo">
@@ -941,7 +941,7 @@
             document.getElementById('logoRight').classList.toggle('active', logo.position === 'right');
 
             const toggleBtn = document.getElementById('logoToggle');
-            toggleBtn.textContent = logo.enabled ? '✅ Activado' : '🚫 Desactivar';
+            toggleBtn.textContent = logo.enabled ? '✅ Activado' : '🚫 Desactivado';
             toggleBtn.classList.toggle('active', logo.enabled);
 
             const preview = document.getElementById('logoPreviewImg');
@@ -957,6 +957,10 @@
             const url = document.getElementById('logoUrl').value;
             if (!gameState.logo) gameState.logo = { position: 'left', enabled: false };
             gameState.logo.url = url;
+            // Activar automáticamente si hay URL
+            if (url && url.trim()) {
+                gameState.logo.enabled = true;
+            }
             updateDisplay();
         }
 
@@ -979,6 +983,8 @@
                 reader.onload = (e) => {
                     if (!gameState.logo) gameState.logo = { position: 'left', enabled: false };
                     gameState.logo.url = e.target.result;
+                    // Activar automáticamente cuando se sube un archivo
+                    gameState.logo.enabled = true;
                     updateDisplay();
                 };
                 reader.readAsDataURL(file);
