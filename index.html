@@ -80,10 +80,20 @@
             gap: 30px;
             padding: 30px 40px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            transition: padding 0.3s ease;
         }
 
         .player-row:last-child {
             border-bottom: none;
+        }
+
+        /* Añadir padding cuando hay logo */
+        .scoreboard.has-logo-left .player-row {
+            padding-left: 160px;
+        }
+
+        .scoreboard.has-logo-right .player-row {
+            padding-right: 160px;
         }
 
         .player-info {
@@ -257,6 +267,28 @@
                 height: 50px;
                 font-size: 24px;
             }
+
+            /* Ajustar padding del logo en responsive */
+            .scoreboard.has-logo-left .player-row {
+                padding-left: 120px;
+            }
+
+            .scoreboard.has-logo-right .player-row {
+                padding-right: 120px;
+            }
+
+            .logo-container {
+                max-width: 90px;
+                max-height: 90px;
+            }
+
+            .logo-container.left {
+                left: 15px;
+            }
+
+            .logo-container.right {
+                right: 15px;
+            }
         }
     </style>
 </head>
@@ -408,10 +440,13 @@
         function applyLogo() {
             const logoContainer = document.getElementById('logoContainer');
             const logoImage = document.getElementById('logoImage');
+            const scoreboard = document.querySelector('.scoreboard');
             const logo = gameState.logo;
 
             if (!logo || !logo.enabled || !logo.url) {
                 logoContainer.className = 'logo-container';
+                // Remover clases de logo del scoreboard
+                scoreboard.classList.remove('has-logo-left', 'has-logo-right');
                 return;
             }
 
@@ -420,6 +455,14 @@
 
             // Configurar posición y visibilidad
             logoContainer.className = `logo-container ${logo.position} enabled`;
+
+            // Añadir clase al scoreboard para ajustar padding
+            scoreboard.classList.remove('has-logo-left', 'has-logo-right');
+            if (logo.position === 'left') {
+                scoreboard.classList.add('has-logo-left');
+            } else {
+                scoreboard.classList.add('has-logo-right');
+            }
         }
 
         // Aplicar color de fondo dinámicamente
