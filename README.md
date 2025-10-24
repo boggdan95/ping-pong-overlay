@@ -40,18 +40,36 @@ ping-pong-overlay/
 └── README.md              # Este archivo
 ```
 
-## 🚀 Cómo Usar
+## 🚀 Cómo Usar en OBS
 
-### Opción 1: Local
-1. Descarga los archivos `index.html` y `control.html`
-2. Abre `index.html` en tu navegador (este es el overlay)
-3. Abre `control.html` en otra ventana/pestaña (panel de control)
-4. En OBS: Captura la ventana del navegador → Chroma Key
+### ⚡ Configuración Rápida (5 minutos)
 
-### Opción 2: Online
-1. Aloja los archivos en un servidor web
-2. Accede a `index.html` desde OBS como fuente de navegador
-3. Accede a `control.html` desde tu dispositivo de control
+1. **En OBS Studio:**
+   - Agrega una fuente → **Browser** (Fuente de Navegador)
+   - ✅ Marca "Local file"
+   - Selecciona `index.html` de este proyecto
+   - Width: 1920, Height: 1080
+   - Click OK
+
+2. **Abre el Panel de Control:**
+   - Abre `control.html` en tu navegador (Chrome/Edge/Firefox)
+   - Configura nombres, banderas, etc.
+   - Los cambios se reflejan **INSTANTÁNEAMENTE** en OBS
+
+3. **Durante el partido:**
+   - Usa el panel de control para cambiar puntajes
+   - O usa atajos de teclado: `1` = +1 J1, `2` = +1 J2, `S` = Cambiar servicio
+
+### 📚 Guía Completa
+
+**⚠️ IMPORTANTE:** NO uses "Captura de Ventana". Usa "Browser Source" para mejor calidad y transparencia nativa.
+
+👉 **[Guía Completa de OBS](docs/GUIA_OBS.md)** - Incluye:
+- Configuración paso a paso con screenshots conceptuales
+- Uso de chroma key (opcional)
+- Workflow para 1 o 2 pantallas
+- Troubleshooting común
+- Tips profesionales
 
 ## 🎮 Controles
 
