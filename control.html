@@ -622,7 +622,15 @@
                 position: 'left',  // 'left' o 'right'
                 enabled: false     // mostrar/ocultar logo
             },
-            overlayVisible: true   // Mostrar/ocultar overlay completo
+            overlayVisible: true,   // Mostrar/ocultar overlay completo
+            // Triggers de animación (timestamps)
+            animations: {
+                point1: 0,
+                point2: 0,
+                set1: 0,
+                set2: 0,
+                service: 0
+            }
         };
 
         // Cargar estado
@@ -734,7 +742,31 @@
 
         // Cambiar puntos
         function changePoints(player, delta) {
-            gameState['player' + player].points = Math.max(0, gameState['player' + player].points + delta);
+            const oldPoints = gameState['player' + player].points;
+            const newPoints = Math.max(0, oldPoints + delta);
+            gameState['player' + player].points = newPoints;
+
+            // Animar si aumentó el punto
+            if (delta > 0 && newPoints > oldPoints) {
+                // Trigger animación de punto
+                gameState.animations['point' + player] = Date.now();
+
+                // Verificar si ganó el set
+                const otherPlayer = player === 1 ? 2 : 1;
+                const otherPoints = gameState['player' + otherPlayer].points;
+
+                if (newPoints >= 11 && newPoints - otherPoints >= 2) {
+                    // Ganó el set! Esperar un poco antes de resetear
+                    setTimeout(() => {
+                        gameState.animations['set' + player] = Date.now();
+                        gameState['player' + player].sets++;
+                        gameState.player1.points = 0;
+                        gameState.player2.points = 0;
+                        updateDisplay();
+                    }, 300);
+                }
+            }
+
             updateService();
             updateDisplay();
         }
@@ -749,6 +781,8 @@
         function setService(player) {
             gameState.player1.service = player === 1;
             gameState.player2.service = player === 2;
+            // Trigger animación de cambio de servicio
+            gameState.animations.service = Date.now();
             updateDisplay();
         }
 
