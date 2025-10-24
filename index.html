@@ -223,7 +223,11 @@
         // Estado global
         let gameState = {
             player1: { name: 'Héctor López', role: 'Jugador 1', points: 7, sets: 1, service: true, flag: '🇪🇸' },
-            player2: { name: 'Susana Martínez', role: 'Jugador 2', points: 5, sets: 0, service: false, flag: '🇦🇷' }
+            player2: { name: 'Susana Martínez', role: 'Jugador 2', points: 5, sets: 0, service: false, flag: '🇦🇷' },
+            background: {
+                type: 'gradient',  // 'solid', 'gradient', 'transparent'
+                color: '#00FF00'   // color para tipo 'solid'
+            }
         };
 
         // Función para actualizar la pantalla
@@ -243,8 +247,31 @@
             document.getElementById('serviceBall1').className = gameState.player1.service ? 'service-ball' : 'service-ball inactive';
             document.getElementById('serviceBall2').className = gameState.player2.service ? 'service-ball' : 'service-ball inactive';
 
+            // Aplicar color de fondo
+            applyBackground();
+
             // Guardar en localStorage
             localStorage.setItem('gameState', JSON.stringify(gameState));
+        }
+
+        // Aplicar color de fondo dinámicamente
+        function applyBackground() {
+            const scoreboard = document.querySelector('.scoreboard');
+            const bg = gameState.background;
+
+            if (!bg) {
+                // Si no hay configuración de fondo, usar el gradiente por defecto
+                scoreboard.style.background = 'linear-gradient(135deg, #003d8c 0%, #0052CC 100%)';
+                return;
+            }
+
+            if (bg.type === 'solid') {
+                scoreboard.style.background = bg.color;
+            } else if (bg.type === 'gradient') {
+                scoreboard.style.background = 'linear-gradient(135deg, #003d8c 0%, #0052CC 100%)';
+            } else if (bg.type === 'transparent') {
+                scoreboard.style.background = 'transparent';
+            }
         }
 
         // Cargar estado guardado
