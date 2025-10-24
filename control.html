@@ -121,17 +121,27 @@
         }
 
         .btn-group {
-            display: flex;
-            gap: 2px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 3px;
             margin-top: 2px;
         }
 
+        .btn-group input[type="number"] {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 6px;
+            color: #0052CC;
+        }
+
         button {
-            flex: 1;
-            padding: 3px;
+            padding: 8px;
             border: none;
-            border-radius: 3px;
-            font-size: 10px;
+            border-radius: 4px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.15s;
@@ -144,6 +154,7 @@
 
         .btn-plus:hover {
             background: #45a049;
+            transform: scale(1.05);
         }
 
         .btn-minus {
@@ -153,6 +164,7 @@
 
         .btn-minus:hover {
             background: #da190b;
+            transform: scale(1.05);
         }
 
         .service-section {
@@ -176,19 +188,20 @@
 
         .btn-service {
             flex: 1;
-            padding: 4px;
-            border: 1px solid #0052CC;
+            padding: 6px 8px;
+            border: 2px solid #0052CC;
             background: white;
             color: #0052CC;
-            border-radius: 3px;
+            border-radius: 4px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.15s;
-            font-size: 9px;
+            font-size: 11px;
         }
 
         .btn-service:hover {
             background: #f0f5ff;
+            transform: scale(1.02);
         }
 
         .btn-service.active {
@@ -215,13 +228,17 @@
             width: 100%;
             background: #ff9800;
             color: white;
-            padding: 4px;
-            font-size: 9px;
+            padding: 6px 8px;
+            font-size: 11px;
             font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
         }
 
         .btn-reset:hover {
             background: #ff6f00;
+            transform: scale(1.02);
         }
 
         .background-section {
@@ -246,26 +263,26 @@
         }
 
         .btn-color {
-            padding: 4px 2px;
+            padding: 8px 4px;
             border: 1px solid transparent;
-            border-radius: 3px;
+            border-radius: 4px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.15s;
-            font-size: 16px;
+            font-size: 18px;
             text-align: center;
             line-height: 1;
         }
 
         .btn-color:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
             border-color: #333;
         }
 
         .btn-color.active {
             border-color: #0052CC;
             border-width: 2px;
-            box-shadow: 0 0 4px rgba(0, 82, 204, 0.5);
+            box-shadow: 0 0 6px rgba(0, 82, 204, 0.6);
         }
 
         .btn-color.green {
@@ -329,8 +346,8 @@
                     <div class="form-group">
                         <label>Puntos</label>
                         <div class="btn-group">
-                            <button class="btn-minus" onclick="changePoints(1, -1)">−</button>
                             <input type="number" id="points1" value="7" readonly>
+                            <button class="btn-minus" onclick="changePoints(1, -1)">−</button>
                             <button class="btn-plus" onclick="changePoints(1, 1)">+</button>
                         </div>
                     </div>
@@ -338,8 +355,8 @@
                     <div class="form-group">
                         <label>Sets</label>
                         <div class="btn-group">
-                            <button class="btn-minus" onclick="changeSets(1, -1)">−</button>
                             <input type="number" id="sets1" value="1" readonly>
+                            <button class="btn-minus" onclick="changeSets(1, -1)">−</button>
                             <button class="btn-plus" onclick="changeSets(1, 1)">+</button>
                         </div>
                     </div>
@@ -365,8 +382,8 @@
                     <div class="form-group">
                         <label>Puntos</label>
                         <div class="btn-group">
-                            <button class="btn-minus" onclick="changePoints(2, -1)">−</button>
                             <input type="number" id="points2" value="5" readonly>
+                            <button class="btn-minus" onclick="changePoints(2, -1)">−</button>
                             <button class="btn-plus" onclick="changePoints(2, 1)">+</button>
                         </div>
                     </div>
@@ -374,8 +391,8 @@
                     <div class="form-group">
                         <label>Sets</label>
                         <div class="btn-group">
-                            <button class="btn-minus" onclick="changeSets(2, -1)">−</button>
                             <input type="number" id="sets2" value="0" readonly>
+                            <button class="btn-minus" onclick="changeSets(2, -1)">−</button>
                             <button class="btn-plus" onclick="changeSets(2, 1)">+</button>
                         </div>
                     </div>
