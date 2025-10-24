@@ -448,6 +448,18 @@
             const saved = localStorage.getItem('gameState');
             if (saved) {
                 gameState = JSON.parse(saved);
+
+                // Asegurar que exista el campo animations (para compatibilidad con versiones anteriores)
+                if (!gameState.animations) {
+                    gameState.animations = {
+                        point1: 0,
+                        point2: 0,
+                        set1: 0,
+                        set2: 0,
+                        service: 0
+                    };
+                }
+
                 updateDisplay();
             } else {
                 updateDisplay();
