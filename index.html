@@ -80,8 +80,23 @@
             gap: 30px;
             padding: 30px 40px;
             border-bottom: none;
-            transition: padding 0.3s ease;
+            transition: padding 0.3s ease, opacity 0.4s ease, transform 0.4s ease;
             position: relative;
+            --border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Ocultar player-rows y logo cuando se muestra el historial */
+        .scoreboard.show-history .player-row {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+
+        .scoreboard.show-history .logo-container {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Línea divisoria con pseudo-elemento */
@@ -92,8 +107,8 @@
             left: 40px;
             right: 40px;
             height: 1px;
-            background: rgba(255, 255, 255, 0.15);
-            transition: left 0.3s ease, right 0.3s ease;
+            background: var(--border-color, rgba(255, 255, 255, 0.15));
+            transition: left 0.3s ease, right 0.3s ease, background 0.3s ease;
         }
 
         /* Ajustar línea cuando hay logo */
@@ -246,6 +261,100 @@
             }
         }
 
+        /* Sección de Historial dentro del Scoreboard */
+        .history-section {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            padding: 30px 40px;
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 0;
+        }
+
+        .scoreboard.show-history .history-section {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+            position: relative;
+        }
+
+        .history-divider {
+            display: none;
+        }
+
+        .history-title {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.85;
+        }
+
+        .history-table {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .history-table-header {
+            display: table-row;
+        }
+
+        .history-table-header-cell {
+            display: table-cell;
+            padding: 8px 16px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .history-table-header-cell:first-child {
+            text-align: left;
+            min-width: 150px;
+        }
+
+        .history-table-row {
+            display: table-row;
+        }
+
+        .history-table-cell {
+            display: table-cell;
+            padding: 10px 16px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .history-table-cell:first-child {
+            text-align: left;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .history-table-row:last-child .history-table-cell {
+            border-bottom: none;
+        }
+
+        .history-table-cell.winner {
+            color: #FFD700;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+
         .stat-value.animate-point {
             animation: pointScore 0.5s ease-out;
         }
@@ -381,6 +490,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- Historial de Sets dentro del mismo cintillo -->
+        <div id="historySection" class="history-section">
+            <div id="historyTable" class="history-table"></div>
+        </div>
     </div>
 
     <script>
@@ -402,6 +516,64 @@
             return countryCodeMap[code3.toUpperCase()] || code3.toLowerCase().slice(0, 2);
         }
 
+        // Definición de temas
+        const themes = {
+            azulModerno: {
+                name: '🔵 Azul Moderno',
+                background: 'linear-gradient(135deg, #003d8c 0%, #0052CC 100%)',
+                textColor: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.15)',
+                flagBorder: 'rgba(255, 255, 255, 0.3)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 0, 0, 0.4)'
+            },
+            oscuroElegante: {
+                name: '🌑 Oscuro Elegante',
+                background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+                textColor: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                flagBorder: 'rgba(255, 215, 0, 0.5)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 0, 0, 0.6)'
+            },
+            claroMinimalista: {
+                name: '☀️ Claro Minimalista',
+                background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+                textColor: '#333333',
+                borderColor: 'rgba(0, 0, 0, 0.1)',
+                flagBorder: 'rgba(0, 0, 0, 0.2)',
+                serviceBall: '#1a237e',
+                shadow: 'rgba(0, 0, 0, 0.2)'
+            },
+            neonNocturno: {
+                name: '💎 Neón Nocturno',
+                background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)',
+                textColor: '#00f5ff',
+                borderColor: 'rgba(0, 245, 255, 0.3)',
+                flagBorder: 'rgba(255, 0, 255, 0.5)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 245, 255, 0.4)'
+            },
+            doradoPremium: {
+                name: '🏆 Dorado Premium',
+                background: 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
+                textColor: '#FFD700',
+                borderColor: 'rgba(255, 215, 0, 0.3)',
+                flagBorder: 'rgba(255, 215, 0, 0.5)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 0, 0, 0.5)'
+            },
+            verdeDeportivo: {
+                name: '🌿 Verde Deportivo',
+                background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)',
+                textColor: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.15)',
+                flagBorder: 'rgba(255, 255, 255, 0.3)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 0, 0, 0.4)'
+            }
+        };
+
         // Estado global
         let gameState = {
             player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: 'ESP' },
@@ -416,6 +588,10 @@
                 enabled: false     // mostrar/ocultar logo
             },
             overlayVisible: true,   // Mostrar/ocultar overlay completo
+            theme: 'azulModerno',      // Tema del scoreboard
+            matchMode: 'best-of-5',    // 'best-of-5' o 'best-of-7'
+            setsHistory: [],           // Historial de sets: [{player1Points: 11, player2Points: 9}, ...]
+            showHistoryOverlay: false, // Mostrar overlay de historial de sets
             // Triggers de animación (timestamps)
             animations: {
                 point1: 0,
@@ -451,6 +627,9 @@
             // Aplicar color de fondo
             applyBackground();
 
+            // Aplicar tema del scoreboard
+            applyTheme();
+
             // Mostrar/ocultar overlay
             const scoreboard = document.querySelector('.scoreboard');
             if (gameState.overlayVisible) {
@@ -458,6 +637,9 @@
             } else {
                 scoreboard.classList.add('hidden');
             }
+
+            // Actualizar overlay de historial
+            updateHistoryOverlay();
 
             // Guardar en localStorage
             localStorage.setItem('gameState', JSON.stringify(gameState));
@@ -513,6 +695,107 @@
             }
         }
 
+        // Aplicar tema del scoreboard dinámicamente
+        function applyTheme() {
+            const themeName = gameState.theme || 'azulModerno';
+            const theme = themes[themeName];
+
+            if (!theme) return;
+
+            const scoreboard = document.querySelector('.scoreboard');
+            const playerRows = document.querySelectorAll('.player-row');
+            const flags = document.querySelectorAll('.flag');
+            const serviceBalls = document.querySelectorAll('.service-ball');
+            const texts = document.querySelectorAll('.player-name, .stat-value, .stat-label');
+
+            // Aplicar fondo del scoreboard
+            scoreboard.style.background = theme.background;
+            scoreboard.style.boxShadow = `0 10px 40px ${theme.shadow}`;
+
+            // Aplicar color de texto
+            texts.forEach(el => {
+                el.style.color = theme.textColor;
+            });
+
+            // Aplicar bordes de banderas
+            flags.forEach(el => {
+                el.style.borderColor = theme.flagBorder;
+            });
+
+            // Aplicar color de pelotas de servicio (solo a las activas)
+            serviceBalls.forEach(el => {
+                if (!el.classList.contains('inactive')) {
+                    el.style.background = theme.serviceBall;
+                    el.style.boxShadow = `0 0 15px ${theme.serviceBall}`;
+                } else {
+                    // Pelota inactiva: transparente
+                    el.style.background = 'rgba(255, 255, 255, 0.15)';
+                    el.style.boxShadow = 'none';
+                }
+            });
+
+            // Aplicar líneas divisorias
+            playerRows.forEach(el => {
+                const style = window.getComputedStyle(el, '::after');
+                if (style) {
+                    // Esto es para la línea del ::after
+                    el.style.setProperty('--border-color', theme.borderColor);
+                }
+            });
+        }
+
+        // Actualizar sección de historial de sets
+        function updateHistoryOverlay() {
+            const scoreboard = document.querySelector('.scoreboard');
+            const table = document.getElementById('historyTable');
+
+            // Alternar entre vista de marcador y vista de historial
+            if (gameState.showHistoryOverlay && gameState.setsHistory && gameState.setsHistory.length > 0) {
+                scoreboard.classList.add('show-history');
+
+                // Generar tabla HTML
+                let html = '';
+
+                // Encabezado de tabla
+                html += '<div class="history-table-header">';
+                html += '<div class="history-table-header-cell"></div>'; // Celda vacía para nombres
+                gameState.setsHistory.forEach((set, index) => {
+                    html += `<div class="history-table-header-cell">SET ${index + 1}</div>`;
+                });
+                html += '</div>';
+
+                // Fila Jugador 1
+                html += '<div class="history-table-row">';
+                const flag1Code = getISO2Code(gameState.player1.flag);
+                html += `<div class="history-table-cell">
+                    <span class="fi fi-${flag1Code}" style="margin-right: 8px;"></span>${gameState.player1.name}
+                </div>`;
+                gameState.setsHistory.forEach((set) => {
+                    const isWinner = set.player1Points > set.player2Points;
+                    const winnerClass = isWinner ? 'winner' : '';
+                    html += `<div class="history-table-cell ${winnerClass}">${set.player1Points}</div>`;
+                });
+                html += '</div>';
+
+                // Fila Jugador 2
+                html += '<div class="history-table-row">';
+                const flag2Code = getISO2Code(gameState.player2.flag);
+                html += `<div class="history-table-cell">
+                    <span class="fi fi-${flag2Code}" style="margin-right: 8px;"></span>${gameState.player2.name}
+                </div>`;
+                gameState.setsHistory.forEach((set) => {
+                    const isWinner = set.player2Points > set.player1Points;
+                    const winnerClass = isWinner ? 'winner' : '';
+                    html += `<div class="history-table-cell ${winnerClass}">${set.player2Points}</div>`;
+                });
+                html += '</div>';
+
+                table.innerHTML = html;
+            } else {
+                scoreboard.classList.remove('show-history');
+            }
+        }
+
         // Cargar estado guardado
         function loadState() {
             const saved = localStorage.getItem('gameState');
@@ -528,6 +811,22 @@
                         set2: 0,
                         service: 0
                     };
+                }
+
+                // Asegurar que existan campos de historial
+                if (!gameState.matchMode) {
+                    gameState.matchMode = 'best-of-5';
+                }
+                if (!gameState.setsHistory) {
+                    gameState.setsHistory = [];
+                }
+                if (gameState.showHistoryOverlay === undefined) {
+                    gameState.showHistoryOverlay = false;
+                }
+
+                // Asegurar que exista el campo theme (para compatibilidad con versiones anteriores)
+                if (!gameState.theme) {
+                    gameState.theme = 'azulModerno';
                 }
 
                 updateDisplay();

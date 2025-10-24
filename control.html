@@ -400,6 +400,36 @@
             max-height: 60px;
         }
 
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .btn-theme {
+            padding: 12px 8px;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            background: white;
+            color: #333;
+        }
+
+        .btn-theme:hover {
+            transform: scale(1.03);
+            border-color: #667eea;
+        }
+
+        .btn-theme.active {
+            border-color: #667eea;
+            border-width: 3px;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.6);
+        }
+
         /* Responsive Design */
         @media (max-width: 600px) {
             body {
@@ -569,6 +599,12 @@
                     </button>
                 </div>
 
+                <div style="margin-bottom: 10px;">
+                    <button id="historyOverlayToggle" class="visibility-toggle" onclick="toggleHistoryOverlay()" style="width: 100%;">
+                        📊 Mostrar Historial en Pantalla
+                    </button>
+                </div>
+
                 <div class="players-grid">
                     <!-- Jugador 1 -->
                     <div class="player-card" id="playerCard1">
@@ -604,6 +640,14 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Historial de Sets -->
+                <div id="setsHistoryContainer" style="margin-top: 12px; display: none;">
+                    <div style="background: #f8f9fa; border-radius: 8px; padding: 10px;">
+                        <h4 style="font-size: 12px; color: #667eea; margin-bottom: 8px; text-transform: uppercase; font-weight: 700;">📊 Historial de Sets</h4>
+                        <div id="setsHistoryList" style="font-size: 12px; color: #555;"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- TAB: CONFIGURACIÓN -->
@@ -630,6 +674,44 @@
                             <label>Bandera (3 letras)</label>
                             <input type="text" id="player2Flag" value="ARG" maxlength="3" onchange="updateData()" placeholder="ARG" style="text-transform: uppercase;">
                         </div>
+                    </div>
+                </div>
+
+                <!-- Modo de Partido -->
+                <div class="config-section">
+                    <h3>🏆 Modo de Partido</h3>
+                    <div class="logo-options">
+                        <button class="btn-logo-option active" id="modeBest5" onclick="setMatchMode('best-of-5')">
+                            Mejor de 5
+                        </button>
+                        <button class="btn-logo-option" id="modeBest7" onclick="setMatchMode('best-of-7')">
+                            Mejor de 7
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tema del Scoreboard -->
+                <div class="config-section">
+                    <h3>🎨 Tema del Scoreboard</h3>
+                    <div class="theme-grid">
+                        <button class="btn-theme" id="themeAzulModerno" onclick="setTheme('azulModerno')">
+                            🔵 Azul Moderno
+                        </button>
+                        <button class="btn-theme" id="themeOscuroElegante" onclick="setTheme('oscuroElegante')">
+                            🌑 Oscuro Elegante
+                        </button>
+                        <button class="btn-theme" id="themeClaroMinimalista" onclick="setTheme('claroMinimalista')">
+                            ☀️ Claro Minimalista
+                        </button>
+                        <button class="btn-theme" id="themeNeonNocturno" onclick="setTheme('neonNocturno')">
+                            🌆 Neón Nocturno
+                        </button>
+                        <button class="btn-theme" id="themeDoradoPremium" onclick="setTheme('doradoPremium')">
+                            🏆 Dorado Premium
+                        </button>
+                        <button class="btn-theme" id="themeVerdeDeportivo" onclick="setTheme('verdeDeportivo')">
+                            🎾 Verde Deportivo
+                        </button>
                     </div>
                 </div>
 
@@ -698,6 +780,64 @@
             return countryCodeMap[code3.toUpperCase()] || code3.toLowerCase().slice(0, 2);
         }
 
+        // Temas predefinidos
+        const themes = {
+            azulModerno: {
+                name: '🔵 Azul Moderno',
+                background: 'linear-gradient(135deg, #003d8c 0%, #0052CC 100%)',
+                textColor: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.15)',
+                flagBorder: 'rgba(255, 255, 255, 0.3)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 0, 0, 0.4)'
+            },
+            oscuroElegante: {
+                name: '🌑 Oscuro Elegante',
+                background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+                textColor: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                flagBorder: 'rgba(255, 215, 0, 0.5)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 0, 0, 0.6)'
+            },
+            claroMinimalista: {
+                name: '☀️ Claro Minimalista',
+                background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+                textColor: '#2c3e50',
+                borderColor: 'rgba(44, 62, 80, 0.1)',
+                flagBorder: 'rgba(44, 62, 80, 0.3)',
+                serviceBall: '#1a237e',
+                shadow: 'rgba(0, 0, 0, 0.2)'
+            },
+            neonNocturno: {
+                name: '🌆 Neón Nocturno',
+                background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
+                textColor: '#00ffff',
+                borderColor: 'rgba(0, 255, 255, 0.3)',
+                flagBorder: 'rgba(255, 0, 255, 0.6)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 0, 0, 0.8)'
+            },
+            doradoPremium: {
+                name: '🏆 Dorado Premium',
+                background: 'linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%)',
+                textColor: '#ffffff',
+                borderColor: 'rgba(255, 215, 0, 0.3)',
+                flagBorder: 'rgba(255, 215, 0, 0.6)',
+                serviceBall: '#ffffff',
+                shadow: 'rgba(0, 0, 0, 0.5)'
+            },
+            verdeDeportivo: {
+                name: '🎾 Verde Deportivo',
+                background: 'linear-gradient(135deg, #134e4a 0%, #14532d 100%)',
+                textColor: '#ffffff',
+                borderColor: 'rgba(74, 222, 128, 0.2)',
+                flagBorder: 'rgba(74, 222, 128, 0.5)',
+                serviceBall: '#4ade80',
+                shadow: 'rgba(0, 0, 0, 0.5)'
+            }
+        };
+
         // Estado global
         let gameState = {
             player1: { name: 'Héctor López', points: 0, sets: 0, service: true, flag: 'ESP' },
@@ -712,6 +852,10 @@
                 enabled: false
             },
             overlayVisible: true,
+            theme: 'azulModerno',
+            matchMode: 'best-of-5',    // 'best-of-5' o 'best-of-7'
+            setsHistory: [],           // Historial de sets: [{player1Points: 11, player2Points: 9}, ...]
+            showHistoryOverlay: false, // Mostrar overlay de historial de sets
             animations: {
                 point1: 0,
                 point2: 0,
@@ -757,6 +901,22 @@
                         service: 0
                     };
                 }
+
+                // Asegurar que exista el campo theme
+                if (!gameState.theme) {
+                    gameState.theme = 'azulModerno';
+                }
+
+                // Asegurar que existan campos de historial
+                if (!gameState.matchMode) {
+                    gameState.matchMode = 'best-of-5';
+                }
+                if (!gameState.setsHistory) {
+                    gameState.setsHistory = [];
+                }
+                if (gameState.showHistoryOverlay === undefined) {
+                    gameState.showHistoryOverlay = false;
+                }
             }
             updateDisplay();
         }
@@ -797,8 +957,20 @@
             // Botón de visibilidad
             updateVisibilityButton();
 
+            // Botón de historial overlay
+            updateHistoryOverlayButton();
+
             // Botones de color activos
             updateBackgroundButtons();
+
+            // Botones de tema activos
+            updateThemeButtons();
+
+            // Botones de modo de partido
+            updateMatchModeButtons();
+
+            // Historial de sets
+            updateSetsHistory();
 
             // Logo UI
             updateLogoUI();
@@ -823,6 +995,31 @@
         function toggleOverlayVisibility() {
             gameState.overlayVisible = !gameState.overlayVisible;
             updateDisplay();
+        }
+
+        // Toggle overlay de historial
+        function toggleHistoryOverlay() {
+            gameState.showHistoryOverlay = !gameState.showHistoryOverlay;
+            updateDisplay();
+        }
+
+        // Actualizar botón de historial overlay
+        function updateHistoryOverlayButton() {
+            const btn = document.getElementById('historyOverlayToggle');
+            const hasHistory = gameState.setsHistory && gameState.setsHistory.length > 0;
+
+            if (gameState.showHistoryOverlay) {
+                btn.textContent = '🙈 Ocultar Historial en Pantalla';
+                btn.classList.add('hidden');
+            } else {
+                btn.textContent = '📊 Mostrar Historial en Pantalla';
+                btn.classList.remove('hidden');
+            }
+
+            // Deshabilitar si no hay historial
+            btn.disabled = !hasHistory;
+            btn.style.opacity = hasHistory ? '1' : '0.5';
+            btn.style.cursor = hasHistory ? 'pointer' : 'not-allowed';
         }
 
         // Actualizar botones de color activos
@@ -872,8 +1069,14 @@
             }
         }
 
+        // Variable para prevenir múltiples victorias de set
+        let processingSetWin = false;
+
         // Cambiar puntos
         function changePoints(player, delta) {
+            // No permitir cambios si se está procesando una victoria de set
+            if (processingSetWin) return;
+
             const oldPoints = gameState['player' + player].points;
             const newPoints = Math.max(0, oldPoints + delta);
             gameState['player' + player].points = newPoints;
@@ -884,12 +1087,25 @@
                 const otherPlayer = player === 1 ? 2 : 1;
                 const otherPoints = gameState['player' + otherPlayer].points;
 
+                // Verificar victoria de set
                 if (newPoints >= 11 && newPoints - otherPoints >= 2) {
+                    // Bloquear inmediatamente
+                    processingSetWin = true;
+
+                    // Guardar historial del set INMEDIATAMENTE antes del setTimeout
+                    gameState.setsHistory.push({
+                        player1Points: gameState.player1.points,
+                        player2Points: gameState.player2.points
+                    });
+
+                    gameState.animations['set' + player] = Date.now();
+                    gameState['player' + player].sets++;
+
+                    // Resetear puntos después de la animación
                     setTimeout(() => {
-                        gameState.animations['set' + player] = Date.now();
-                        gameState['player' + player].sets++;
                         gameState.player1.points = 0;
                         gameState.player2.points = 0;
+                        processingSetWin = false;
                         updateDisplay();
                     }, 300);
                 }
@@ -930,6 +1146,71 @@
                 gameState.background = { type: 'solid', color: colorMap[type] };
             }
             updateDisplay();
+        }
+
+        // Cambiar tema
+        function setTheme(themeName) {
+            if (themes[themeName]) {
+                gameState.theme = themeName;
+                updateDisplay();
+            }
+        }
+
+        // Actualizar botones de tema activos
+        function updateThemeButtons() {
+            document.querySelectorAll('.btn-theme').forEach(btn => btn.classList.remove('active'));
+
+            const themeMap = {
+                'azulModerno': 'themeAzulModerno',
+                'oscuroElegante': 'themeOscuroElegante',
+                'claroMinimalista': 'themeClaroMinimalista',
+                'neonNocturno': 'themeNeonNocturno',
+                'doradoPremium': 'themeDoradoPremium',
+                'verdeDeportivo': 'themeVerdeDeportivo'
+            };
+
+            const activeThemeId = themeMap[gameState.theme || 'azulModerno'];
+            const activeBtn = document.getElementById(activeThemeId);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+        }
+
+        // Cambiar modo de partido
+        function setMatchMode(mode) {
+            gameState.matchMode = mode;
+            updateDisplay();
+        }
+
+        // Actualizar botones de modo de partido
+        function updateMatchModeButtons() {
+            document.getElementById('modeBest5').classList.toggle('active', gameState.matchMode === 'best-of-5');
+            document.getElementById('modeBest7').classList.toggle('active', gameState.matchMode === 'best-of-7');
+        }
+
+        // Actualizar historial de sets
+        function updateSetsHistory() {
+            const container = document.getElementById('setsHistoryContainer');
+            const list = document.getElementById('setsHistoryList');
+
+            if (gameState.setsHistory && gameState.setsHistory.length > 0) {
+                container.style.display = 'block';
+
+                let html = '<div style="display: flex; flex-direction: column; gap: 6px;">';
+                gameState.setsHistory.forEach((set, index) => {
+                    const winner = set.player1Points > set.player2Points ? 1 : 2;
+                    const winnerStyle = winner === 1 ? 'color: #667eea; font-weight: 700;' : 'color: #764ba2; font-weight: 700;';
+
+                    html += `<div style="display: flex; justify-content: space-between; padding: 4px 8px; background: white; border-radius: 4px;">
+                        <span>Set ${index + 1}:</span>
+                        <span style="${winnerStyle}">${set.player1Points} - ${set.player2Points}</span>
+                    </div>`;
+                });
+                html += '</div>';
+                list.innerHTML = html;
+            } else {
+                container.style.display = 'none';
+            }
         }
 
         // Funciones del Logo
@@ -1000,6 +1281,7 @@
                 gameState.player2.sets = 0;
                 gameState.player1.service = true;
                 gameState.player2.service = false;
+                gameState.setsHistory = [];  // Limpiar historial
                 updateDisplay();
             }
         }
