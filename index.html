@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ping Pong Overlay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +15,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background: transparent;
             height: 100vh;
             display: flex;
@@ -170,7 +173,6 @@
                 <div class="flag" id="flag1">🇪🇸</div>
                 <div class="player-details">
                     <div class="player-name" id="player1Name">Héctor López</div>
-                    <div class="player-role" id="player1Role">Jugador 1</div>
                 </div>
             </div>
 
@@ -197,7 +199,6 @@
                 <div class="flag" id="flag2">🇦🇷</div>
                 <div class="player-details">
                     <div class="player-name" id="player2Name">Susana Martínez</div>
-                    <div class="player-role" id="player2Role">Jugador 2</div>
                 </div>
             </div>
 
@@ -222,8 +223,8 @@
     <script>
         // Estado global
         let gameState = {
-            player1: { name: 'Héctor López', role: 'Jugador 1', points: 7, sets: 1, service: true, flag: '🇪🇸' },
-            player2: { name: 'Susana Martínez', role: 'Jugador 2', points: 5, sets: 0, service: false, flag: '🇦🇷' },
+            player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: '🇪🇸' },
+            player2: { name: 'Susana Martínez', points: 5, sets: 0, service: false, flag: '🇦🇷' },
             background: {
                 type: 'solid',     // 'solid', 'gradient', 'transparent'
                 color: '#00FF00'   // Verde por defecto para chroma key
@@ -234,8 +235,6 @@
         function updateDisplay() {
             document.getElementById('player1Name').textContent = gameState.player1.name;
             document.getElementById('player2Name').textContent = gameState.player2.name;
-            document.getElementById('player1Role').textContent = gameState.player1.role;
-            document.getElementById('player2Role').textContent = gameState.player2.role;
             document.getElementById('points1').textContent = gameState.player1.points;
             document.getElementById('points2').textContent = gameState.player2.points;
             document.getElementById('sets1').textContent = gameState.player1.sets;

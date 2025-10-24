@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +15,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 8px;
@@ -334,11 +337,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Rol / Descripción</label>
-                    <input type="text" id="player1Role" value="Jugador 1" onchange="updateData()">
-                </div>
-
                 <div class="row">
                     <div class="form-group">
                         <label>Puntos</label>
@@ -373,11 +371,6 @@
                         <label>Bandera</label>
                         <input type="text" id="player2Flag" value="🇦🇷" maxlength="2" onchange="updateData()">
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Rol / Descripción</label>
-                    <input type="text" id="player2Role" value="Jugador 2" onchange="updateData()">
                 </div>
 
                 <div class="row">
@@ -456,8 +449,8 @@
     <script>
         // Estado global
         let gameState = {
-            player1: { name: 'Héctor López', role: 'Jugador 1', points: 7, sets: 1, service: true, flag: '🇪🇸' },
-            player2: { name: 'Susana Martínez', role: 'Jugador 2', points: 5, sets: 0, service: false, flag: '🇦🇷' },
+            player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: '🇪🇸' },
+            player2: { name: 'Susana Martínez', points: 5, sets: 0, service: false, flag: '🇦🇷' },
             background: {
                 type: 'solid',     // 'solid', 'gradient', 'transparent'
                 color: '#00FF00'   // Verde por defecto para chroma key
@@ -477,8 +470,6 @@
         function updateDisplay() {
             document.getElementById('player1Name').value = gameState.player1.name;
             document.getElementById('player2Name').value = gameState.player2.name;
-            document.getElementById('player1Role').value = gameState.player1.role;
-            document.getElementById('player2Role').value = gameState.player2.role;
             document.getElementById('player1Flag').value = gameState.player1.flag;
             document.getElementById('player2Flag').value = gameState.player2.flag;
             document.getElementById('points1').value = gameState.player1.points;
@@ -529,8 +520,6 @@
         function updateData() {
             gameState.player1.name = document.getElementById('player1Name').value || 'Jugador 1';
             gameState.player2.name = document.getElementById('player2Name').value || 'Jugador 2';
-            gameState.player1.role = document.getElementById('player1Role').value || 'Jugador 1';
-            gameState.player2.role = document.getElementById('player2Role').value || 'Jugador 2';
             gameState.player1.flag = document.getElementById('player1Flag').value || '🇪🇸';
             gameState.player2.flag = document.getElementById('player2Flag').value || '🇦🇷';
             updateDisplay();
@@ -598,8 +587,8 @@
         function resetAll() {
             if (confirm('¿Reiniciar todo?')) {
                 gameState = {
-                    player1: { name: 'Héctor López', role: 'Jugador 1', points: 0, sets: 0, service: true, flag: '🇪🇸' },
-                    player2: { name: 'Susana Martínez', role: 'Jugador 2', points: 0, sets: 0, service: false, flag: '🇦🇷' },
+                    player1: { name: 'Héctor López', points: 0, sets: 0, service: true, flag: '🇪🇸' },
+                    player2: { name: 'Susana Martínez', points: 0, sets: 0, service: false, flag: '🇦🇷' },
                     background: {
                         type: 'solid',
                         color: '#00FF00'  // Verde por defecto
