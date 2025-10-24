@@ -211,6 +211,36 @@ Actualmente no, pero puedes abrir en navegadores diferentes.
 
 ## 📋 Changelog
 
+### v0.3.0 (2024-10-24)
+**🎨 Sistema de Temas y 📊 Historial de Sets**
+
+#### Sistema de Temas
+- 🎨 6 temas predefinidos para el scoreboard:
+  - Azul Moderno (tema por defecto)
+  - Oscuro Elegante
+  - Claro Minimalista
+  - Neón Nocturno
+  - Dorado Premium
+  - Verde Deportivo
+- Selector de temas en panel de control (tab Configuración)
+- Aplicación dinámica de colores a todos los elementos del overlay
+- Pelotas de servicio adaptadas automáticamente según el tema
+
+#### Historial de Sets
+- 🏆 Configuración de modo de partido (Mejor de 5 o Mejor de 7 sets)
+- 💾 Guardado automático de puntajes de cada set jugado
+- 📊 Visualización del historial en control panel
+- 🔄 Toggle para alternar entre marcador actual e historial completo
+- 📋 Tabla con nombres, banderas y columnas de cada set
+- ⭐ Puntajes ganadores resaltados en dorado
+- 🖼️ Logo se oculta automáticamente en vista de historial
+
+#### Mejoras y Correcciones
+- 🐛 Fix: Prevención de múltiples sets al dar clicks rápidos
+- ✨ Transiciones suaves entre vistas de marcador e historial
+- 🎯 Botón de historial deshabilitado si no hay sets jugados
+- 🧹 Historial se limpia automáticamente al resetear partido
+
 ### v0.2.1 (2024-10-24)
 **🎬 Animaciones y Panel de Control Mejorado**
 
