@@ -79,11 +79,39 @@
             align-items: center;
             gap: 30px;
             padding: 30px 40px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: none;
+            transition: padding 0.3s ease;
+            position: relative;
         }
 
-        .player-row:last-child {
-            border-bottom: none;
+        /* Línea divisoria con pseudo-elemento */
+        .player-row:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 40px;
+            right: 40px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            transition: left 0.3s ease, right 0.3s ease;
+        }
+
+        /* Ajustar línea cuando hay logo */
+        .scoreboard.has-logo-left .player-row:not(:last-child)::after {
+            left: 160px;
+        }
+
+        .scoreboard.has-logo-right .player-row:not(:last-child)::after {
+            right: 160px;
+        }
+
+        /* Añadir padding cuando hay logo */
+        .scoreboard.has-logo-left .player-row {
+            padding-left: 160px;
+        }
+
+        .scoreboard.has-logo-right .player-row {
+            padding-right: 160px;
         }
 
         .player-info {
@@ -173,6 +201,63 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
+        /* Animaciones */
+        @keyframes pointScore {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+                color: #FFD700;
+                text-shadow: 0 0 20px #FFD700;
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes setWin {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+            25% {
+                transform: scale(1.15) rotate(5deg);
+            }
+            50% {
+                transform: scale(1.25) rotate(-5deg);
+            }
+            75% {
+                transform: scale(1.15) rotate(3deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes serviceSpin {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        .stat-value.animate-point {
+            animation: pointScore 0.5s ease-out;
+        }
+
+        .stat-value.animate-set {
+            animation: setWin 0.8s ease-in-out;
+        }
+
+        .service-ball.animate-spin {
+            animation: serviceSpin 0.4s ease-in-out;
+        }
+
         @media (max-width: 1000px) {
             .player-row {
                 padding: 22px 30px;
@@ -199,6 +284,37 @@
                 width: 50px;
                 height: 50px;
                 font-size: 24px;
+            }
+
+            /* Ajustar padding del logo en responsive */
+            .scoreboard.has-logo-left .player-row {
+                padding-left: 120px;
+            }
+
+            .scoreboard.has-logo-right .player-row {
+                padding-right: 120px;
+            }
+
+            /* Ajustar línea divisoria en responsive */
+            .scoreboard.has-logo-left .player-row:not(:last-child)::after {
+                left: 120px;
+            }
+
+            .scoreboard.has-logo-right .player-row:not(:last-child)::after {
+                right: 120px;
+            }
+
+            .logo-container {
+                max-width: 90px;
+                max-height: 90px;
+            }
+
+            .logo-container.left {
+                left: 15px;
+            }
+
+            .logo-container.right {
+                right: 15px;
             }
         }
     </style>
@@ -299,7 +415,15 @@
                 position: 'left',  // 'left' o 'right'
                 enabled: false     // mostrar/ocultar logo
             },
-            overlayVisible: true   // Mostrar/ocultar overlay completo
+            overlayVisible: true,   // Mostrar/ocultar overlay completo
+            // Triggers de animación (timestamps)
+            animations: {
+                point1: 0,
+                point2: 0,
+                set1: 0,
+                set2: 0,
+                service: 0
+            }
         };
 
         // Función para actualizar la pantalla
@@ -343,10 +467,13 @@
         function applyLogo() {
             const logoContainer = document.getElementById('logoContainer');
             const logoImage = document.getElementById('logoImage');
+            const scoreboard = document.querySelector('.scoreboard');
             const logo = gameState.logo;
 
             if (!logo || !logo.enabled || !logo.url) {
                 logoContainer.className = 'logo-container';
+                // Remover clases de logo del scoreboard
+                scoreboard.classList.remove('has-logo-left', 'has-logo-right');
                 return;
             }
 
@@ -355,6 +482,14 @@
 
             // Configurar posición y visibilidad
             logoContainer.className = `logo-container ${logo.position} enabled`;
+
+            // Añadir clase al scoreboard para ajustar padding
+            scoreboard.classList.remove('has-logo-left', 'has-logo-right');
+            if (logo.position === 'left') {
+                scoreboard.classList.add('has-logo-left');
+            } else {
+                scoreboard.classList.add('has-logo-right');
+            }
         }
 
         // Aplicar color de fondo dinámicamente
@@ -383,14 +518,57 @@
             const saved = localStorage.getItem('gameState');
             if (saved) {
                 gameState = JSON.parse(saved);
+
+                // Asegurar que exista el campo animations (para compatibilidad con versiones anteriores)
+                if (!gameState.animations) {
+                    gameState.animations = {
+                        point1: 0,
+                        point2: 0,
+                        set1: 0,
+                        set2: 0,
+                        service: 0
+                    };
+                }
+
                 updateDisplay();
             } else {
                 updateDisplay();
             }
         }
 
+        // Funciones de Animación
+        function animatePointScore(player) {
+            const pointElement = document.getElementById(`points${player}`);
+            pointElement.classList.add('animate-point');
+            setTimeout(() => {
+                pointElement.classList.remove('animate-point');
+            }, 500);
+        }
+
+        function animateSetWin(player) {
+            const setElement = document.getElementById(`sets${player}`);
+            setElement.classList.add('animate-set');
+            setTimeout(() => {
+                setElement.classList.remove('animate-set');
+            }, 800);
+        }
+
+        function animateServiceChange() {
+            const ball1 = document.getElementById('serviceBall1');
+            const ball2 = document.getElementById('serviceBall2');
+
+            if (gameState.player1.service) {
+                ball1.classList.add('animate-spin');
+                setTimeout(() => ball1.classList.remove('animate-spin'), 400);
+            } else {
+                ball2.classList.add('animate-spin');
+                setTimeout(() => ball2.classList.remove('animate-spin'), 400);
+            }
+        }
+
         // Actualizar servicio automáticamente según reglas de tenis de mesa
-        function updateService() {
+        function updateService(animate = true) {
+            const oldService1 = gameState.player1.service;
             const totalPoints = gameState.player1.points + gameState.player2.points;
             const p1 = gameState.player1.points;
             const p2 = gameState.player2.points;
@@ -405,12 +583,61 @@
                 gameState.player1.service = serviceBlock === 0;
                 gameState.player2.service = serviceBlock === 1;
             }
+
+            // Animar si cambió el servicio
+            if (animate && oldService1 !== gameState.player1.service) {
+                animateServiceChange();
+            }
         }
+
+        // Rastrear últimos timestamps de animación
+        let lastAnimations = {
+            point1: 0,
+            point2: 0,
+            set1: 0,
+            set2: 0,
+            service: 0
+        };
 
         // Escuchar cambios desde otros tabs/ventanas
         window.addEventListener('storage', (e) => {
             if (e.key === 'gameState') {
-                gameState = JSON.parse(e.newValue);
+                const newState = JSON.parse(e.newValue);
+
+                // Verificar si hay animaciones nuevas
+                if (newState.animations) {
+                    // Animación de punto jugador 1
+                    if (newState.animations.point1 && newState.animations.point1 !== lastAnimations.point1) {
+                        animatePointScore(1);
+                        lastAnimations.point1 = newState.animations.point1;
+                    }
+
+                    // Animación de punto jugador 2
+                    if (newState.animations.point2 && newState.animations.point2 !== lastAnimations.point2) {
+                        animatePointScore(2);
+                        lastAnimations.point2 = newState.animations.point2;
+                    }
+
+                    // Animación de set jugador 1
+                    if (newState.animations.set1 && newState.animations.set1 !== lastAnimations.set1) {
+                        animateSetWin(1);
+                        lastAnimations.set1 = newState.animations.set1;
+                    }
+
+                    // Animación de set jugador 2
+                    if (newState.animations.set2 && newState.animations.set2 !== lastAnimations.set2) {
+                        animateSetWin(2);
+                        lastAnimations.set2 = newState.animations.set2;
+                    }
+
+                    // Animación de cambio de servicio
+                    if (newState.animations.service && newState.animations.service !== lastAnimations.service) {
+                        animateServiceChange();
+                        lastAnimations.service = newState.animations.service;
+                    }
+                }
+
+                gameState = newState;
                 updateDisplay();
             }
         });
@@ -419,25 +646,56 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === '1') {
                 gameState.player1.points++;
+
+                // Trigger animación de punto
+                gameState.animations.point1 = Date.now();
+                lastAnimations.point1 = gameState.animations.point1;
+                animatePointScore(1);
+
+                // Verificar si ganó el set
                 if (gameState.player1.points >= 11 && gameState.player1.points - gameState.player2.points >= 2) {
-                    gameState.player1.sets++;
-                    gameState.player1.points = 0;
-                    gameState.player2.points = 0;
+                    setTimeout(() => {
+                        gameState.animations.set1 = Date.now();
+                        lastAnimations.set1 = gameState.animations.set1;
+                        animateSetWin(1);
+                        gameState.player1.sets++;
+                        gameState.player1.points = 0;
+                        gameState.player2.points = 0;
+                        updateDisplay();
+                    }, 300);
                 }
+
                 updateService();
                 updateDisplay();
             } else if (e.key === '2') {
                 gameState.player2.points++;
+
+                // Trigger animación de punto
+                gameState.animations.point2 = Date.now();
+                lastAnimations.point2 = gameState.animations.point2;
+                animatePointScore(2);
+
+                // Verificar si ganó el set
                 if (gameState.player2.points >= 11 && gameState.player2.points - gameState.player1.points >= 2) {
-                    gameState.player2.sets++;
-                    gameState.player1.points = 0;
-                    gameState.player2.points = 0;
+                    setTimeout(() => {
+                        gameState.animations.set2 = Date.now();
+                        lastAnimations.set2 = gameState.animations.set2;
+                        animateSetWin(2);
+                        gameState.player2.sets++;
+                        gameState.player1.points = 0;
+                        gameState.player2.points = 0;
+                        updateDisplay();
+                    }, 300);
                 }
+
                 updateService();
                 updateDisplay();
             } else if (e.key === 's' || e.key === 'S') {
                 gameState.player1.service = !gameState.player1.service;
                 gameState.player2.service = !gameState.player2.service;
+                gameState.animations.service = Date.now();
+                lastAnimations.service = gameState.animations.service;
+                animateServiceChange();
                 updateDisplay();
             }
         });

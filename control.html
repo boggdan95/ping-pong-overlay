@@ -23,30 +23,82 @@
         }
 
         .container {
-            max-width: 100%;
+            max-width: 500px;
             margin: 0 auto;
         }
 
         h1 {
             text-align: center;
             color: white;
-            margin-bottom: 4px;
-            font-size: 11px;
-            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            border-color: #667eea;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ==================== TAB PARTIDO ==================== */
+
+        .match-header {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
         }
 
         .visibility-toggle {
+            flex: 2;
             background: #2196F3;
             color: white;
-            padding: 8px 12px;
+            padding: 10px;
             font-size: 13px;
             font-weight: 700;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
-            width: 100%;
-            margin-bottom: 6px;
             box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
         }
 
@@ -64,372 +116,211 @@
             background: #d32f2f;
         }
 
-        .panel {
-            background: white;
-            border-radius: 6px;
-            padding: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .players-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4px;
-            margin-bottom: 4px;
-        }
-
-        .player-section {
-            padding: 4px;
-            background: #f8f9fa;
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .controls-row {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr 0.8fr;
-            gap: 4px;
-        }
-
-        .player-title {
-            font-size: 10px;
+        .btn-reset-match {
+            flex: 1;
+            background: #ff9800;
+            color: white;
+            padding: 10px;
+            font-size: 12px;
             font-weight: 700;
-            color: #0052CC;
-            margin-bottom: 3px;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 2px;
-        }
-
-        .compact-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 3px;
-            margin-bottom: 2px;
-        }
-
-        .points-sets-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 1px;
-            color: #555;
-            font-size: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        input[type="text"],
-        input[type="number"] {
-            width: 100%;
-            padding: 4px 6px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            font-size: 11px;
-            transition: border-color 0.2s;
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus {
-            outline: none;
-            border-color: #0052CC;
-            background: #f0f5ff;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3px;
-        }
-
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto;
-            gap: 3px;
-            margin-top: 2px;
-        }
-
-        .btn-group input[type="number"] {
-            grid-column: 1 / -1;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 700;
-            padding: 6px;
-            color: #0052CC;
-        }
-
-        button {
-            padding: 8px;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: 700;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: all 0.2s;
         }
 
-        .btn-plus {
-            background: #4CAF50;
+        .btn-reset-match:hover {
+            background: #ff6f00;
+            transform: translateY(-1px);
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .player-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .player-card.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        .btn-plus:hover {
-            background: #45a049;
-            transform: scale(1.05);
+        .player-name-display {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .btn-minus {
+        .player-flag-display {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .score-display {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .sets-display {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .point-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-point {
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-point-minus {
             background: #f44336;
             color: white;
         }
 
-        .btn-minus:hover {
+        .btn-point-minus:hover {
             background: #da190b;
             transform: scale(1.05);
         }
 
-        .service-section {
-            background: #f0f5ff;
-            padding: 4px;
-            border-radius: 4px;
-        }
-
-        .service-section h3 {
-            margin-bottom: 2px;
-            color: #0052CC;
-            font-size: 8px;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .service-buttons {
-            display: flex;
-            gap: 2px;
-        }
-
-        .btn-service {
-            flex: 1;
-            padding: 6px 8px;
-            border: 2px solid #0052CC;
-            background: white;
-            color: #0052CC;
-            border-radius: 4px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.15s;
-            font-size: 11px;
-        }
-
-        .btn-service:hover {
-            background: #f0f5ff;
-            transform: scale(1.02);
-        }
-
-        .btn-service.active {
-            background: #0052CC;
-            color: white;
-        }
-
-        .reset-section {
-            background: #fff3e0;
-            padding: 4px;
-            border-radius: 4px;
-            border: 1px solid #ff9800;
-        }
-
-        .reset-section h3 {
-            margin-bottom: 2px;
-            color: #ff6f00;
-            font-size: 8px;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .btn-reset {
-            width: 100%;
-            background: #ff9800;
-            color: white;
-            padding: 6px 8px;
-            font-size: 11px;
-            font-weight: 700;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .btn-reset:hover {
-            background: #ff6f00;
-            transform: scale(1.02);
-        }
-
-        .logo-section {
-            background: #e8f5e9;
-            padding: 4px;
-            border-radius: 4px;
-            border: 1px solid #4CAF50;
-        }
-
-        .logo-section h3 {
-            margin-bottom: 2px;
-            color: #2e7d32;
-            font-size: 8px;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .logo-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .logo-input-group {
-            display: flex;
-            gap: 2px;
-        }
-
-        .logo-url-input {
-            flex: 1;
-            font-size: 10px;
-            padding: 4px;
-        }
-
-        .logo-file-btn {
+        .btn-point-plus {
             background: #4CAF50;
             color: white;
-            padding: 4px 8px;
-            font-size: 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: 700;
         }
 
-        .logo-file-btn:hover {
+        .btn-point-plus:hover {
             background: #45a049;
+            transform: scale(1.05);
         }
 
-        .logo-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 2px;
-        }
-
-        .btn-logo-option {
-            padding: 4px;
-            font-size: 9px;
-            border: 1px solid #4CAF50;
-            background: white;
-            color: #4CAF50;
-            border-radius: 3px;
+        .service-indicator {
+            margin-top: 8px;
+            padding: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .player-card.active .service-indicator {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+        }
+
+        .service-indicator:hover {
+            transform: scale(1.02);
+        }
+
+        /* ==================== TAB CONFIGURACIÓN ==================== */
+
+        .config-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .config-section h3 {
+            font-size: 12px;
+            color: #667eea;
+            margin-bottom: 8px;
             font-weight: 700;
-            transition: all 0.15s;
+            text-transform: uppercase;
         }
 
-        .btn-logo-option:hover {
-            background: #e8f5e9;
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
-        .btn-logo-option.active {
-            background: #4CAF50;
-            color: white;
+        .form-group {
+            margin-bottom: 8px;
         }
 
-        .logo-preview {
-            max-height: 60px;
-            text-align: center;
-            margin-top: 3px;
-            display: none;
-        }
-
-        .logo-preview.show {
+        .form-group label {
             display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #555;
+            font-size: 11px;
+            text-transform: uppercase;
         }
 
-        .logo-preview img {
-            max-height: 60px;
-            max-width: 100%;
-            object-fit: contain;
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
         }
 
-        .background-section {
-            background: #f0f0f0;
-            padding: 4px;
-            border-radius: 4px;
-            border: 1px solid #9e9e9e;
-        }
-
-        .background-section h3 {
-            margin-bottom: 2px;
-            color: #424242;
-            font-size: 8px;
-            text-align: center;
-            font-weight: 700;
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f0f5ff;
         }
 
         .color-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
+            gap: 6px;
         }
 
         .btn-color {
-            padding: 8px 4px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            font-weight: 700;
+            padding: 10px;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.15s;
-            font-size: 18px;
-            text-align: center;
-            line-height: 1;
+            transition: all 0.2s;
         }
 
         .btn-color:hover {
-            transform: scale(1.08);
-            border-color: #333;
+            transform: scale(1.05);
         }
 
         .btn-color.active {
-            border-color: #0052CC;
-            border-width: 2px;
-            box-shadow: 0 0 6px rgba(0, 82, 204, 0.6);
+            border-color: #667eea;
+            border-width: 3px;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.6);
         }
 
-        .btn-color.green {
-            background: #00FF00;
-            color: #000;
-        }
-
-        .btn-color.blue {
-            background: #0000FF;
-            color: #fff;
-        }
-
-        .btn-color.magenta {
-            background: #FF00FF;
-            color: #fff;
-        }
-
-        .btn-color.red {
-            background: #FF0000;
-            color: #fff;
-        }
-
+        .btn-color.green { background: #00FF00; color: #000; }
+        .btn-color.blue { background: #0000FF; color: #fff; }
+        .btn-color.magenta { background: #FF00FF; color: #fff; }
+        .btn-color.red { background: #FF0000; color: #fff; }
         .btn-color.gradient {
             background: linear-gradient(135deg, #003d8c 0%, #0052CC 100%);
             color: #fff;
         }
-
         .btn-color.transparent {
             background: repeating-linear-gradient(
                 45deg,
@@ -440,152 +331,350 @@
             );
             color: #000;
         }
+
+        .logo-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .logo-url-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .logo-file-btn {
+            padding: 8px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logo-options {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .btn-logo-option {
+            flex: 1;
+            padding: 8px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-logo-option:hover {
+            border-color: #667eea;
+        }
+
+        .btn-logo-option.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .logo-preview {
+            text-align: center;
+            padding: 12px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-preview img {
+            max-width: 100%;
+            max-height: 60px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 6px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 14px;
+                margin-bottom: 6px;
+            }
+
+            .tab-button {
+                padding: 6px;
+                font-size: 11px;
+            }
+
+            .panel {
+                padding: 8px;
+            }
+
+            .score-display {
+                font-size: 28px;
+            }
+
+            .player-name-display {
+                font-size: 11px;
+            }
+
+            .player-flag-display {
+                font-size: 20px;
+            }
+
+            .btn-point {
+                font-size: 18px;
+                padding: 10px 6px;
+            }
+        }
+
+        /* Ultra compacto para cuarto de pantalla (960x540 o menos) */
+        @media (max-width: 500px) {
+            body {
+                padding: 4px;
+            }
+
+            h1 {
+                font-size: 13px;
+                margin-bottom: 4px;
+            }
+
+            .tabs {
+                gap: 4px;
+                margin-bottom: 6px;
+            }
+
+            .tab-button {
+                padding: 6px 4px;
+                font-size: 10px;
+            }
+
+            .panel {
+                padding: 6px;
+                border-radius: 6px;
+            }
+
+            .match-header {
+                gap: 4px;
+                margin-bottom: 6px;
+            }
+
+            .visibility-toggle,
+            .btn-reset-match {
+                padding: 8px;
+                font-size: 11px;
+            }
+
+            .players-grid {
+                gap: 6px;
+            }
+
+            .player-card {
+                padding: 8px;
+            }
+
+            .player-name-display {
+                font-size: 10px;
+                margin-bottom: 4px;
+            }
+
+            .player-flag-display {
+                font-size: 18px;
+                margin-bottom: 6px;
+            }
+
+            .score-display {
+                font-size: 24px;
+                margin-bottom: 6px;
+            }
+
+            .sets-display {
+                font-size: 9px;
+                margin-bottom: 6px;
+            }
+
+            .point-buttons {
+                gap: 4px;
+            }
+
+            .btn-point {
+                padding: 10px 4px;
+                font-size: 16px;
+            }
+
+            .service-indicator {
+                margin-top: 6px;
+                padding: 4px;
+                font-size: 9px;
+            }
+
+            .config-section {
+                padding: 8px;
+                margin-bottom: 8px;
+            }
+
+            .config-section h3 {
+                font-size: 10px;
+            }
+
+            .form-group input {
+                padding: 6px;
+                font-size: 12px;
+            }
+
+            .btn-color {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚙️ Panel de Control</h1>
+        <h1>🏓 Control Panel</h1>
 
-        <!-- Botón de Visibilidad del Overlay -->
-        <button id="visibilityToggle" class="visibility-toggle" onclick="toggleOverlayVisibility()">
-            👁️ Ocultar Overlay
-        </button>
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('match')">
+                🏓 Partido
+            </button>
+            <button class="tab-button" onclick="switchTab('config')">
+                ⚙️ Configuración
+            </button>
+        </div>
 
         <div class="panel">
-            <!-- Jugador 1 -->
-            <div class="player-section">
-                <div class="player-title">Jugador 1</div>
-
-                <div class="compact-row">
-                    <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" id="player1Name" value="Héctor López" onchange="updateData()">
-                    </div>
-                    <div class="form-group">
-                        <label>Bandera</label>
-                        <input type="text" id="player1Flag" value="ESP" maxlength="3" onchange="updateData()" placeholder="GUA" style="text-transform: uppercase;">
-                    </div>
+            <!-- TAB: PARTIDO -->
+            <div id="matchTab" class="tab-content active">
+                <div class="match-header">
+                    <button id="visibilityToggle" class="visibility-toggle" onclick="toggleOverlayVisibility()">
+                        👁️ Mostrar Overlay
+                    </button>
+                    <button class="btn-reset-match" onclick="resetAll()">
+                        🔄 Reset
+                    </button>
                 </div>
 
-                <div class="row">
-                    <div class="form-group">
-                        <label>Puntos</label>
-                        <div class="btn-group">
-                            <input type="number" id="points1" value="7" readonly>
-                            <button class="btn-minus" onclick="changePoints(1, -1)">−</button>
-                            <button class="btn-plus" onclick="changePoints(1, 1)">+</button>
+                <div class="players-grid">
+                    <!-- Jugador 1 -->
+                    <div class="player-card" id="playerCard1">
+                        <div class="player-name-display" id="player1NameDisplay">Jugador 1</div>
+                        <div class="player-flag-display">
+                            <span class="fi fi-es" id="player1FlagDisplay"></span>
+                        </div>
+                        <div class="score-display" id="player1ScoreDisplay">0</div>
+                        <div class="sets-display">Sets: <span id="player1SetsDisplay">0</span></div>
+                        <div class="point-buttons">
+                            <button class="btn-point btn-point-minus" onclick="changePoints(1, -1)">−</button>
+                            <button class="btn-point btn-point-plus" onclick="changePoints(1, 1)">+</button>
+                        </div>
+                        <div class="service-indicator" onclick="setService(1)">
+                            🎾 Servicio
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Sets</label>
-                        <div class="btn-group">
-                            <input type="number" id="sets1" value="1" readonly>
-                            <button class="btn-minus" onclick="changeSets(1, -1)">−</button>
-                            <button class="btn-plus" onclick="changeSets(1, 1)">+</button>
+                    <!-- Jugador 2 -->
+                    <div class="player-card" id="playerCard2">
+                        <div class="player-name-display" id="player2NameDisplay">Jugador 2</div>
+                        <div class="player-flag-display">
+                            <span class="fi fi-ar" id="player2FlagDisplay"></span>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Jugador 2 -->
-            <div class="player-section">
-                <div class="player-title">Jugador 2</div>
-
-                <div class="compact-row">
-                    <div class="form-group">
-                        <label>Nombre</label>
-                        <input type="text" id="player2Name" value="Susana Martínez" onchange="updateData()">
-                    </div>
-                    <div class="form-group">
-                        <label>Bandera</label>
-                        <input type="text" id="player2Flag" value="ARG" maxlength="3" onchange="updateData()" placeholder="ESA" style="text-transform: uppercase;">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group">
-                        <label>Puntos</label>
-                        <div class="btn-group">
-                            <input type="number" id="points2" value="5" readonly>
-                            <button class="btn-minus" onclick="changePoints(2, -1)">−</button>
-                            <button class="btn-plus" onclick="changePoints(2, 1)">+</button>
+                        <div class="score-display" id="player2ScoreDisplay">0</div>
+                        <div class="sets-display">Sets: <span id="player2SetsDisplay">0</span></div>
+                        <div class="point-buttons">
+                            <button class="btn-point btn-point-minus" onclick="changePoints(2, -1)">−</button>
+                            <button class="btn-point btn-point-plus" onclick="changePoints(2, 1)">+</button>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Sets</label>
-                        <div class="btn-group">
-                            <input type="number" id="sets2" value="0" readonly>
-                            <button class="btn-minus" onclick="changeSets(2, -1)">−</button>
-                            <button class="btn-plus" onclick="changeSets(2, 1)">+</button>
+                        <div class="service-indicator" onclick="setService(2)">
+                            🎾 Servicio
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Servicio -->
-            <div class="service-section">
-                <h3>🎾 SERVICIO</h3>
-                <div class="service-buttons">
-                    <button class="btn-service active" id="serviceBtn1" onclick="setService(1)">
-                        J1
-                    </button>
-                    <button class="btn-service" id="serviceBtn2" onclick="setService(2)">
-                        J2
-                    </button>
+            <!-- TAB: CONFIGURACIÓN -->
+            <div id="configTab" class="tab-content">
+                <!-- Jugadores -->
+                <div class="config-section">
+                    <h3>👥 Jugadores</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre Jugador 1</label>
+                            <input type="text" id="player1Name" value="Héctor López" onchange="updateData()">
+                        </div>
+                        <div class="form-group">
+                            <label>Bandera (3 letras)</label>
+                            <input type="text" id="player1Flag" value="ESP" maxlength="3" onchange="updateData()" placeholder="ESP" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre Jugador 2</label>
+                            <input type="text" id="player2Name" value="Susana Martínez" onchange="updateData()">
+                        </div>
+                        <div class="form-group">
+                            <label>Bandera (3 letras)</label>
+                            <input type="text" id="player2Flag" value="ARG" maxlength="3" onchange="updateData()" placeholder="ARG" style="text-transform: uppercase;">
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Color de Fondo (Chroma Key) -->
-            <div class="background-section">
-                <h3>🎨 COLOR FONDO</h3>
-                <div class="color-grid">
-                    <button class="btn-color green active" onclick="setBackground('green')" id="bgGreen">
-                        🟢
-                    </button>
-                    <button class="btn-color blue" onclick="setBackground('blue')" id="bgBlue">
-                        🔵
-                    </button>
-                    <button class="btn-color magenta" onclick="setBackground('magenta')" id="bgMagenta">
-                        🟣
-                    </button>
-                    <button class="btn-color red" onclick="setBackground('red')" id="bgRed">
-                        🔴
-                    </button>
-                    <button class="btn-color gradient" onclick="setBackground('gradient')" id="bgGradient">
-                        🌈
-                    </button>
-                    <button class="btn-color transparent" onclick="setBackground('transparent')" id="bgTransparent">
-                        ⚪
-                    </button>
+                <!-- Color de Fondo -->
+                <div class="config-section">
+                    <h3>🎨 Color de Fondo (Chroma Key)</h3>
+                    <div class="color-grid">
+                        <button class="btn-color green active" onclick="setBackground('green')" id="bgGreen">
+                            🟢 Verde
+                        </button>
+                        <button class="btn-color blue" onclick="setBackground('blue')" id="bgBlue">
+                            🔵 Azul
+                        </button>
+                        <button class="btn-color magenta" onclick="setBackground('magenta')" id="bgMagenta">
+                            🟣 Magenta
+                        </button>
+                        <button class="btn-color red" onclick="setBackground('red')" id="bgRed">
+                            🔴 Rojo
+                        </button>
+                        <button class="btn-color gradient" onclick="setBackground('gradient')" id="bgGradient">
+                            🌈 Degradado
+                        </button>
+                        <button class="btn-color transparent" onclick="setBackground('transparent')" id="bgTransparent">
+                            ⚪ Transparente
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Logo -->
-            <div class="logo-section">
-                <h3>🖼️ LOGO</h3>
-                <div class="logo-controls">
+                <!-- Logo -->
+                <div class="config-section">
+                    <h3>🖼️ Logo</h3>
                     <div class="logo-input-group">
-                        <input type="text" id="logoUrl" class="logo-url-input" placeholder="URL del logo" onchange="updateLogoUrl()">
+                        <input type="text" id="logoUrl" class="logo-url-input" placeholder="URL del logo o pega imagen" onchange="updateLogoUrl()">
                         <input type="file" id="logoFile" accept="image/*" style="display: none;" onchange="handleLogoFile(event)">
-                        <button class="logo-file-btn" onclick="document.getElementById('logoFile').click()">📁</button>
+                        <button class="logo-file-btn" onclick="document.getElementById('logoFile').click()">📁 Subir</button>
                     </div>
                     <div class="logo-options">
-                        <button class="btn-logo-option active" id="logoLeft" onclick="setLogoPosition('left')">⬅️ Izq</button>
-                        <button class="btn-logo-option" id="logoRight" onclick="setLogoPosition('right')">Der ➡️</button>
-                        <button class="btn-logo-option" id="logoToggle" onclick="toggleLogo()">🚫 Off</button>
+                        <button class="btn-logo-option active" id="logoLeft" onclick="setLogoPosition('left')">⬅️ Izquierda</button>
+                        <button class="btn-logo-option" id="logoRight" onclick="setLogoPosition('right')">Derecha ➡️</button>
+                        <button class="btn-logo-option" id="logoToggle" onclick="toggleLogo()">🚫 Desactivado</button>
                     </div>
                     <div id="logoPreview" class="logo-preview">
-                        <img id="logoPreviewImg" src="" alt="Preview">
+                        <img id="logoPreviewImg" src="" alt="Vista previa del logo">
                     </div>
                 </div>
-            </div>
-
-            <!-- Reset -->
-            <div class="reset-section">
-                <h3>🔄 RESET</h3>
-                <button class="btn-reset" onclick="resetAll()">Reiniciar</button>
             </div>
         </div>
     </div>
@@ -611,52 +700,108 @@
 
         // Estado global
         let gameState = {
-            player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: 'ESP' },
-            player2: { name: 'Susana Martínez', points: 5, sets: 0, service: false, flag: 'ARG' },
+            player1: { name: 'Héctor López', points: 0, sets: 0, service: true, flag: 'ESP' },
+            player2: { name: 'Susana Martínez', points: 0, sets: 0, service: false, flag: 'ARG' },
             background: {
-                type: 'solid',     // 'solid', 'gradient', 'transparent'
-                color: '#00FF00'   // Verde por defecto para chroma key
+                type: 'solid',
+                color: '#00FF00'
             },
             logo: {
-                url: '',           // URL de la imagen o data URI
-                position: 'left',  // 'left' o 'right'
-                enabled: false     // mostrar/ocultar logo
+                url: '',
+                position: 'left',
+                enabled: false
             },
-            overlayVisible: true   // Mostrar/ocultar overlay completo
+            overlayVisible: true,
+            animations: {
+                point1: 0,
+                point2: 0,
+                set1: 0,
+                set2: 0,
+                service: 0
+            }
         };
+
+        // Cambiar entre tabs
+        function switchTab(tabName) {
+            // Ocultar todos los tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Mostrar el tab seleccionado
+            if (tabName === 'match') {
+                document.getElementById('matchTab').classList.add('active');
+                document.querySelectorAll('.tab-button')[0].classList.add('active');
+            } else if (tabName === 'config') {
+                document.getElementById('configTab').classList.add('active');
+                document.querySelectorAll('.tab-button')[1].classList.add('active');
+            }
+        }
 
         // Cargar estado
         function loadState() {
             const saved = localStorage.getItem('gameState');
             if (saved) {
                 gameState = JSON.parse(saved);
+
+                // Asegurar que exista el campo animations
+                if (!gameState.animations) {
+                    gameState.animations = {
+                        point1: 0,
+                        point2: 0,
+                        set1: 0,
+                        set2: 0,
+                        service: 0
+                    };
+                }
             }
             updateDisplay();
         }
 
         // Actualizar pantalla
         function updateDisplay() {
+            // Tab Configuración
             document.getElementById('player1Name').value = gameState.player1.name;
             document.getElementById('player2Name').value = gameState.player2.name;
             document.getElementById('player1Flag').value = gameState.player1.flag;
             document.getElementById('player2Flag').value = gameState.player2.flag;
-            document.getElementById('points1').value = gameState.player1.points;
-            document.getElementById('points2').value = gameState.player2.points;
-            document.getElementById('sets1').value = gameState.player1.sets;
-            document.getElementById('sets2').value = gameState.player2.sets;
 
-            // Botones de servicio
-            document.getElementById('serviceBtn1').classList.toggle('active', gameState.player1.service);
-            document.getElementById('serviceBtn2').classList.toggle('active', gameState.player2.service);
+            // Tab Partido - Display
+            document.getElementById('player1NameDisplay').textContent = gameState.player1.name;
+            document.getElementById('player2NameDisplay').textContent = gameState.player2.name;
+            document.getElementById('player1ScoreDisplay').textContent = gameState.player1.points;
+            document.getElementById('player2ScoreDisplay').textContent = gameState.player2.points;
+            document.getElementById('player1SetsDisplay').textContent = gameState.player1.sets;
+            document.getElementById('player2SetsDisplay').textContent = gameState.player2.sets;
 
-            // Actualizar botones de fondo
+            // Banderas
+            const flag1 = getISO2Code(gameState.player1.flag);
+            const flag2 = getISO2Code(gameState.player2.flag);
+            document.getElementById('player1FlagDisplay').className = `fi fi-${flag1}`;
+            document.getElementById('player2FlagDisplay').className = `fi fi-${flag2}`;
+
+            // Indicador de servicio (resaltar card activo)
+            const card1 = document.getElementById('playerCard1');
+            const card2 = document.getElementById('playerCard2');
+            if (gameState.player1.service) {
+                card1.classList.add('active');
+                card2.classList.remove('active');
+            } else {
+                card1.classList.remove('active');
+                card2.classList.add('active');
+            }
+
+            // Botón de visibilidad
+            updateVisibilityButton();
+
+            // Botones de color activos
             updateBackgroundButtons();
 
-            // Actualizar logo UI
+            // Logo UI
             updateLogoUI();
-
-            // Actualizar botón de visibilidad
-            updateVisibilityButton();
 
             // Guardar
             localStorage.setItem('gameState', JSON.stringify(gameState));
@@ -682,17 +827,14 @@
 
         // Actualizar botones de color activos
         function updateBackgroundButtons() {
-            // Remover clase active de todos
             document.querySelectorAll('.btn-color').forEach(btn => btn.classList.remove('active'));
 
-            // Marcar el activo según el tipo
             const bg = gameState.background;
             if (bg.type === 'gradient') {
                 document.getElementById('bgGradient').classList.add('active');
             } else if (bg.type === 'transparent') {
                 document.getElementById('bgTransparent').classList.add('active');
             } else if (bg.type === 'solid') {
-                // Determinar qué botón activar según el color
                 if (bg.color === '#00FF00') {
                     document.getElementById('bgGreen').classList.add('active');
                 } else if (bg.color === '#0000FF') {
@@ -714,18 +856,16 @@
             updateDisplay();
         }
 
-        // Actualizar servicio automáticamente según reglas de tenis de mesa
+        // Actualizar servicio
         function updateService() {
             const totalPoints = gameState.player1.points + gameState.player2.points;
             const p1 = gameState.player1.points;
             const p2 = gameState.player2.points;
 
-            // En deuce (10-10 o más), servicio cambia cada punto
             if (p1 >= 10 && p2 >= 10) {
                 gameState.player1.service = (totalPoints % 2) === 0;
                 gameState.player2.service = !gameState.player1.service;
             } else {
-                // Servicio normal: cada 2 puntos
                 const serviceBlock = Math.floor(totalPoints / 2) % 2;
                 gameState.player1.service = serviceBlock === 0;
                 gameState.player2.service = serviceBlock === 1;
@@ -734,7 +874,27 @@
 
         // Cambiar puntos
         function changePoints(player, delta) {
-            gameState['player' + player].points = Math.max(0, gameState['player' + player].points + delta);
+            const oldPoints = gameState['player' + player].points;
+            const newPoints = Math.max(0, oldPoints + delta);
+            gameState['player' + player].points = newPoints;
+
+            if (delta > 0 && newPoints > oldPoints) {
+                gameState.animations['point' + player] = Date.now();
+
+                const otherPlayer = player === 1 ? 2 : 1;
+                const otherPoints = gameState['player' + otherPlayer].points;
+
+                if (newPoints >= 11 && newPoints - otherPoints >= 2) {
+                    setTimeout(() => {
+                        gameState.animations['set' + player] = Date.now();
+                        gameState['player' + player].sets++;
+                        gameState.player1.points = 0;
+                        gameState.player2.points = 0;
+                        updateDisplay();
+                    }, 300);
+                }
+            }
+
             updateService();
             updateDisplay();
         }
@@ -749,6 +909,7 @@
         function setService(player) {
             gameState.player1.service = player === 1;
             gameState.player2.service = player === 2;
+            gameState.animations.service = Date.now();
             updateDisplay();
         }
 
@@ -762,21 +923,11 @@
             };
 
             if (type === 'gradient') {
-                gameState.background = {
-                    type: 'gradient',
-                    color: '#00FF00'
-                };
+                gameState.background = { type: 'gradient', color: '#00FF00' };
             } else if (type === 'transparent') {
-                gameState.background = {
-                    type: 'transparent',
-                    color: '#00FF00'
-                };
+                gameState.background = { type: 'transparent', color: '#00FF00' };
             } else {
-                // Color sólido
-                gameState.background = {
-                    type: 'solid',
-                    color: colorMap[type]
-                };
+                gameState.background = { type: 'solid', color: colorMap[type] };
             }
             updateDisplay();
         }
@@ -785,35 +936,43 @@
         function updateLogoUI() {
             const logo = gameState.logo || { url: '', position: 'left', enabled: false };
 
-            // Actualizar input
             document.getElementById('logoUrl').value = logo.url || '';
-
-            // Actualizar botones de posición
             document.getElementById('logoLeft').classList.toggle('active', logo.position === 'left');
             document.getElementById('logoRight').classList.toggle('active', logo.position === 'right');
 
-            // Actualizar botón de toggle
             const toggleBtn = document.getElementById('logoToggle');
-            toggleBtn.textContent = logo.enabled ? '✅ On' : '🚫 Off';
+            toggleBtn.textContent = logo.enabled ? '✅ Activado' : '🚫 Desactivado';
             toggleBtn.classList.toggle('active', logo.enabled);
 
-            // Actualizar preview
-            const preview = document.getElementById('logoPreview');
-            const previewImg = document.getElementById('logoPreviewImg');
-            if (logo.url && logo.enabled) {
-                previewImg.src = logo.url;
-                preview.classList.add('show');
+            const preview = document.getElementById('logoPreviewImg');
+            if (logo.url) {
+                preview.src = logo.url;
+                preview.style.display = 'block';
             } else {
-                preview.classList.remove('show');
+                preview.style.display = 'none';
             }
         }
 
         function updateLogoUrl() {
             const url = document.getElementById('logoUrl').value;
+            if (!gameState.logo) gameState.logo = { position: 'left', enabled: false };
             gameState.logo.url = url;
-            if (url) {
+            // Activar automáticamente si hay URL
+            if (url && url.trim()) {
                 gameState.logo.enabled = true;
             }
+            updateDisplay();
+        }
+
+        function setLogoPosition(position) {
+            if (!gameState.logo) gameState.logo = { url: '', enabled: false };
+            gameState.logo.position = position;
+            updateDisplay();
+        }
+
+        function toggleLogo() {
+            if (!gameState.logo) gameState.logo = { url: '', position: 'left' };
+            gameState.logo.enabled = !gameState.logo.enabled;
             updateDisplay();
         }
 
@@ -821,8 +980,10 @@
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = (e) => {
+                    if (!gameState.logo) gameState.logo = { position: 'left', enabled: false };
                     gameState.logo.url = e.target.result;
+                    // Activar automáticamente cuando se sube un archivo
                     gameState.logo.enabled = true;
                     updateDisplay();
                 };
@@ -830,46 +991,37 @@
             }
         }
 
-        function setLogoPosition(position) {
-            gameState.logo.position = position;
-            updateDisplay();
-        }
-
-        function toggleLogo() {
-            gameState.logo.enabled = !gameState.logo.enabled;
-            updateDisplay();
-        }
-
-        // Reiniciar
+        // Reiniciar todo
         function resetAll() {
-            if (confirm('¿Reiniciar todo?')) {
-                gameState = {
-                    player1: { name: 'Héctor López', points: 0, sets: 0, service: true, flag: 'ESP' },
-                    player2: { name: 'Susana Martínez', points: 0, sets: 0, service: false, flag: 'ARG' },
-                    background: {
-                        type: 'solid',
-                        color: '#00FF00'  // Verde por defecto
-                    },
-                    logo: {
-                        url: '',
-                        position: 'left',
-                        enabled: false
-                    },
-                    overlayVisible: true  // Mostrar overlay por defecto
-                };
+            if (confirm('¿Resetear puntos y sets a 0?')) {
+                gameState.player1.points = 0;
+                gameState.player2.points = 0;
+                gameState.player1.sets = 0;
+                gameState.player2.sets = 0;
+                gameState.player1.service = true;
+                gameState.player2.service = false;
                 updateDisplay();
             }
         }
 
-        // Escuchar cambios desde otros tabs/ventanas (ej: atajos de teclado en overlay)
+        // Escuchar cambios desde el overlay
         window.addEventListener('storage', (e) => {
             if (e.key === 'gameState') {
                 gameState = JSON.parse(e.newValue);
+                if (!gameState.animations) {
+                    gameState.animations = {
+                        point1: 0,
+                        point2: 0,
+                        set1: 0,
+                        set2: 0,
+                        service: 0
+                    };
+                }
                 updateDisplay();
             }
         });
 
-        // Iniciar
+        // Cargar estado al iniciar
         loadState();
     </script>
 </body>
