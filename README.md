@@ -211,6 +211,35 @@ Actualmente no, pero puedes abrir en navegadores diferentes.
 
 ## 📋 Changelog
 
+### v0.3.1 (2025-01-24)
+**🐛 Confirmación de Set Ganado - Hotfix Critical**
+
+#### Problema Resuelto
+- ❌ Si un operador ingresaba mal un punto que daba como ganado el set, no había forma de corregirlo
+- ❌ Los sets se guardaban automáticamente sin posibilidad de verificación
+
+#### Solución: Modal de Confirmación
+- ✅ Aparece automáticamente al detectar set ganado (11 pts con 2 de ventaja)
+- ✅ Muestra nombres de jugadores y puntajes finales del set
+- ✅ Botón "✅ Confirmar" para procesar el set
+- ✅ Botón "❌ Cancelar" para corregir error manteniendo puntos actuales
+- ✅ Previene errores accidentales durante operación en vivo
+
+#### Mejoras en Animaciones
+- ⚡ Transición más lenta y visible al acreditar sets (1.8s vs 0.8s)
+- 🎬 Secuencia temporal mejorada:
+  1. Muestra marcador ganador (11-9) por 2 segundos
+  2. Resetea a 0-0
+  3. Acredita el set con animación de celebración más dramática
+- 🎨 Animación setWin con más pasos y rotaciones para mejor visibilidad
+
+#### Flujo de Uso
+**Caso Normal:**
+- Jugador llega a 11-9 → Aparece modal → Confirmar → Animación → Set acreditado
+
+**Caso de Corrección:**
+- Error en marcador → Aparece modal → Cancelar → Usar botón "−" para corregir → Continuar partido
+
 ### v0.3.0 (2024-10-24)
 **🎨 Sistema de Temas y 📊 Historial de Sets**
 
