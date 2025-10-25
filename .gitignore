@@ -26,3 +26,11 @@ npm-debug.log*
 # Local development
 .env.local
 .env.*.local
+
+# User logos
+logos/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg

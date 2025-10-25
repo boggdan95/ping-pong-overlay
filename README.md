@@ -211,6 +211,34 @@ Actualmente no, pero puedes abrir en navegadores diferentes.
 
 ## 📋 Changelog
 
+### v0.3.2 (2025-01-24)
+**🎨 Ajustes UI - Legibilidad y Posicionamiento Mejorados**
+
+#### Mejoras Visuales
+- 📍 **Reposicionamiento**: Scoreboard en esquina inferior izquierda (40px margen)
+- 📝 **Tipografía aumentada**:
+  - Nombres: 28px → **56px** (2x más grande)
+  - Puntos/Sets: 36px → **48px**
+  - Banderas: 60px → **75px**
+  - Pelotas de servicio: 28px → **35px**
+- 📦 **Más compacto**: Padding y gaps reducidos para mejor balance
+
+#### Historial Rediseñado
+- 🎯 **Mismo diseño que marcador**: Transición fluida sin cambios bruscos
+- 📊 **Muestra todos los sets**: 5 o 7 según configuración (best-of-5/7)
+- 👻 **Sets pendientes**: Aparecen en gris (0-0) hasta que se jueguen
+- 🏆 **Resalta ganadores**: Puntajes ganadores en dorado
+- 🚫 **Sin headers**: Más limpio, sin "SET 1, SET 2, etc."
+
+#### Auto-Switch Inteligente
+- ⚡ **Cambio automático**: Al sumar punto desde historial, vuelve al marcador
+- 🎬 **Transición suave**: Fade out → Fade in (400ms)
+- 🔒 **Sin bugs**: Bloqueo durante transición previene actualizaciones rápidas
+
+#### Performance
+- ⚙️ **Polling optimizado**: 200ms → 500ms, comparación más eficiente
+- 🛡️ **Error handling**: Try-catch para capturar problemas
+
 ### v0.3.1 (2025-01-24)
 **🐛 Confirmación de Set Ganado - Hotfix Critical**
 
