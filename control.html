@@ -235,6 +235,126 @@
             transform: scale(1.02);
         }
 
+        /* ==================== MODAL DE CONFIRMACIÓN ==================== */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .modal-scores {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .modal-score-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 16px;
+        }
+
+        .modal-score-row:first-child {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 12px;
+            margin-bottom: 8px;
+        }
+
+        .modal-player-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-player-score {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .modal-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .modal-btn-confirm {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal-btn-cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
         /* ==================== TAB CONFIGURACIÓN ==================== */
 
         .config-section {
@@ -761,6 +881,33 @@
         </div>
     </div>
 
+    <!-- Modal de Confirmación de Set -->
+    <div id="setConfirmModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">🏆 ¿Confirmar Set Ganado?</div>
+            </div>
+            <div class="modal-scores">
+                <div class="modal-score-row">
+                    <span class="modal-player-name" id="modalPlayer1Name">Jugador 1</span>
+                    <span class="modal-player-score" id="modalPlayer1Score">11</span>
+                </div>
+                <div class="modal-score-row">
+                    <span class="modal-player-name" id="modalPlayer2Name">Jugador 2</span>
+                    <span class="modal-player-score" id="modalPlayer2Score">9</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="cancelSetWin()">
+                    ❌ Cancelar
+                </button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmSetWin()">
+                    ✅ Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Mapeo de códigos de 3 letras a códigos ISO 3166-1 alpha-2
         const countryCodeMap = {
@@ -1071,11 +1218,12 @@
 
         // Variable para prevenir múltiples victorias de set
         let processingSetWin = false;
+        let pendingSetWin = null; // Almacena info del set pendiente de confirmar
 
         // Cambiar puntos
         function changePoints(player, delta) {
-            // No permitir cambios si se está procesando una victoria de set
-            if (processingSetWin) return;
+            // No permitir cambios si se está procesando una victoria de set o hay una pendiente
+            if (processingSetWin || pendingSetWin) return;
 
             const oldPoints = gameState['player' + player].points;
             const newPoints = Math.max(0, oldPoints + delta);
@@ -1089,29 +1237,95 @@
 
                 // Verificar victoria de set
                 if (newPoints >= 11 && newPoints - otherPoints >= 2) {
-                    // Bloquear inmediatamente
-                    processingSetWin = true;
-
-                    // Guardar historial del set INMEDIATAMENTE antes del setTimeout
-                    gameState.setsHistory.push({
-                        player1Points: gameState.player1.points,
-                        player2Points: gameState.player2.points
-                    });
-
-                    gameState.animations['set' + player] = Date.now();
-                    gameState['player' + player].sets++;
-
-                    // Resetear puntos después de la animación
-                    setTimeout(() => {
-                        gameState.player1.points = 0;
-                        gameState.player2.points = 0;
-                        processingSetWin = false;
-                        updateDisplay();
-                    }, 300);
+                    // Mostrar modal de confirmación
+                    showSetConfirmModal(player);
+                    return; // No procesar automáticamente
                 }
             }
 
             updateService();
+            updateDisplay();
+        }
+
+        // Mostrar modal de confirmación de set
+        function showSetConfirmModal(winnerPlayer) {
+            // Guardar información del set pendiente
+            pendingSetWin = {
+                winner: winnerPlayer,
+                player1Points: gameState.player1.points,
+                player2Points: gameState.player2.points
+            };
+
+            // Actualizar contenido del modal
+            document.getElementById('modalPlayer1Name').textContent = gameState.player1.name || 'Jugador 1';
+            document.getElementById('modalPlayer2Name').textContent = gameState.player2.name || 'Jugador 2';
+            document.getElementById('modalPlayer1Score').textContent = gameState.player1.points;
+            document.getElementById('modalPlayer2Score').textContent = gameState.player2.points;
+
+            // Mostrar modal
+            document.getElementById('setConfirmModal').classList.add('show');
+        }
+
+        // Confirmar set ganado
+        function confirmSetWin() {
+            if (!pendingSetWin) return;
+
+            // Bloquear procesamiento
+            processingSetWin = true;
+
+            const player = pendingSetWin.winner;
+
+            // Ocultar modal
+            document.getElementById('setConfirmModal').classList.remove('show');
+
+            // Guardar datos del set
+            const setData = {
+                player1Points: pendingSetWin.player1Points,
+                player2Points: pendingSetWin.player2Points
+            };
+
+            pendingSetWin = null;
+
+            // Actualizar display inmediatamente para mostrar el marcador
+            updateDisplay();
+
+            // DESPUÉS de 2 segundos, resetear puntos a 0-0
+            setTimeout(() => {
+                gameState.player1.points = 0;
+                gameState.player2.points = 0;
+                updateDisplay();
+
+                // DESPUÉS de resetear, acreditar el set con animación
+                setTimeout(() => {
+                    // Guardar historial del set
+                    gameState.setsHistory.push(setData);
+
+                    // Incrementar sets del ganador
+                    gameState['player' + player].sets++;
+
+                    // Animación de set ganado
+                    gameState.animations['set' + player] = Date.now();
+
+                    // Actualizar para mostrar el set acreditado
+                    updateDisplay();
+
+                    // Liberar procesamiento después de la animación
+                    setTimeout(() => {
+                        processingSetWin = false;
+                    }, 2000);
+                }, 500);
+            }, 2000);
+        }
+
+        // Cancelar set ganado
+        function cancelSetWin() {
+            // Ocultar modal
+            document.getElementById('setConfirmModal').classList.remove('show');
+
+            // Limpiar set pendiente
+            pendingSetWin = null;
+
+            // Los puntos quedan como están, permitiendo usar botones -/+ para corregir
             updateDisplay();
         }
 
