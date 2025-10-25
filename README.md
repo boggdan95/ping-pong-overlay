@@ -211,6 +211,27 @@ Actualmente no, pero puedes abrir en navegadores diferentes.
 
 ## 📋 Changelog
 
+### v0.3.3 (2025-01-24)
+**🔧 Corrección Manual de Servicio - Hotfix**
+
+#### Problema Resuelto
+- ❌ Si un operador corregía manualmente el servicio, solo duraba 1 punto
+- ❌ No respetaba los bloques de 2 puntos antes del 10-10
+- ❌ Causaba rotaciones incorrectas en puntos subsecuentes
+
+#### Solución: Override Inteligente con Bloques
+- ✅ **Corrección respeta bloques**: Al cambiar servicio en 6-0, se mantiene por 2 puntos (6-1 y 7-0)
+- ✅ **Detección de bloques**: Calcula `Math.floor(totalPoints / 2)` para determinar bloques de servicio
+- ✅ **Manejo de Deuce**: En 10-10+, override solo dura 1 punto (regla correcta)
+- ✅ **Reset automático**: Override se limpia al cambiar bloque o iniciar nuevo set
+- 🎯 **Flujo operativo**: Permite corregir errores sin afectar rotación automática posterior
+
+#### Implementación Técnica
+- Agregado `manualServiceOverride` flag para tracking
+- Agregado `manualServiceStartPoint` para calcular bloque inicial
+- Modificado `updateService()` para verificar si aún en mismo bloque
+- Reset en `confirmSetWin()` y `resetAll()`
+
 ### v0.3.2 (2025-01-24)
 **🎨 Ajustes UI - Legibilidad y Posicionamiento Mejorados**
 
