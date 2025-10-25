@@ -19,10 +19,10 @@
             font-family: 'Montserrat', sans-serif;
             background: transparent;
             height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            width: 100vw;
+            position: relative;
+            margin: 0;
+            padding: 0;
         }
 
         .scoreboard {
@@ -35,7 +35,9 @@
             flex-direction: column;
             gap: 0;
             overflow: hidden;
-            position: relative;
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
             opacity: 1;
             transition: opacity 0.3s ease;
         }
@@ -77,8 +79,8 @@
         .player-row {
             display: flex;
             align-items: center;
-            gap: 30px;
-            padding: 30px 40px;
+            gap: 20px;
+            padding: 20px 30px;
             border-bottom: none;
             transition: padding 0.3s ease, opacity 0.4s ease, transform 0.4s ease;
             position: relative;
@@ -138,14 +140,14 @@
         }
 
         .flag {
-            width: 60px;
-            height: 60px;
+            width: 75px;
+            height: 75px;
             border-radius: 8px;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            font-size: 50px;
             border: 2px solid rgba(255, 255, 255, 0.3);
             overflow: hidden;
         }
@@ -157,14 +159,14 @@
         }
 
         .player-name {
-            font-size: 28px;
+            font-size: 56px;
             font-weight: bold;
             color: white;
             letter-spacing: 0.5px;
         }
 
         .player-role {
-            font-size: 13px;
+            font-size: 16px;
             color: #5ba3ff;
             font-style: italic;
             letter-spacing: 0.3px;
@@ -173,9 +175,9 @@
         .stats-section {
             display: flex;
             align-items: center;
-            gap: 50px;
+            gap: 35px;
             margin-left: auto;
-            padding-left: 30px;
+            padding-left: 20px;
         }
 
         .stat-block {
@@ -186,7 +188,7 @@
         }
 
         .stat-label {
-            font-size: 10px;
+            font-size: 13px;
             color: rgba(255, 255, 255, 0.6);
             font-weight: bold;
             text-transform: uppercase;
@@ -194,16 +196,16 @@
         }
 
         .stat-value {
-            font-size: 36px;
+            font-size: 48px;
             font-weight: bold;
             color: white;
-            min-width: 50px;
+            min-width: 60px;
             text-align: center;
         }
 
         .service-ball {
-            width: 28px;
-            height: 28px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             background: #ffffff;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.6);
@@ -284,12 +286,14 @@
             opacity: 0;
             transform: scale(0.95);
             transition: opacity 0.4s ease, transform 0.4s ease;
-            padding: 30px 40px;
             pointer-events: none;
             position: absolute;
             width: 100%;
             left: 0;
             top: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
 
         .scoreboard.show-history .history-section {
@@ -299,78 +303,70 @@
             position: relative;
         }
 
-        .history-divider {
-            display: none;
+        /* Reutilizar el mismo estilo de player-row para el historial */
+        .history-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 30px;
+            position: relative;
         }
 
-        .history-title {
-            color: #ffffff;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            opacity: 0.85;
+        .history-row:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 30px;
+            right: 30px;
+            height: 1px;
+            background: var(--border-color, rgba(255, 255, 255, 0.15));
         }
 
-        .history-table {
-            display: table;
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+        .history-player-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+            min-width: 0;
         }
 
-        .history-table-header {
-            display: table-row;
-        }
-
-        .history-table-header-cell {
-            display: table-cell;
-            padding: 8px 16px;
-            text-align: center;
-            font-size: 11px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.6);
-            text-transform: uppercase;
+        .history-player-name {
+            font-size: 56px;
+            font-weight: bold;
+            color: white;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
         }
 
-        .history-table-header-cell:first-child {
-            text-align: left;
-            min-width: 150px;
+        .history-sets-container {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+            margin-left: auto;
+            padding-left: 20px;
         }
 
-        .history-table-row {
-            display: table-row;
+        .history-set-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
 
-        .history-table-cell {
-            display: table-cell;
-            padding: 10px 16px;
+        .history-set-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            min-width: 60px;
             text-align: center;
-            font-size: 18px;
-            font-weight: 700;
-            font-family: 'Courier New', monospace;
-            color: #ffffff;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .history-table-cell:first-child {
-            text-align: left;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .history-table-row:last-child .history-table-cell {
-            border-bottom: none;
-        }
-
-        .history-table-cell.winner {
+        .history-set-value.winner {
             color: #FFD700;
             text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+
+        .history-set-value.pending {
+            opacity: 0.3;
         }
 
         .stat-value.animate-point {
@@ -511,7 +507,7 @@
 
         <!-- Historial de Sets dentro del mismo cintillo -->
         <div id="historySection" class="history-section">
-            <div id="historyTable" class="history-table"></div>
+            <div id="historyTable"></div>
         </div>
     </div>
 
@@ -771,41 +767,56 @@
             if (gameState.showHistoryOverlay && gameState.setsHistory && gameState.setsHistory.length > 0) {
                 scoreboard.classList.add('show-history');
 
-                // Generar tabla HTML
+                // Determinar total de sets según modo
+                const totalSets = gameState.matchMode === 'best-of-7' ? 7 : 5;
+
+                // Generar HTML con el mismo diseño que player-row
                 let html = '';
 
-                // Encabezado de tabla
-                html += '<div class="history-table-header">';
-                html += '<div class="history-table-header-cell"></div>'; // Celda vacía para nombres
-                gameState.setsHistory.forEach((set, index) => {
-                    html += `<div class="history-table-header-cell">SET ${index + 1}</div>`;
-                });
-                html += '</div>';
-
                 // Fila Jugador 1
-                html += '<div class="history-table-row">';
+                html += '<div class="history-row">';
+                html += '<div class="history-player-info">';
                 const flag1Code = getISO2Code(gameState.player1.flag);
-                html += `<div class="history-table-cell">
-                    <span class="fi fi-${flag1Code}" style="margin-right: 8px;"></span>${gameState.player1.name}
-                </div>`;
-                gameState.setsHistory.forEach((set) => {
-                    const isWinner = set.player1Points > set.player2Points;
-                    const winnerClass = isWinner ? 'winner' : '';
-                    html += `<div class="history-table-cell ${winnerClass}">${set.player1Points}</div>`;
-                });
+                html += `<div class="flag">`;
+                html += `<span class="fi fi-${flag1Code}"></span>`;
+                html += `</div>`;
+                html += `<span class="history-player-name">${gameState.player1.name}</span>`;
+                html += '</div>';
+                html += '<div class="history-sets-container">';
+                for (let i = 0; i < totalSets; i++) {
+                    const set = gameState.setsHistory[i];
+                    if (set) {
+                        const isWinner = set.player1Points > set.player2Points;
+                        const winnerClass = isWinner ? 'winner' : '';
+                        html += `<div class="history-set-block"><div class="history-set-value ${winnerClass}">${set.player1Points}</div></div>`;
+                    } else {
+                        html += `<div class="history-set-block"><div class="history-set-value pending">0</div></div>`;
+                    }
+                }
+                html += '</div>';
                 html += '</div>';
 
                 // Fila Jugador 2
-                html += '<div class="history-table-row">';
+                html += '<div class="history-row">';
+                html += '<div class="history-player-info">';
                 const flag2Code = getISO2Code(gameState.player2.flag);
-                html += `<div class="history-table-cell">
-                    <span class="fi fi-${flag2Code}" style="margin-right: 8px;"></span>${gameState.player2.name}
-                </div>`;
-                gameState.setsHistory.forEach((set) => {
-                    const isWinner = set.player2Points > set.player1Points;
-                    const winnerClass = isWinner ? 'winner' : '';
-                    html += `<div class="history-table-cell ${winnerClass}">${set.player2Points}</div>`;
-                });
+                html += `<div class="flag">`;
+                html += `<span class="fi fi-${flag2Code}"></span>`;
+                html += `</div>`;
+                html += `<span class="history-player-name">${gameState.player2.name}</span>`;
+                html += '</div>';
+                html += '<div class="history-sets-container">';
+                for (let i = 0; i < totalSets; i++) {
+                    const set = gameState.setsHistory[i];
+                    if (set) {
+                        const isWinner = set.player2Points > set.player1Points;
+                        const winnerClass = isWinner ? 'winner' : '';
+                        html += `<div class="history-set-block"><div class="history-set-value ${winnerClass}">${set.player2Points}</div></div>`;
+                    } else {
+                        html += `<div class="history-set-block"><div class="history-set-value pending">0</div></div>`;
+                    }
+                }
+                html += '</div>';
                 html += '</div>';
 
                 table.innerHTML = html;
@@ -1019,6 +1030,39 @@
 
         // Cargar estado al iniciar
         loadState();
+
+        // Polling adicional para OBS (que no siempre detecta eventos de storage)
+        // Revisar cambios cada 500ms (reducido para mejor performance)
+        let lastSavedState = '';
+        setInterval(() => {
+            try {
+                const saved = localStorage.getItem('gameState');
+                if (saved && saved !== lastSavedState) {
+                    const newState = JSON.parse(saved);
+
+                    // Detectar qué cambió para aplicar animaciones
+                    if (newState.player1.points !== gameState.player1.points && newState.player1.points > gameState.player1.points) {
+                        newState.animations.point1 = Date.now();
+                    }
+                    if (newState.player2.points !== gameState.player2.points && newState.player2.points > gameState.player2.points) {
+                        newState.animations.point2 = Date.now();
+                    }
+                    if (newState.player1.sets !== gameState.player1.sets && newState.player1.sets > gameState.player1.sets) {
+                        newState.animations.set1 = Date.now();
+                    }
+                    if (newState.player2.sets !== gameState.player2.sets && newState.player2.sets > gameState.player2.sets) {
+                        newState.animations.set2 = Date.now();
+                    }
+
+                    // Actualizar estado
+                    gameState = newState;
+                    lastSavedState = saved;
+                    updateDisplay();
+                }
+            } catch (e) {
+                console.error('Error en polling:', e);
+            }
+        }, 500);
     </script>
 </body>
 </html>

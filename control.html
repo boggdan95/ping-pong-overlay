@@ -1219,11 +1219,48 @@
         // Variable para prevenir múltiples victorias de set
         let processingSetWin = false;
         let pendingSetWin = null; // Almacena info del set pendiente de confirmar
+        let switchingFromHistory = false; // Prevenir clicks durante transición
 
         // Cambiar puntos
         function changePoints(player, delta) {
-            // No permitir cambios si se está procesando una victoria de set o hay una pendiente
-            if (processingSetWin || pendingSetWin) return;
+            // No permitir cambios si se está procesando una victoria de set, hay una pendiente, o estamos en transición
+            if (processingSetWin || pendingSetWin || switchingFromHistory) return;
+
+            // Si estamos mostrando el historial y se suma un punto, volver al marcador con delay
+            if (delta > 0 && gameState.showHistoryOverlay) {
+                // Bloquear para evitar múltiples clicks
+                switchingFromHistory = true;
+
+                // Primero ocultar el historial
+                gameState.showHistoryOverlay = false;
+                localStorage.setItem('gameState', JSON.stringify(gameState));
+
+                // Esperar un poco para que se vea la transición antes de actualizar puntos
+                setTimeout(() => {
+                    const oldPoints = gameState['player' + player].points;
+                    const newPoints = Math.max(0, oldPoints + delta);
+                    gameState['player' + player].points = newPoints;
+
+                    if (newPoints > oldPoints) {
+                        gameState.animations['point' + player] = Date.now();
+
+                        const otherPlayer = player === 1 ? 2 : 1;
+                        const otherPoints = gameState['player' + otherPlayer].points;
+
+                        // Verificar victoria de set
+                        if (newPoints >= 11 && newPoints - otherPoints >= 2) {
+                            switchingFromHistory = false;
+                            showSetConfirmModal(player);
+                            return;
+                        }
+                    }
+
+                    updateService();
+                    updateDisplay();
+                    switchingFromHistory = false; // Liberar después de actualizar
+                }, 400); // Esperar que termine la transición (0.4s)
+                return;
+            }
 
             const oldPoints = gameState['player' + player].points;
             const newPoints = Math.max(0, oldPoints + delta);
