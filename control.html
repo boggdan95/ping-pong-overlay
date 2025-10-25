@@ -1200,12 +1200,43 @@
             updateDisplay();
         }
 
-        // Actualizar servicio
+        // Actualizar servicio (respeta cambios manuales)
         function updateService() {
             const totalPoints = gameState.player1.points + gameState.player2.points;
             const p1 = gameState.player1.points;
             const p2 = gameState.player2.points;
 
+            // Si hay un override manual, verificar si aún estamos en el mismo bloque de servicio
+            if (manualServiceOverride && manualServiceStartPoint !== null) {
+                // Calcular cuántos puntos han pasado desde el cambio manual
+                const pointsSinceManual = totalPoints - manualServiceStartPoint;
+
+                // En deuce (10-10+), servicio cambia cada punto
+                if (p1 >= 10 && p2 >= 10) {
+                    // Si ya pasó 1 punto o más, resetear el override
+                    if (pointsSinceManual >= 1) {
+                        manualServiceOverride = false;
+                        manualServiceStartPoint = null;
+                    } else {
+                        return; // Mantener el servicio manual
+                    }
+                } else {
+                    // Antes del 10-10, servicio cambia cada 2 puntos
+                    // Calcular en qué bloque estábamos cuando se hizo el cambio manual
+                    const manualServiceBlock = Math.floor(manualServiceStartPoint / 2);
+                    const currentServiceBlock = Math.floor(totalPoints / 2);
+
+                    // Si cambiamos de bloque, resetear el override
+                    if (currentServiceBlock !== manualServiceBlock) {
+                        manualServiceOverride = false;
+                        manualServiceStartPoint = null;
+                    } else {
+                        return; // Mantener el servicio manual dentro del mismo bloque
+                    }
+                }
+            }
+
+            // Cálculo automático normal
             if (p1 >= 10 && p2 >= 10) {
                 gameState.player1.service = (totalPoints % 2) === 0;
                 gameState.player2.service = !gameState.player1.service;
@@ -1220,6 +1251,8 @@
         let processingSetWin = false;
         let pendingSetWin = null; // Almacena info del set pendiente de confirmar
         let switchingFromHistory = false; // Prevenir clicks durante transición
+        let manualServiceOverride = false; // Indica que el servicio fue cambiado manualmente
+        let manualServiceStartPoint = null; // Punto total cuando se hizo el cambio manual
 
         // Cambiar puntos
         function changePoints(player, delta) {
@@ -1330,6 +1363,7 @@
             setTimeout(() => {
                 gameState.player1.points = 0;
                 gameState.player2.points = 0;
+                manualServiceOverride = false;  // Resetear override al iniciar nuevo set
                 updateDisplay();
 
                 // DESPUÉS de resetear, acreditar el set con animación
@@ -1372,11 +1406,13 @@
             updateDisplay();
         }
 
-        // Cambiar servicio
+        // Cambiar servicio manualmente
         function setService(player) {
             gameState.player1.service = player === 1;
             gameState.player2.service = player === 2;
             gameState.animations.service = Date.now();
+            manualServiceOverride = true; // Marcar que fue cambiado manualmente
+            manualServiceStartPoint = gameState.player1.points + gameState.player2.points; // Guardar punto actual
             updateDisplay();
         }
 
@@ -1533,6 +1569,7 @@
                 gameState.player1.service = true;
                 gameState.player2.service = false;
                 gameState.setsHistory = [];  // Limpiar historial
+                manualServiceOverride = false;  // Resetear override manual
                 updateDisplay();
             }
         }
