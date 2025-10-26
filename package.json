@@ -1,18 +1,26 @@
 {
   "name": "ping-pong-overlay",
-  "version": "1.0.0",
-  "description": "Professional overlay for table tennis streaming with OBS integration",
+  "version": "0.4.0-beta",
+  "description": "Professional overlay for table tennis streaming with OBS integration - Premium Edition",
   "main": "index.html",
+  "scripts": {
+    "license:generate": "node scripts/generate-license.js",
+    "license:validate": "node scripts/generate-license.js --validate",
+    "license:help": "node scripts/generate-license.js --help",
+    "test:license": "node scripts/generate-license.js PRO test@example.com"
+  },
   "keywords": [
     "ping-pong",
     "table-tennis",
     "overlay",
     "obs",
     "streaming",
-    "scoreboard"
+    "scoreboard",
+    "premium",
+    "license"
   ],
   "author": "Your Name",
-  "license": "MIT",
+  "license": "COMMERCIAL",
   "repository": {
     "type": "git",
     "url": "https://github.com/tu-usuario/ping-pong-overlay.git"
@@ -20,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/tu-usuario/ping-pong-overlay/issues"
   },
-  "homepage": "https://github.com/tu-usuario/ping-pong-overlay#readme"
+  "homepage": "https://github.com/tu-usuario/ping-pong-overlay#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }

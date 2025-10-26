@@ -691,11 +691,268 @@
                 font-size: 12px;
             }
         }
+
+        /* ==================== MODAL DE LICENCIA ==================== */
+
+        .license-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .license-modal.show {
+            display: flex;
+        }
+
+        .license-modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: licenseModalSlideIn 0.4s ease;
+        }
+
+        @keyframes licenseModalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .license-modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .license-modal-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .license-modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .license-modal-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .license-input-group {
+            margin-bottom: 20px;
+        }
+
+        .license-input-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .license-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        .license-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f0f5ff;
+        }
+
+        .license-input.error {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .license-error-msg {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #ffebee;
+            color: #c62828;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .license-error-msg.show {
+            display: block;
+        }
+
+        .license-btn {
+            width: 100%;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .license-btn-activate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .license-btn-activate:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .license-btn-activate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .license-info-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .license-info-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #667eea;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .license-info-text {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .license-buy-link {
+            text-align: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .license-buy-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .license-buy-link a:hover {
+            text-decoration: underline;
+        }
+
+        .premium-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #000;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        .feature-locked {
+            opacity: 0.5;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .feature-locked::after {
+            content: '🔒';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            opacity: 0.3;
+        }
+
+        .license-status-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .license-status-bar.show {
+            display: flex;
+        }
+
+        .license-status-tier {
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .license-status-manage {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .license-status-manage:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🏓 Control Panel</h1>
+
+        <!-- Barra de estado de licencia -->
+        <div id="licenseStatusBar" class="license-status-bar">
+            <span>
+                ✨ Licencia: <span class="license-status-tier" id="licenseTierDisplay">PRO</span>
+            </span>
+            <button class="license-status-manage" onclick="showLicenseModal()">Gestionar</button>
+        </div>
 
         <!-- Tabs -->
         <div class="tabs">
@@ -908,7 +1165,312 @@
         </div>
     </div>
 
+    <!-- Modal de Licencia Premium -->
+    <div id="licenseModal" class="license-modal">
+        <div class="license-modal-content">
+            <div class="license-modal-header">
+                <div class="license-modal-icon">🔐</div>
+                <div class="license-modal-title">Activar Ping Pong Overlay Premium</div>
+                <div class="license-modal-subtitle">Desbloquea funciones premium con tu código de licencia</div>
+            </div>
+
+            <div class="license-info-box">
+                <div class="license-info-title">📦 Características Premium</div>
+                <div class="license-info-text">
+                    • Temas personalizables ilimitados<br>
+                    • Estadísticas avanzadas y gráficos<br>
+                    • Sin límite de torneos<br>
+                    • Actualizaciones prioritarias
+                </div>
+            </div>
+
+            <div class="license-input-group">
+                <label class="license-input-label">Código de Licencia</label>
+                <input
+                    type="text"
+                    id="licenseKeyInput"
+                    class="license-input"
+                    placeholder="PPO-PRO-20250124-A3F9E2C1"
+                    maxlength="30"
+                >
+                <div id="licenseError" class="license-error-msg">
+                    Código de licencia inválido. Verifica el formato.
+                </div>
+            </div>
+
+            <button class="license-btn license-btn-activate" onclick="activateLicense()" id="activateBtn">
+                ✅ Activar Licencia
+            </button>
+
+            <div class="license-buy-link">
+                No tienes licencia? <a href="https://pingpongoverlay.com/buy" target="_blank">Comprar aquí</a>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ==================== SISTEMA DE LICENCIAS PREMIUM ====================
+
+        const LICENSE_CONFIG = {
+            SECRET_KEY: 'ppo-premium-2025-secret-k3y', // Secret key para validación offline
+            PRODUCT_CODE: 'PPO',
+            TIERS: {
+                FREE: {
+                    name: 'Free',
+                    features: [],
+                    maxActivations: 1
+                },
+                BASIC: {
+                    name: 'Basic',
+                    features: ['themes_premium_3', 'stats_basic'],
+                    maxActivations: 2
+                },
+                PRO: {
+                    name: 'Pro',
+                    features: ['themes_unlimited', 'stats_advanced', 'cloud_save', 'mobile_control', 'custom_branding'],
+                    maxActivations: 5
+                },
+                ENTERPRISE: {
+                    name: 'Enterprise',
+                    features: ['all'],
+                    maxActivations: 999
+                }
+            }
+        };
+
+        let licenseData = null;
+
+        // Función de hash simple (SHA-256 simplificado para validación offline)
+        async function simpleHash(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex.substring(0, 8).toUpperCase();
+        }
+
+        // Validar licencia offline
+        async function validateLicenseOffline(licenseKey) {
+            const parts = licenseKey.split('-');
+
+            // Formato: PPO-TIER-TIMESTAMP-HASH
+            if (parts.length !== 4) {
+                console.log('❌ Formato inválido: debe tener 4 partes');
+                return false;
+            }
+
+            const [product, tier, timestamp, hash] = parts;
+
+            // Verificar producto
+            if (product !== LICENSE_CONFIG.PRODUCT_CODE) {
+                console.log('❌ Código de producto inválido');
+                return false;
+            }
+
+            // Verificar tier válido
+            if (!['BASIC', 'PRO', 'ENTERPRISE'].includes(tier)) {
+                console.log('❌ Tier inválido:', tier);
+                return false;
+            }
+
+            // Verificar timestamp (formato YYYYMMDD)
+            if (!/^\d{8}$/.test(timestamp)) {
+                console.log('❌ Timestamp inválido');
+                return false;
+            }
+
+            // Verificar hash
+            const hashInput = `${product}-${tier}-${timestamp}-${LICENSE_CONFIG.SECRET_KEY}`;
+            const expectedHash = await simpleHash(hashInput);
+
+            if (hash !== expectedHash) {
+                console.log('❌ Hash inválido. Esperado:', expectedHash, 'Recibido:', hash);
+                return false;
+            }
+
+            // TODO: Verificar expiración (opcional)
+            // const issueDate = parseTimestamp(timestamp);
+            // const daysSinceIssue = daysBetween(issueDate, new Date());
+            // if (tier === 'BASIC' && daysSinceIssue > 365) return false; // 1 año
+
+            console.log('✅ Licencia válida offline');
+            return true;
+        }
+
+        // Validar licencia online (placeholder para futura API)
+        async function validateLicenseOnline(licenseKey) {
+            // TODO: Implementar validación online cuando tengamos API
+            // const response = await fetch('https://api.pingpongoverlay.com/v1/licenses/validate', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ licenseKey, machineId: getMachineId() })
+            // });
+            // return await response.json();
+
+            console.log('ℹ️ Validación online no disponible (sin API)');
+            return null;
+        }
+
+        // Inicializar sistema de licencias
+        function initLicense() {
+            const saved = localStorage.getItem('ppo_license');
+
+            if (saved) {
+                try {
+                    licenseData = JSON.parse(saved);
+                    console.log('📦 Licencia cargada:', licenseData);
+
+                    // Validar offline en background
+                    validateLicenseOffline(licenseData.key).then(isValid => {
+                        if (!isValid) {
+                            console.warn('⚠️ Licencia guardada no es válida');
+                            licenseData = null;
+                            localStorage.removeItem('ppo_license');
+                            updateLicenseUI();
+                        } else {
+                            // Habilitar features premium
+                            enablePremiumFeatures(licenseData.tier);
+                            updateLicenseUI();
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error al cargar licencia:', e);
+                    licenseData = null;
+                }
+            } else {
+                console.log('ℹ️ No hay licencia activada (modo FREE)');
+                licenseData = { tier: 'FREE' };
+            }
+
+            updateLicenseUI();
+        }
+
+        // Actualizar UI de licencia
+        function updateLicenseUI() {
+            const statusBar = document.getElementById('licenseStatusBar');
+            const tierDisplay = document.getElementById('licenseTierDisplay');
+
+            if (licenseData && licenseData.tier !== 'FREE') {
+                statusBar.classList.add('show');
+                tierDisplay.textContent = licenseData.tier;
+            } else {
+                statusBar.classList.remove('show');
+            }
+        }
+
+        // Mostrar modal de licencia
+        function showLicenseModal() {
+            document.getElementById('licenseModal').classList.add('show');
+            document.getElementById('licenseKeyInput').value = '';
+            document.getElementById('licenseError').classList.remove('show');
+            document.getElementById('licenseKeyInput').classList.remove('error');
+        }
+
+        // Ocultar modal de licencia
+        function hideLicenseModal() {
+            document.getElementById('licenseModal').classList.remove('show');
+        }
+
+        // Activar licencia
+        async function activateLicense() {
+            const input = document.getElementById('licenseKeyInput');
+            const errorMsg = document.getElementById('licenseError');
+            const activateBtn = document.getElementById('activateBtn');
+            const key = input.value.trim().toUpperCase();
+
+            // Limpiar errores previos
+            errorMsg.classList.remove('show');
+            input.classList.remove('error');
+
+            if (!key) {
+                input.classList.add('error');
+                errorMsg.textContent = 'Por favor ingresa un código de licencia';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            // Deshabilitar botón durante validación
+            activateBtn.disabled = true;
+            activateBtn.textContent = '🔄 Validando...';
+
+            // Validación offline
+            const isValid = await validateLicenseOffline(key);
+
+            if (!isValid) {
+                input.classList.add('error');
+                errorMsg.textContent = '❌ Código de licencia inválido. Verifica el formato.';
+                errorMsg.classList.add('show');
+                activateBtn.disabled = false;
+                activateBtn.textContent = '✅ Activar Licencia';
+                return;
+            }
+
+            // Extraer tier del código
+            const tier = key.split('-')[1];
+
+            // Intentar validación online (opcional)
+            const onlineValidation = await validateLicenseOnline(key);
+
+            // Guardar licencia
+            licenseData = {
+                key: key,
+                tier: tier,
+                features: LICENSE_CONFIG.TIERS[tier].features,
+                activatedAt: Date.now(),
+                online: onlineValidation || null
+            };
+
+            localStorage.setItem('ppo_license', JSON.stringify(licenseData));
+
+            // Mostrar éxito
+            activateBtn.textContent = '✅ Licencia Activada!';
+            activateBtn.style.background = '#4CAF50';
+
+            // Esperar 1 segundo y cerrar modal
+            setTimeout(() => {
+                hideLicenseModal();
+                activateBtn.disabled = false;
+                activateBtn.textContent = '✅ Activar Licencia';
+                activateBtn.style.background = '';
+
+                // Habilitar features premium
+                enablePremiumFeatures(tier);
+                updateLicenseUI();
+
+                // Recargar para aplicar cambios
+                location.reload();
+            }, 1500);
+        }
+
+        // Habilitar features premium según tier
+        function enablePremiumFeatures(tier) {
+            const features = LICENSE_CONFIG.TIERS[tier]?.features || [];
+            console.log('🎉 Features habilitadas:', features);
+
+            // Aquí se habilitarán features específicas según el tier
+            // Por ahora solo guardamos el tier en licenseData
+        }
+
+        // Verificar si tiene acceso a una feature
+        function hasFeature(featureName) {
+            if (!licenseData || licenseData.tier === 'FREE') {
+                return false;
+            }
+
+            const features = LICENSE_CONFIG.TIERS[licenseData.tier]?.features || [];
+            return features.includes(featureName) || features.includes('all');
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'licenseModal') {
+                hideLicenseModal();
+            }
+        });
+
+        // ==================== FIN SISTEMA DE LICENCIAS ====================
+
         // Mapeo de códigos de 3 letras a códigos ISO 3166-1 alpha-2
         const countryCodeMap = {
             'GUA': 'gt', 'ESA': 'sv', 'NCA': 'ni', 'HON': 'hn', 'PAN': 'pa',
@@ -1622,6 +2184,9 @@
 
         // Cargar estado al iniciar
         loadState();
+
+        // Inicializar sistema de licencias
+        initLicense();
     </script>
 </body>
 </html>
