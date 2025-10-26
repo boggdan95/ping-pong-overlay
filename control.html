@@ -1321,6 +1321,9 @@
                     licenseData = JSON.parse(saved);
                     console.log('📦 Licencia cargada:', licenseData);
 
+                    // Actualizar UI inmediatamente (antes de validar)
+                    updateLicenseUI();
+
                     // Validar offline en background
                     validateLicenseOffline(licenseData.key).then(isValid => {
                         if (!isValid) {
@@ -1329,14 +1332,16 @@
                             localStorage.removeItem('ppo_license');
                             updateLicenseUI();
                         } else {
+                            console.log('✅ Licencia válida:', licenseData.tier);
                             // Habilitar features premium
                             enablePremiumFeatures(licenseData.tier);
                             updateLicenseUI();
                         }
                     });
                 } catch (e) {
-                    console.error('Error al cargar licencia:', e);
+                    console.error('❌ Error al cargar licencia:', e);
                     licenseData = null;
+                    localStorage.removeItem('ppo_license');
                 }
             } else {
                 console.log('ℹ️ No hay licencia activada (modo FREE)');
@@ -1351,10 +1356,17 @@
             const statusBar = document.getElementById('licenseStatusBar');
             const tierDisplay = document.getElementById('licenseTierDisplay');
 
-            if (licenseData && licenseData.tier !== 'FREE') {
+            if (!statusBar || !tierDisplay) {
+                console.warn('⚠️ Elementos de UI de licencia no encontrados');
+                return;
+            }
+
+            if (licenseData && licenseData.tier && licenseData.tier !== 'FREE') {
+                console.log('🎨 Mostrando barra de licencia:', licenseData.tier);
                 statusBar.classList.add('show');
                 tierDisplay.textContent = licenseData.tier;
             } else {
+                console.log('🎨 Ocultando barra de licencia (modo FREE)');
                 statusBar.classList.remove('show');
             }
         }
