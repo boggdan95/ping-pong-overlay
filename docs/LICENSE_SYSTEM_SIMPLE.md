@@ -2,7 +2,27 @@
 
 ## 🎯 Objetivo
 
-Sistema de validación **offline** con validación SHA-256 para Ping Pong Overlay Premium.
+Sistema de **Trial de 7 días + Bloqueo** con validación offline SHA-256.
+
+**Modelo de negocio:** Trial completo → Expira → Compra licencia → Desbloqueado para siempre
+
+---
+
+## 🔄 Flujo del Usuario
+
+```
+1. Primera instalación
+   ↓
+2. Trial de 7 días (TODO gratis)
+   ↓
+3. Banner muestra días restantes
+   ↓
+4. Día 8: Modal BLOQUEANTE
+   ↓
+5. Compra + Activa licencia
+   ↓
+6. Desbloqueado PARA SIEMPRE
+```
 
 ---
 
