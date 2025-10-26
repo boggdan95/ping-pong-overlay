@@ -7,7 +7,9 @@
     "license:generate": "node scripts/generate-license.js",
     "license:validate": "node scripts/generate-license.js --validate",
     "license:help": "node scripts/generate-license.js --help",
-    "test:license": "node scripts/generate-license.js PRO test@example.com"
+    "test:license": "node scripts/generate-license.js PRO test@example.com",
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "keywords": [
     "ping-pong",

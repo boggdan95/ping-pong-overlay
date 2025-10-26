@@ -908,13 +908,28 @@
         .license-status-bar {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-bottom: 8px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
             display: none;
             align-items: center;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: slideInDown 0.4s ease;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .license-status-bar.show {
@@ -924,17 +939,22 @@
         .license-status-tier {
             font-weight: 700;
             text-transform: uppercase;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 6px;
         }
 
         .license-status-manage {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
             border: none;
             color: white;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 11px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
+            transition: all 0.2s;
         }
 
         .license-status-manage:hover {
@@ -1436,10 +1456,16 @@
             localStorage.setItem('ppo_license', JSON.stringify(licenseData));
 
             // Mostrar éxito
-            activateBtn.textContent = '✅ Licencia Activada!';
+            activateBtn.textContent = '✅ ¡Licencia ' + tier + ' Activada!';
             activateBtn.style.background = '#4CAF50';
 
-            // Esperar 1 segundo y cerrar modal
+            // Agregar mensaje de éxito en el modal
+            const successMsg = document.createElement('div');
+            successMsg.style.cssText = 'margin-top: 16px; padding: 12px; background: #e8f5e9; color: #2e7d32; border-radius: 8px; text-align: center; font-weight: 600;';
+            successMsg.textContent = '🎉 ¡Perfecto! La página se recargará para aplicar los cambios...';
+            document.querySelector('.license-modal-content').appendChild(successMsg);
+
+            // Esperar 2 segundos y cerrar modal
             setTimeout(() => {
                 hideLicenseModal();
                 activateBtn.disabled = false;
@@ -1452,7 +1478,7 @@
 
                 // Recargar para aplicar cambios
                 location.reload();
-            }, 1500);
+            }, 2000);
         }
 
         // Habilitar features premium según tier
