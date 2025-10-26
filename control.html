@@ -1206,44 +1206,62 @@
             const p1 = gameState.player1.points;
             const p2 = gameState.player2.points;
 
-            // Si hay un override manual, verificar si aún estamos en el mismo bloque de servicio
+            // Si hay un override manual activo
             if (manualServiceOverride && manualServiceStartPoint !== null) {
-                // Calcular cuántos puntos han pasado desde el cambio manual
-                const pointsSinceManual = totalPoints - manualServiceStartPoint;
-
                 // En deuce (10-10+), servicio cambia cada punto
                 if (p1 >= 10 && p2 >= 10) {
+                    const pointsSinceManual = totalPoints - manualServiceStartPoint;
                     // Si ya pasó 1 punto o más, resetear el override
                     if (pointsSinceManual >= 1) {
                         manualServiceOverride = false;
                         manualServiceStartPoint = null;
+                        // Continuar al cálculo automático
                     } else {
                         return; // Mantener el servicio manual
                     }
                 } else {
                     // Antes del 10-10, servicio cambia cada 2 puntos
-                    // Calcular en qué bloque estábamos cuando se hizo el cambio manual
-                    const manualServiceBlock = Math.floor(manualServiceStartPoint / 2);
-                    const currentServiceBlock = Math.floor(totalPoints / 2);
+                    // Si el override se hizo en 0-0, mantener hasta que llegue a total=2
+                    // Si se hizo en otro punto, mantener hasta el siguiente múltiplo de 2
+                    const nextMultipleOf2 = Math.ceil((manualServiceStartPoint + 1) / 2) * 2;
 
-                    // Si cambiamos de bloque, resetear el override
-                    if (currentServiceBlock !== manualServiceBlock) {
+                    if (totalPoints < nextMultipleOf2) {
+                        // Aún no llegamos al siguiente múltiplo de 2, mantener el servicio manual
+                        return;
+                    } else if (totalPoints === nextMultipleOf2) {
+                        // Llegamos exactamente al múltiplo de 2, resetear override
+                        // El cálculo automático tomará control desde aquí
                         manualServiceOverride = false;
                         manualServiceStartPoint = null;
-                    } else {
-                        return; // Mantener el servicio manual dentro del mismo bloque
+                        // Continuar al cálculo automático
                     }
                 }
             }
 
-            // Cálculo automático normal
+            // Cálculo automático normal - SOLO si NO hay override manual
             if (p1 >= 10 && p2 >= 10) {
                 gameState.player1.service = (totalPoints % 2) === 0;
                 gameState.player2.service = !gameState.player1.service;
             } else {
+                // Calcular servicio basado en quién sirvió primero
                 const serviceBlock = Math.floor(totalPoints / 2) % 2;
-                gameState.player1.service = serviceBlock === 0;
-                gameState.player2.service = serviceBlock === 1;
+
+                // Si firstServer está definido, usar esa información
+                if (firstServer !== null) {
+                    // Si firstServer es 1, entonces J1 sirve en bloques pares (0, 2, 4...) y J2 en impares
+                    // Si firstServer es 2, entonces J2 sirve en bloques pares y J1 en impares
+                    if (firstServer === 1) {
+                        gameState.player1.service = serviceBlock === 0;
+                        gameState.player2.service = serviceBlock === 1;
+                    } else {
+                        gameState.player1.service = serviceBlock === 1;
+                        gameState.player2.service = serviceBlock === 0;
+                    }
+                } else {
+                    // Fallback al comportamiento por defecto (J1 sirve primero)
+                    gameState.player1.service = serviceBlock === 0;
+                    gameState.player2.service = serviceBlock === 1;
+                }
             }
         }
 
@@ -1253,6 +1271,7 @@
         let switchingFromHistory = false; // Prevenir clicks durante transición
         let manualServiceOverride = false; // Indica que el servicio fue cambiado manualmente
         let manualServiceStartPoint = null; // Punto total cuando se hizo el cambio manual
+        let firstServer = null; // Quién sirvió primero (1 o 2), determina la rotación
 
         // Cambiar puntos
         function changePoints(player, delta) {
@@ -1364,6 +1383,7 @@
                 gameState.player1.points = 0;
                 gameState.player2.points = 0;
                 manualServiceOverride = false;  // Resetear override al iniciar nuevo set
+                firstServer = null;  // Resetear primer servidor para el nuevo set
                 updateDisplay();
 
                 // DESPUÉS de resetear, acreditar el set con animación
@@ -1408,11 +1428,19 @@
 
         // Cambiar servicio manualmente
         function setService(player) {
+            const totalPoints = gameState.player1.points + gameState.player2.points;
+
             gameState.player1.service = player === 1;
             gameState.player2.service = player === 2;
             gameState.animations.service = Date.now();
             manualServiceOverride = true; // Marcar que fue cambiado manualmente
-            manualServiceStartPoint = gameState.player1.points + gameState.player2.points; // Guardar punto actual
+            manualServiceStartPoint = totalPoints; // Guardar punto actual
+
+            // Si estamos en 0-0 o 0-1 (inicio del set), guardar quién sirve primero
+            if (totalPoints <= 1 && firstServer === null) {
+                firstServer = player;
+            }
+
             updateDisplay();
         }
 
@@ -1570,6 +1598,7 @@
                 gameState.player2.service = false;
                 gameState.setsHistory = [];  // Limpiar historial
                 manualServiceOverride = false;  // Resetear override manual
+                firstServer = null;  // Resetear primer servidor
                 updateDisplay();
             }
         }
