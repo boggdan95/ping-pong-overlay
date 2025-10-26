@@ -211,6 +211,36 @@ Actualmente no, pero puedes abrir en navegadores diferentes.
 
 ## 📋 Changelog
 
+### v0.3.4 (2025-01-24)
+**🚨 Selección Manual del Servidor Inicial - Hotfix Crítico**
+
+#### Problema Resuelto (Bug Crítico)
+- ❌ El sistema asignaba automáticamente el servicio al Jugador 1 en 0-0
+- ❌ No había forma de elegir quién sirve primero al inicio del set
+- ❌ La rotación automática asumía siempre que J1 servía primero
+- ❌ Al corregir el servicio, la rotación posterior era incorrecta
+
+#### Solución: Sistema de Primer Servidor
+- ✅ **Selección libre en 0-0**: Operador elige quién sirve primero clickeando botón de servicio
+- ✅ **Tracking de firstServer**: Sistema guarda quién sirvió primero (1 o 2)
+- ✅ **Rotación inteligente**: Cálculo automático se basa en firstServer
+  - Si J1 sirve primero: J1 en bloques pares (0-1, 4-5), J2 en impares (2-3, 6-7)
+  - Si J2 sirve primero: J2 en bloques pares, J1 en impares
+- ✅ **Reset correcto**: firstServer se limpia al ganar set o resetear partido
+- 🎯 **Flujo operativo**: Permite operación profesional con elección de servidor inicial
+
+#### Flujo de Uso
+1. Inicio 0-0: Operador click en "🎾 Servicio" del jugador que servirá primero
+2. Sistema mantiene ese servidor por el bloque 0-1
+3. En total=2: Rotación automática cambia correctamente al otro jugador
+4. Rotación continúa cada 2 puntos basada en quién sirvió primero
+
+#### Implementación Técnica
+- Agregado `firstServer` variable (null, 1, o 2)
+- Modificado `setService()` para guardar firstServer en total ≤ 1
+- Modificado `updateService()` para calcular rotación basada en firstServer
+- Reset en `confirmSetWin()` y `resetAll()`
+
 ### v0.3.3 (2025-01-24)
 **🔧 Corrección Manual de Servicio - Hotfix**
 
