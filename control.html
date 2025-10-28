@@ -1235,6 +1235,7 @@
             SECRET_KEY: 'ppo-premium-2025-secret-k3y', // Secret key para validación offline
             PRODUCT_CODE: 'PPO',
             TRIAL_DAYS: 7, // Días de prueba gratuitos
+            PREMIUM_BUILD: false, // Cambiar a true para versión sin trial
             TIERS: {
                 FREE: {
                     name: 'Free',
@@ -1360,6 +1361,15 @@
 
         // Inicializar sistema de licencias
         function initLicense() {
+            // Si es versión PREMIUM (sin trial), funciona siempre
+            if (LICENSE_CONFIG.PREMIUM_BUILD) {
+                console.log('🎉 Versión Premium - Sin restricciones');
+                licenseData = { tier: 'PREMIUM', isPremiumBuild: true };
+                updateLicenseUI();
+                return;
+            }
+
+            // Versión pública con trial
             const saved = localStorage.getItem('ppo_license');
 
             if (saved) {

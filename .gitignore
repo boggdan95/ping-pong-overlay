@@ -34,3 +34,8 @@ logos/
 *.jpeg
 *.gif
 *.svg
+
+# Premium builds (NO subir a GitHub)
+premium/
+*-premium.html
+*.zip

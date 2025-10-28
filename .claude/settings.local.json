@@ -12,7 +12,13 @@
       "Bash(start index.html)",
       "Bash(node -c:*)",
       "Bash(git branch:*)",
-      "Bash(node scripts/generate-license.js:*)"
+      "Bash(node scripts/generate-license.js:*)",
+      "Bash(start test-license.html)",
+      "Bash(start test-trial.html)",
+      "Bash(node scripts/test-trial-system.js:*)",
+      "Bash(start TEST_REPORT.html)",
+      "Bash(cat:*)",
+      "Bash(node scripts/build-premium.js:*)"
     ],
     "deny": [],
     "ask": []

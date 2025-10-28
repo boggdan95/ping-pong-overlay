@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Sistema de Licencias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #e8f5e9;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test - Sistema de Licencias</h1>
+
+        <div class="test-section">
+            <h3>Estado Actual</h3>
+            <div id="currentStatus"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>1. Activar Licencia de Prueba</h3>
+            <p>Código PRO válido:</p>
+            <input type="text" id="testLicense" value="PPO-PRO-20251026-4F3D160A" />
+            <button onclick="testActivation()">Activar Licencia</button>
+            <div id="activationResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. Verificar Features</h3>
+            <button onclick="checkFeatures()">Verificar Features</button>
+            <div id="featuresResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. Ver Datos de Licencia</h3>
+            <button onclick="showLicenseData()">Ver Datos</button>
+            <div id="licenseDataResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. Limpiar Licencia</h3>
+            <button onclick="clearLicense()" style="background: #f44336;">Resetear a FREE</button>
+            <div id="clearResult"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>5. Probar Código Inválido</h3>
+            <input type="text" id="invalidLicense" value="PPO-INVALID-12345678-ABCD1234" />
+            <button onclick="testInvalidLicense()">Probar Inválido</button>
+            <div id="invalidResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== SISTEMA DE LICENCIAS ====================
+
+        const LICENSE_CONFIG = {
+            SECRET_KEY: 'ppo-premium-2025-secret-k3y',
+            PRODUCT_CODE: 'PPO',
+            TIERS: {
+                FREE: {
+                    name: 'Free',
+                    features: [],
+                    maxActivations: 1
+                },
+                BASIC: {
+                    name: 'Basic',
+                    features: ['themes_premium_3', 'stats_basic'],
+                    maxActivations: 2
+                },
+                PRO: {
+                    name: 'Pro',
+                    features: ['themes_unlimited', 'stats_advanced', 'cloud_save', 'mobile_control', 'custom_branding'],
+                    maxActivations: 5
+                },
+                ENTERPRISE: {
+                    name: 'Enterprise',
+                    features: ['all'],
+                    maxActivations: 999
+                }
+            }
+        };
+
+        let licenseData = null;
+
+        async function simpleHash(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex.substring(0, 8).toUpperCase();
+        }
+
+        async function validateLicenseOffline(licenseKey) {
+            const parts = licenseKey.split('-');
+
+            if (parts.length !== 4) {
+                return { valid: false, error: 'Formato inválido' };
+            }
+
+            const [product, tier, timestamp, hash] = parts;
+
+            if (product !== LICENSE_CONFIG.PRODUCT_CODE) {
+                return { valid: false, error: 'Código de producto inválido' };
+            }
+
+            if (!['BASIC', 'PRO', 'ENTERPRISE'].includes(tier)) {
+                return { valid: false, error: 'Tier inválido' };
+            }
+
+            if (!/^\d{8}$/.test(timestamp)) {
+                return { valid: false, error: 'Timestamp inválido' };
+            }
+
+            const hashInput = `${product}-${tier}-${timestamp}-${LICENSE_CONFIG.SECRET_KEY}`;
+            const expectedHash = await simpleHash(hashInput);
+
+            if (hash !== expectedHash) {
+                return { valid: false, error: 'Hash inválido' };
+            }
+
+            return { valid: true, tier };
+        }
+
+        function hasFeature(featureName) {
+            if (!licenseData || licenseData.tier === 'FREE') {
+                return false;
+            }
+
+            const features = LICENSE_CONFIG.TIERS[licenseData.tier]?.features || [];
+            return features.includes(featureName) || features.includes('all');
+        }
+
+        function initLicense() {
+            const saved = localStorage.getItem('ppo_license');
+
+            if (saved) {
+                try {
+                    licenseData = JSON.parse(saved);
+                } catch (e) {
+                    licenseData = null;
+                }
+            } else {
+                licenseData = { tier: 'FREE' };
+            }
+
+            updateStatus();
+        }
+
+        function updateStatus() {
+            const status = document.getElementById('currentStatus');
+            if (licenseData && licenseData.tier !== 'FREE') {
+                status.innerHTML = `<div class="result">✅ Licencia Activa: <strong>${licenseData.tier}</strong></div>`;
+            } else {
+                status.innerHTML = `<div class="result error">ℹ️ Modo FREE (sin licencia)</div>`;
+            }
+        }
+
+        async function testActivation() {
+            const input = document.getElementById('testLicense');
+            const result = document.getElementById('activationResult');
+            const key = input.value.trim().toUpperCase();
+
+            result.innerHTML = '<p>🔄 Validando...</p>';
+
+            const validation = await validateLicenseOffline(key);
+
+            if (!validation.valid) {
+                result.innerHTML = `<div class="result error">❌ ${validation.error}</div>`;
+                return;
+            }
+
+            const tier = key.split('-')[1];
+
+            licenseData = {
+                key: key,
+                tier: tier,
+                features: LICENSE_CONFIG.TIERS[tier].features,
+                activatedAt: Date.now()
+            };
+
+            localStorage.setItem('ppo_license', JSON.stringify(licenseData));
+
+            result.innerHTML = `<div class="result">✅ Licencia ${tier} activada exitosamente!</div>`;
+            updateStatus();
+        }
+
+        function checkFeatures() {
+            const result = document.getElementById('featuresResult');
+
+            if (!licenseData || licenseData.tier === 'FREE') {
+                result.innerHTML = '<div class="result error">❌ No hay licencia activa</div>';
+                return;
+            }
+
+            const features = LICENSE_CONFIG.TIERS[licenseData.tier].features;
+
+            let html = '<div class="result"><pre>';
+            html += `Tier: ${licenseData.tier}\n\n`;
+            html += 'Features disponibles:\n';
+            features.forEach(f => {
+                html += `  ✓ ${f}\n`;
+            });
+            html += '\nPruebas:\n';
+            html += `  hasFeature('themes_unlimited'): ${hasFeature('themes_unlimited')}\n`;
+            html += `  hasFeature('stats_advanced'): ${hasFeature('stats_advanced')}\n`;
+            html += `  hasFeature('cloud_save'): ${hasFeature('cloud_save')}\n`;
+            html += '</pre></div>';
+
+            result.innerHTML = html;
+        }
+
+        function showLicenseData() {
+            const result = document.getElementById('licenseDataResult');
+            result.innerHTML = '<div class="result"><pre>' + JSON.stringify(licenseData, null, 2) + '</pre></div>';
+        }
+
+        function clearLicense() {
+            localStorage.removeItem('ppo_license');
+            licenseData = { tier: 'FREE' };
+
+            const result = document.getElementById('clearResult');
+            result.innerHTML = '<div class="result">✅ Licencia eliminada. Modo FREE activo.</div>';
+
+            updateStatus();
+        }
+
+        async function testInvalidLicense() {
+            const input = document.getElementById('invalidLicense');
+            const result = document.getElementById('invalidResult');
+            const key = input.value.trim().toUpperCase();
+
+            result.innerHTML = '<p>🔄 Validando...</p>';
+
+            const validation = await validateLicenseOffline(key);
+
+            if (!validation.valid) {
+                result.innerHTML = `<div class="result">✅ Correctamente rechazado: <strong>${validation.error}</strong></div>`;
+            } else {
+                result.innerHTML = `<div class="result error">❌ ERROR: Código inválido fue aceptado!</div>`;
+            }
+        }
+
+        // Inicializar al cargar
+        initLicense();
+    </script>
+</body>
+</html>
