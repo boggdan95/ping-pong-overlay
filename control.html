@@ -143,7 +143,7 @@
         .player-card {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 8px;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
         }
 
@@ -153,28 +153,28 @@
         }
 
         .player-name-display {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .player-flag-display {
-            font-size: 24px;
-            margin-bottom: 8px;
+            font-size: 20px;
+            margin-bottom: 6px;
         }
 
         .score-display {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-family: 'Courier New', monospace;
             cursor: pointer;
             transition: all 0.2s;
             border-radius: 4px;
-            padding: 4px 8px;
+            padding: 2px 6px;
         }
 
         .score-display:hover {
@@ -188,14 +188,14 @@
         }
 
         .score-input {
-            width: 60px;
-            font-size: 36px;
+            width: 55px;
+            font-size: 32px;
             font-weight: 700;
             font-family: 'Courier New', monospace;
             text-align: center;
             border: 2px solid #667eea;
             border-radius: 4px;
-            padding: 4px;
+            padding: 2px;
         }
 
         .score-input:focus {
@@ -204,9 +204,9 @@
         }
 
         .sets-display {
-            font-size: 11px;
+            font-size: 10px;
             opacity: 0.8;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .sets-display span {
@@ -243,10 +243,10 @@
 
         .btn-point {
             flex: 1;
-            padding: 12px 8px;
+            padding: 10px 6px;
             border: none;
             border-radius: 6px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
@@ -273,11 +273,11 @@
         }
 
         .service-indicator {
-            margin-top: 8px;
-            padding: 6px;
+            margin-top: 6px;
+            padding: 5px;
             background: rgba(255, 255, 255, 0.5);
             border-radius: 6px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -749,92 +749,11 @@
             }
         }
 
-        /* ==================== BANNER DE APOYO ==================== */
-
-        .support-banner {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .support-banner-content {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .support-banner-text {
-            font-weight: 600;
-        }
-
-        .support-banner-links {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .support-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 12px;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .support-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .support-close {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-
-        .support-close:hover {
-            opacity: 1;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🏓 Control Panel</h1>
-
-        <!-- Banner de Apoyo (opcional, se puede cerrar) -->
-        <div id="supportBanner" class="support-banner" style="display: none;">
-            <div class="support-banner-content">
-                <span class="support-banner-text">¿Te gusta este overlay? Apóyame con un café</span>
-                <div class="support-banner-links">
-                    <a href="#" class="support-btn" target="_blank">Donar</a>
-                    <a href="#" class="support-btn" target="_blank">Personalización</a>
-                </div>
-            </div>
-            <button class="support-close" onclick="closeSupportBanner()">×</button>
-        </div>
 
         <!-- Tabs -->
         <div class="tabs">
@@ -1048,26 +967,6 @@
     </div>
 
     <script>
-        // ==================== BANNER DE APOYO ====================
-
-        function initSupportBanner() {
-            const bannerDismissed = localStorage.getItem('ppo_support_banner_dismissed');
-
-            if (!bannerDismissed) {
-                document.getElementById('supportBanner').style.display = 'flex';
-            }
-        }
-
-        function closeSupportBanner() {
-            document.getElementById('supportBanner').style.display = 'none';
-            localStorage.setItem('ppo_support_banner_dismissed', 'true');
-        }
-
-        // Mostrar banner al cargar (solo primera vez)
-        window.addEventListener('DOMContentLoaded', initSupportBanner);
-
-        // ==================== FIN BANNER DE APOYO ====================
-
         // Mapeo de códigos de 3 letras a códigos ISO 3166-1 alpha-2
         const countryCodeMap = {
             'GUA': 'gt', 'ESA': 'sv', 'NCA': 'ni', 'HON': 'hn', 'PAN': 'pa',
