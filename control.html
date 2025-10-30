@@ -35,24 +35,32 @@
             font-weight: 700;
         }
 
-        /* Tabs */
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Tabs (lateral) */
         .tabs {
             display: flex;
+            flex-direction: column;
             gap: 6px;
-            margin-bottom: 8px;
+            min-width: 50px;
         }
 
         .tab-button {
-            flex: 1;
-            padding: 8px;
+            padding: 12px 8px;
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 2px solid transparent;
             border-radius: 6px;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 24px;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .tab-button:hover {
@@ -66,6 +74,7 @@
         }
 
         .panel {
+            flex: 1;
             background: white;
             border-radius: 8px;
             padding: 10px;
@@ -622,9 +631,19 @@
                 margin-bottom: 6px;
             }
 
+            /* Volver a tabs horizontales en móvil */
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .tabs {
+                flex-direction: row;
+                min-width: unset;
+            }
+
             .tab-button {
                 padding: 6px;
-                font-size: 11px;
+                font-size: 20px;
             }
 
             .panel {
@@ -662,12 +681,11 @@
 
             .tabs {
                 gap: 4px;
-                margin-bottom: 6px;
             }
 
             .tab-button {
                 padding: 6px 4px;
-                font-size: 10px;
+                font-size: 18px;
             }
 
             .panel {
@@ -755,17 +773,18 @@
     <div class="container">
         <h1>🏓 Control Panel</h1>
 
-        <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab-button active" onclick="switchTab('match')">
-                🏓 Partido
-            </button>
-            <button class="tab-button" onclick="switchTab('config')">
-                ⚙️ Configuración
-            </button>
-        </div>
+        <div class="main-layout">
+            <!-- Tabs (lateral) -->
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('match')" title="Partido">
+                    🏓
+                </button>
+                <button class="tab-button" onclick="switchTab('config')" title="Configuración">
+                    ⚙️
+                </button>
+            </div>
 
-        <div class="panel">
+            <div class="panel">
             <!-- TAB: PARTIDO -->
             <div id="matchTab" class="tab-content active">
                 <div class="match-header">
@@ -935,6 +954,7 @@
                         <img id="logoPreviewImg" src="" alt="Vista previa del logo">
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </div>
