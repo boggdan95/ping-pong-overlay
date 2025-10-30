@@ -803,6 +803,12 @@
                     </button>
                 </div>
 
+                <div style="margin-bottom: 10px;">
+                    <button id="winnerOverlayToggle" class="visibility-toggle" onclick="toggleWinnerOverlay()" style="width: 100%; display: none;">
+                        🏆 Mostrar Pantalla de Ganador
+                    </button>
+                </div>
+
                 <div class="players-grid">
                     <!-- Jugador 1 -->
                     <div class="player-card" id="playerCard1">
@@ -891,6 +897,22 @@
                     </div>
                     <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
                         <span id="setsToWinLabel">Primero en ganar 3 sets</span>
+                    </div>
+                </div>
+
+                <!-- Animaciones de Ganador -->
+                <div class="config-section">
+                    <h3>✨ Animaciones</h3>
+                    <div class="logo-options">
+                        <button class="btn-logo-option active" id="animationsOn" onclick="setAnimations(true)">
+                            ✅ Activadas
+                        </button>
+                        <button class="btn-logo-option" id="animationsOff" onclick="setAnimations(false)">
+                            🚫 Desactivadas
+                        </button>
+                    </div>
+                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
+                        Confetti en pantalla de ganador
                     </div>
                 </div>
 
@@ -1205,6 +1227,9 @@
             // Botón de historial overlay
             updateHistoryOverlayButton();
 
+            // Botón de pantalla de ganador
+            updateWinnerOverlayButton();
+
             // Botones de color activos
             updateBackgroundButtons();
 
@@ -1213,6 +1238,9 @@
 
             // Botones de modo de partido
             updateMatchModeButtons();
+
+            // Botones de animaciones
+            updateAnimationsButtons();
 
             // Historial de sets
             updateSetsHistory();
@@ -1248,6 +1276,15 @@
             updateDisplay();
         }
 
+        // Toggle pantalla de ganador
+        function toggleWinnerOverlay() {
+            if (!gameState.winner) {
+                gameState.winner = { detected: false, player: null, finalScore: '', showOverlay: false };
+            }
+            gameState.winner.showOverlay = !gameState.winner.showOverlay;
+            updateDisplay();
+        }
+
         // Actualizar botón de historial overlay
         function updateHistoryOverlayButton() {
             const btn = document.getElementById('historyOverlayToggle');
@@ -1265,6 +1302,26 @@
             btn.disabled = !hasHistory;
             btn.style.opacity = hasHistory ? '1' : '0.5';
             btn.style.cursor = hasHistory ? 'pointer' : 'not-allowed';
+        }
+
+        // Actualizar botón de pantalla de ganador
+        function updateWinnerOverlayButton() {
+            const btn = document.getElementById('winnerOverlayToggle');
+            const hasWinner = gameState.winner && gameState.winner.detected;
+
+            if (hasWinner) {
+                btn.style.display = 'block';
+
+                if (gameState.winner.showOverlay) {
+                    btn.textContent = '🙈 Ocultar Pantalla de Ganador';
+                    btn.classList.add('hidden');
+                } else {
+                    btn.textContent = '🏆 Mostrar Pantalla de Ganador';
+                    btn.classList.remove('hidden');
+                }
+            } else {
+                btn.style.display = 'none';
+            }
         }
 
         // Actualizar botones de color activos
@@ -1714,6 +1771,15 @@
             updateDisplay();
         }
 
+        // Activar/desactivar animaciones
+        function setAnimations(enabled) {
+            if (!gameState.winner) {
+                gameState.winner = { detected: false, player: null, finalScore: '', showOverlay: false };
+            }
+            gameState.winner.animationsEnabled = enabled;
+            updateDisplay();
+        }
+
         // Obtener número de sets necesarios para ganar
         function getSetsToWin() {
             const modeMap = {
@@ -1739,6 +1805,13 @@
             };
             const modeName = modeNames[gameState.matchMode] || 'Mejor de 5';
             document.getElementById('setsToWinLabel').textContent = `${modeName} - Primero en ganar ${setsToWin} sets`;
+        }
+
+        // Actualizar botones de animaciones
+        function updateAnimationsButtons() {
+            const animationsEnabled = gameState.winner && gameState.winner.animationsEnabled !== false;
+            document.getElementById('animationsOn').classList.toggle('active', animationsEnabled);
+            document.getElementById('animationsOff').classList.toggle('active', !animationsEnabled);
         }
 
         // Detectar ganador del partido
