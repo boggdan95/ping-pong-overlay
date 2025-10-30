@@ -18,7 +18,8 @@
       "Bash(node scripts/test-trial-system.js:*)",
       "Bash(start TEST_REPORT.html)",
       "Bash(cat:*)",
-      "Bash(node scripts/build-premium.js:*)"
+      "Bash(node scripts/build-premium.js:*)",
+      "Bash(git check-ignore:*)"
     ],
     "deny": [],
     "ask": []

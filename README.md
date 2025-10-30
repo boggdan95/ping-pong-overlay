@@ -391,9 +391,32 @@ Para más información, consulta la documentación en la carpeta `docs/`:
 - **[Guía para Desarrolladores](docs/PROMPT.md)** - Documentación técnica y estructura de código
 - **[Guía de Descarga](docs/DESCARGAR.txt)** - Instrucciones de descarga e instalación
 
-## 📞 Soporte
+## 💝 Apoyo al Proyecto
 
-Para problemas o sugerencias, abre un issue en el repositorio.
+Este proyecto es **100% gratis y de código abierto**. Si te resulta útil, considera apoyarlo:
+
+### ☕ Donaciones
+- **PayPal**: [Tu enlace aquí]
+- **Ko-fi**: [Tu enlace aquí]
+- **GitHub Sponsors**: [Tu enlace aquí]
+
+### 💼 Servicios Profesionales
+
+¿Necesitas ayuda o personalización? Ofrezco:
+
+| Servicio | Precio | Descripción |
+|----------|--------|-------------|
+| **Setup Rápido** | $15 USD | Instalación en OBS + configuración básica (30 min video call) |
+| **Personalización** | $35 USD | Setup + colores custom + logo + tutorial (1 hora) |
+| **Torneo/Empresa** | $75+ USD | Todo lo anterior + múltiples overlays + soporte durante evento |
+
+**¿Interesado?** Contáctame en: [tu-email@ejemplo.com]
+
+---
+
+## 📞 Soporte Comunitario
+
+Para problemas técnicos o sugerencias, abre un issue en el repositorio.
 
 ---
 
