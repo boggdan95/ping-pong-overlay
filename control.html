@@ -543,7 +543,8 @@
         }
 
         .logo-options {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-bottom: 8px;
         }
@@ -876,14 +877,20 @@
 
                 <!-- Modo de Partido -->
                 <div class="config-section">
-                    <h3>🏆 Modo de Partido</h3>
+                    <h3>🏆 Sets para Ganar</h3>
                     <div class="logo-options">
+                        <button class="btn-logo-option" id="modeBest3" onclick="setMatchMode('best-of-3')">
+                            Mejor de 3
+                        </button>
                         <button class="btn-logo-option active" id="modeBest5" onclick="setMatchMode('best-of-5')">
                             Mejor de 5
                         </button>
                         <button class="btn-logo-option" id="modeBest7" onclick="setMatchMode('best-of-7')">
                             Mejor de 7
                         </button>
+                    </div>
+                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
+                        <span id="setsToWinLabel">Primero en ganar 3 sets</span>
                     </div>
                 </div>
 
@@ -1078,9 +1085,14 @@
             },
             overlayVisible: true,
             theme: 'azulModerno',
-            matchMode: 'best-of-5',    // 'best-of-5' o 'best-of-7'
+            matchMode: 'best-of-5',    // 'best-of-3', 'best-of-5' o 'best-of-7'
             setsHistory: [],           // Historial de sets: [{player1Points: 11, player2Points: 9}, ...]
             showHistoryOverlay: false, // Mostrar overlay de historial de sets
+            winner: {                  // Información del ganador del partido
+                detected: false,
+                player: null,          // 1 o 2
+                finalScore: ''         // ej: '3-1'
+            },
             animations: {
                 point1: 0,
                 point2: 0,
@@ -1141,6 +1153,14 @@
                 }
                 if (gameState.showHistoryOverlay === undefined) {
                     gameState.showHistoryOverlay = false;
+                }
+                // Asegurar que exista el campo winner
+                if (!gameState.winner) {
+                    gameState.winner = {
+                        detected: false,
+                        player: null,
+                        finalScore: ''
+                    };
                 }
             }
             updateDisplay();
@@ -1584,6 +1604,19 @@
                     // Actualizar para mostrar el set acreditado
                     updateDisplay();
 
+                    // Verificar si hay ganador del partido
+                    const matchWinner = checkMatchWinner();
+                    if (matchWinner) {
+                        // Guardar información del ganador
+                        if (!gameState.winner) {
+                            gameState.winner = {};
+                        }
+                        gameState.winner.detected = true;
+                        gameState.winner.player = matchWinner;
+                        gameState.winner.finalScore = `${gameState.player1.sets}-${gameState.player2.sets}`;
+                        localStorage.setItem('gameState', JSON.stringify(gameState));
+                    }
+
                     // Liberar procesamiento después de la animación
                     setTimeout(() => {
                         processingSetWin = false;
@@ -1681,10 +1714,43 @@
             updateDisplay();
         }
 
+        // Obtener número de sets necesarios para ganar
+        function getSetsToWin() {
+            const modeMap = {
+                'best-of-3': 2,
+                'best-of-5': 3,
+                'best-of-7': 4
+            };
+            return modeMap[gameState.matchMode] || 3;
+        }
+
         // Actualizar botones de modo de partido
         function updateMatchModeButtons() {
+            document.getElementById('modeBest3').classList.toggle('active', gameState.matchMode === 'best-of-3');
             document.getElementById('modeBest5').classList.toggle('active', gameState.matchMode === 'best-of-5');
             document.getElementById('modeBest7').classList.toggle('active', gameState.matchMode === 'best-of-7');
+
+            // Actualizar label
+            const setsToWin = getSetsToWin();
+            const modeNames = {
+                'best-of-3': 'Mejor de 3',
+                'best-of-5': 'Mejor de 5',
+                'best-of-7': 'Mejor de 7'
+            };
+            const modeName = modeNames[gameState.matchMode] || 'Mejor de 5';
+            document.getElementById('setsToWinLabel').textContent = `${modeName} - Primero en ganar ${setsToWin} sets`;
+        }
+
+        // Detectar ganador del partido
+        function checkMatchWinner() {
+            const setsToWin = getSetsToWin();
+
+            if (gameState.player1.sets >= setsToWin) {
+                return 1;
+            } else if (gameState.player2.sets >= setsToWin) {
+                return 2;
+            }
+            return null;
         }
 
         // Actualizar historial de sets
@@ -1781,6 +1847,11 @@
                 gameState.player1.service = true;
                 gameState.player2.service = false;
                 gameState.setsHistory = [];  // Limpiar historial
+                gameState.winner = {         // Limpiar ganador
+                    detected: false,
+                    player: null,
+                    finalScore: ''
+                };
                 manualServiceOverride = false;  // Resetear override manual
                 firstServer = null;  // Resetear primer servidor
                 updateDisplay();
