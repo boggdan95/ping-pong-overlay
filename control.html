@@ -171,12 +171,69 @@
             font-weight: 700;
             margin-bottom: 8px;
             font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .score-display:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .score-display.editing {
+            background: white;
+            color: #667eea;
+        }
+
+        .score-input {
+            width: 60px;
+            font-size: 36px;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            border: 2px solid #667eea;
+            border-radius: 4px;
+            padding: 4px;
+        }
+
+        .score-input:focus {
+            outline: none;
+            border-color: #764ba2;
         }
 
         .sets-display {
             font-size: 11px;
             opacity: 0.8;
             margin-bottom: 8px;
+        }
+
+        .sets-display span {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+
+        .sets-display span:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .sets-input {
+            width: 40px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid #667eea;
+            border-radius: 3px;
+            padding: 2px;
+        }
+
+        .sets-input:focus {
+            outline: none;
+            border-color: #764ba2;
         }
 
         .point-buttons {
@@ -814,8 +871,8 @@
                         <div class="player-flag-display">
                             <span class="fi fi-es" id="player1FlagDisplay"></span>
                         </div>
-                        <div class="score-display" id="player1ScoreDisplay">0</div>
-                        <div class="sets-display">Sets: <span id="player1SetsDisplay">0</span></div>
+                        <div class="score-display" id="player1ScoreDisplay" onclick="editScore(1)" title="Click para editar">0</div>
+                        <div class="sets-display">Sets: <span id="player1SetsDisplay" onclick="editSets(1)" title="Click para editar">0</span></div>
                         <div class="point-buttons">
                             <button class="btn-point btn-point-minus" onclick="changePoints(1, -1)">−</button>
                             <button class="btn-point btn-point-plus" onclick="changePoints(1, 1)">+</button>
@@ -831,8 +888,8 @@
                         <div class="player-flag-display">
                             <span class="fi fi-ar" id="player2FlagDisplay"></span>
                         </div>
-                        <div class="score-display" id="player2ScoreDisplay">0</div>
-                        <div class="sets-display">Sets: <span id="player2SetsDisplay">0</span></div>
+                        <div class="score-display" id="player2ScoreDisplay" onclick="editScore(2)" title="Click para editar">0</div>
+                        <div class="sets-display">Sets: <span id="player2SetsDisplay" onclick="editSets(2)" title="Click para editar">0</span></div>
                         <div class="point-buttons">
                             <button class="btn-point btn-point-minus" onclick="changePoints(2, -1)">−</button>
                             <button class="btn-point btn-point-plus" onclick="changePoints(2, 1)">+</button>
@@ -1374,11 +1431,117 @@
         let manualServiceOverride = false; // Indica que el servicio fue cambiado manualmente
         let manualServiceStartPoint = null; // Punto total cuando se hizo el cambio manual
         let firstServer = null; // Quién sirvió primero (1 o 2), determina la rotación
+        let editingScore = null; // Player number being edited (1 or 2), null if none
+        let editingSets = null; // Player number being edited for sets (1 or 2), null if none
+
+        // Editar puntos manualmente
+        function editScore(player) {
+            // No permitir edición durante procesamiento
+            if (processingSetWin || pendingSetWin || switchingFromHistory || editingScore || editingSets) return;
+
+            editingScore = player;
+            const displayElement = document.getElementById(`player${player}ScoreDisplay`);
+            const currentValue = gameState[`player${player}`].points;
+
+            // Crear input temporal
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'score-input';
+            input.value = currentValue;
+            input.min = '0';
+            input.max = '99';
+
+            // Reemplazar el display con el input
+            displayElement.textContent = '';
+            displayElement.appendChild(input);
+            displayElement.classList.add('editing');
+
+            // Focus y seleccionar todo
+            input.focus();
+            input.select();
+
+            // Función para guardar cambios
+            const saveChanges = () => {
+                const newValue = parseInt(input.value) || 0;
+                const validValue = Math.max(0, Math.min(99, newValue));
+
+                gameState[`player${player}`].points = validValue;
+                editingScore = null;
+                displayElement.classList.remove('editing');
+
+                updateService();
+                updateDisplay();
+            };
+
+            // Guardar al presionar Enter
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    saveChanges();
+                } else if (e.key === 'Escape') {
+                    editingScore = null;
+                    displayElement.classList.remove('editing');
+                    updateDisplay();
+                }
+            });
+
+            // Guardar al perder foco
+            input.addEventListener('blur', saveChanges);
+        }
+
+        // Editar sets manualmente
+        function editSets(player) {
+            // No permitir edición durante procesamiento
+            if (processingSetWin || pendingSetWin || switchingFromHistory || editingScore || editingSets) return;
+
+            editingSets = player;
+            const displayElement = document.getElementById(`player${player}SetsDisplay`);
+            const currentValue = gameState[`player${player}`].sets;
+
+            // Crear input temporal
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'sets-input';
+            input.value = currentValue;
+            input.min = '0';
+            input.max = '9';
+
+            // Reemplazar el display con el input
+            displayElement.textContent = '';
+            displayElement.appendChild(input);
+
+            // Focus y seleccionar todo
+            input.focus();
+            input.select();
+
+            // Función para guardar cambios
+            const saveChanges = () => {
+                const newValue = parseInt(input.value) || 0;
+                const validValue = Math.max(0, Math.min(9, newValue));
+
+                gameState[`player${player}`].sets = validValue;
+                editingSets = null;
+
+                updateDisplay();
+            };
+
+            // Guardar al presionar Enter
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    saveChanges();
+                } else if (e.key === 'Escape') {
+                    editingSets = null;
+                    updateDisplay();
+                }
+            });
+
+            // Guardar al perder foco
+            input.addEventListener('blur', saveChanges);
+        }
 
         // Cambiar puntos
         function changePoints(player, delta) {
             // No permitir cambios si se está procesando una victoria de set, hay una pendiente, o estamos en transición
-            if (processingSetWin || pendingSetWin || switchingFromHistory) return;
+            if (processingSetWin || pendingSetWin || switchingFromHistory || editingScore || editingSets) return;
 
             // Si estamos mostrando el historial y se suma un punto, volver al marcador con delay
             if (delta > 0 && gameState.showHistoryOverlay) {
