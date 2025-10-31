@@ -1015,6 +1015,37 @@
         </div>
     </div>
 
+    <!-- Modal de Confirmación de Ganador del Partido -->
+    <div id="matchWinnerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" style="font-size: 24px;">🏆 ¡GANADOR DEL PARTIDO!</div>
+            </div>
+            <div class="modal-scores">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 48px; margin-bottom: 10px;" id="matchWinnerFlag">🇪🇸</div>
+                    <div style="font-size: 20px; font-weight: 700; color: #667eea; margin-bottom: 10px;" id="matchWinnerName">Jugador 1</div>
+                </div>
+                <div class="modal-score-row">
+                    <span class="modal-player-name" id="matchModalPlayer1Name">Jugador 1</span>
+                    <span class="modal-player-score" id="matchModalPlayer1Sets">3</span>
+                </div>
+                <div class="modal-score-row">
+                    <span class="modal-player-name" id="matchModalPlayer2Name">Jugador 2</span>
+                    <span class="modal-player-score" id="matchModalPlayer2Sets">0</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="cancelMatchWin()">
+                    ❌ Cancelar
+                </button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmMatchWin()">
+                    ✅ Confirmar y Mostrar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Mapeo de códigos de 3 letras a códigos ISO 3166-1 alpha-2
         const countryCodeMap = {
@@ -1659,15 +1690,8 @@
                     // Verificar si hay ganador del partido
                     const matchWinner = checkMatchWinner();
                     if (matchWinner) {
-                        // Guardar información del ganador
-                        if (!gameState.winner) {
-                            gameState.winner = {};
-                        }
-                        gameState.winner.detected = true;
-                        gameState.winner.player = matchWinner;
-                        gameState.winner.finalScore = `${gameState.player1.sets}-${gameState.player2.sets}`;
-                        gameState.winner.showOverlay = true; // Mostrar automáticamente
-                        localStorage.setItem('gameState', JSON.stringify(gameState));
+                        // Mostrar modal de confirmación de ganador
+                        showMatchWinnerModal(matchWinner);
                     }
 
                     // Liberar procesamiento después de la animación
@@ -1820,6 +1844,71 @@
                 return 2;
             }
             return null;
+        }
+
+        // Variable para almacenar info del ganador pendiente
+        let pendingMatchWinner = null;
+
+        // Mostrar modal de confirmación de ganador del partido
+        function showMatchWinnerModal(winnerPlayer) {
+            pendingMatchWinner = winnerPlayer;
+
+            // Actualizar contenido del modal
+            const winnerData = gameState[`player${winnerPlayer}`];
+            const winnerFlagCode = getISO2Code(winnerData.flag);
+
+            document.getElementById('matchWinnerName').textContent = winnerData.name;
+            document.getElementById('matchWinnerFlag').textContent = getFlagEmoji(winnerFlagCode);
+
+            document.getElementById('matchModalPlayer1Name').textContent = gameState.player1.name || 'Jugador 1';
+            document.getElementById('matchModalPlayer2Name').textContent = gameState.player2.name || 'Jugador 2';
+            document.getElementById('matchModalPlayer1Sets').textContent = gameState.player1.sets;
+            document.getElementById('matchModalPlayer2Sets').textContent = gameState.player2.sets;
+
+            // Mostrar modal
+            document.getElementById('matchWinnerModal').classList.add('show');
+        }
+
+        // Función auxiliar para obtener emoji de bandera desde código ISO
+        function getFlagEmoji(countryCode) {
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char => 127397 + char.charCodeAt());
+            return String.fromCodePoint(...codePoints);
+        }
+
+        // Confirmar ganador del partido
+        function confirmMatchWin() {
+            if (!pendingMatchWinner) return;
+
+            // Ocultar modal
+            document.getElementById('matchWinnerModal').classList.remove('show');
+
+            // Guardar información del ganador
+            if (!gameState.winner) {
+                gameState.winner = {};
+            }
+            gameState.winner.detected = true;
+            gameState.winner.player = pendingMatchWinner;
+            gameState.winner.finalScore = `${gameState.player1.sets}-${gameState.player2.sets}`;
+            gameState.winner.showOverlay = true;
+
+            pendingMatchWinner = null;
+
+            updateDisplay();
+        }
+
+        // Cancelar ganador del partido
+        function cancelMatchWin() {
+            // Ocultar modal
+            document.getElementById('matchWinnerModal').classList.remove('show');
+
+            // Limpiar ganador pendiente
+            pendingMatchWinner = null;
+
+            // Los sets quedan como están, permitiendo corrección manual
+            updateDisplay();
         }
 
         // Actualizar historial de sets
