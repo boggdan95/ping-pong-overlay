@@ -696,7 +696,7 @@
                     </div>
                     <div class="winner-score" id="winnerScore">3-0</div>
                 </div>
-                <div class="winner-trophy">🏆</div>
+                <div class="winner-trophy" id="winnerTrophy">🏆</div>
             </div>
         </div>
     </div>
@@ -1300,6 +1300,10 @@
             // Actualizar bandera usando fi (flag-icons)
             const flagElement = document.getElementById('winnerFlag');
             flagElement.className = `winner-flag fi fi-${winnerFlagCode}`;
+
+            // Actualizar emoji de celebración
+            const trophyElement = document.getElementById('winnerTrophy');
+            trophyElement.textContent = winner.emoji || '🏆';
 
             // Generar confetti si está habilitado
             if (gameState.winner.animationsEnabled !== false) {

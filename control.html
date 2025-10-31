@@ -914,6 +914,26 @@
                             🚫 Desactivadas
                         </button>
                     </div>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px; margin-top: 12px;">
+                        Emoji de Celebración
+                    </div>
+                    <div class="logo-options">
+                        <button class="btn-logo-option active" id="emojiTrophy" onclick="setWinnerEmoji('🏆')">
+                            🏆 Trofeo
+                        </button>
+                        <button class="btn-logo-option" id="emojiMedal" onclick="setWinnerEmoji('🥇')">
+                            🥇 Medalla
+                        </button>
+                        <button class="btn-logo-option" id="emojiCup" onclick="setWinnerEmoji('🏅')">
+                            🏅 Medalla 2
+                        </button>
+                        <button class="btn-logo-option" id="emojiStar" onclick="setWinnerEmoji('⭐')">
+                            ⭐ Estrella
+                        </button>
+                        <button class="btn-logo-option" id="emojiCrown" onclick="setWinnerEmoji('👑')">
+                            👑 Corona
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Tema del Scoreboard -->
@@ -1022,9 +1042,11 @@
                 <div class="modal-title">🏆 ¿Confirmar Ganador?</div>
             </div>
             <div class="modal-scores">
-                <div style="text-align: center; margin-bottom: 12px;">
-                    <div style="font-size: 32px; margin-bottom: 6px;" id="matchWinnerFlag">🇪🇸</div>
-                    <div style="font-size: 16px; font-weight: 700; color: #667eea;" id="matchWinnerName">Jugador 1</div>
+                <div style="text-align: center; margin-bottom: 8px;">
+                    <div style="font-size: 40px; margin-bottom: 4px;">
+                        <span id="matchWinnerFlag" class="fi fi-es"></span>
+                    </div>
+                    <div style="font-size: 14px; font-weight: 700; color: #667eea;" id="matchWinnerName">Jugador 1</div>
                 </div>
                 <div class="modal-score-row">
                     <span class="modal-player-name" id="matchModalPlayer1Name">Jugador 1</span>
@@ -1144,7 +1166,8 @@
             winner: {                  // Información del ganador del partido
                 detected: false,
                 player: null,          // 1 o 2
-                finalScore: ''         // ej: '3-1'
+                finalScore: '',        // ej: '3-1'
+                emoji: '🏆'            // Emoji de celebración
             },
             animations: {
                 point1: 0,
@@ -1212,8 +1235,13 @@
                     gameState.winner = {
                         detected: false,
                         player: null,
-                        finalScore: ''
+                        finalScore: '',
+                        emoji: '🏆'
                     };
+                }
+                // Asegurar que exista el emoji en winner
+                if (!gameState.winner.emoji) {
+                    gameState.winner.emoji = '🏆';
                 }
             }
             updateDisplay();
@@ -1272,6 +1300,9 @@
 
             // Botones de animaciones
             updateAnimationsButtons();
+
+            // Botones de emoji de celebración
+            updateWinnerEmojiButtons();
 
             // Historial de sets
             updateSetsHistory();
@@ -1544,6 +1575,12 @@
                 editingSets = null;
 
                 updateDisplay();
+
+                // Verificar si hay ganador del partido después de editar sets
+                const matchWinner = checkMatchWinner();
+                if (matchWinner) {
+                    showMatchWinnerModal(matchWinner);
+                }
             };
 
             // Guardar al presionar Enter
@@ -1625,11 +1662,14 @@
 
         // Mostrar modal de confirmación de set
         function showSetConfirmModal(winnerPlayer) {
-            // Guardar información del set pendiente
+            // Guardar información del set pendiente Y el estado anterior
             pendingSetWin = {
                 winner: winnerPlayer,
                 player1Points: gameState.player1.points,
-                player2Points: gameState.player2.points
+                player2Points: gameState.player2.points,
+                // Guardar punto anterior para restaurar si se cancela
+                previousPlayer1Points: gameState.player1.points - (winnerPlayer === 1 ? 1 : 0),
+                previousPlayer2Points: gameState.player2.points - (winnerPlayer === 2 ? 1 : 0)
             };
 
             // Actualizar contenido del modal
@@ -1707,16 +1747,41 @@
             // Ocultar modal
             document.getElementById('setConfirmModal').classList.remove('show');
 
+            // Restaurar puntos al estado anterior (antes del último punto)
+            if (pendingSetWin) {
+                gameState.player1.points = pendingSetWin.previousPlayer1Points;
+                gameState.player2.points = pendingSetWin.previousPlayer2Points;
+            }
+
             // Limpiar set pendiente
             pendingSetWin = null;
 
-            // Los puntos quedan como están, permitiendo usar botones -/+ para corregir
+            // Actualizar display con puntos restaurados
             updateDisplay();
         }
 
         // Cambiar sets
         function changeSets(player, delta) {
-            gameState['player' + player].sets = Math.max(0, gameState['player' + player].sets + delta);
+            const newValue = Math.max(0, gameState['player' + player].sets + delta);
+
+            // Validar que no se exceda el límite de sets necesarios para ganar
+            const setsToWin = getSetsToWin();
+            const otherPlayer = player === 1 ? 2 : 1;
+            const otherPlayerSets = gameState['player' + otherPlayer].sets;
+
+            // Si estamos sumando (+1) y el jugador ya alcanzaría los sets para ganar, mostrar modal
+            if (delta > 0 && newValue >= setsToWin) {
+                // Verificar que el otro jugador no tenga también sets suficientes
+                if (otherPlayerSets < setsToWin) {
+                    gameState['player' + player].sets = newValue;
+                    updateDisplay();
+                    // Mostrar modal de ganador
+                    showMatchWinnerModal(player);
+                    return;
+                }
+            }
+
+            gameState['player' + player].sets = newValue;
             updateDisplay();
         }
 
@@ -1794,9 +1859,41 @@
         // Activar/desactivar animaciones
         function setAnimations(enabled) {
             if (!gameState.winner) {
-                gameState.winner = { detected: false, player: null, finalScore: '', showOverlay: false };
+                gameState.winner = { detected: false, player: null, finalScore: '', showOverlay: false, emoji: '🏆' };
             }
             gameState.winner.animationsEnabled = enabled;
+            updateDisplay();
+        }
+
+        // Cambiar emoji de celebración
+        function setWinnerEmoji(emoji) {
+            if (!gameState.winner) {
+                gameState.winner = { detected: false, player: null, finalScore: '', showOverlay: false, emoji: '🏆' };
+            }
+            gameState.winner.emoji = emoji;
+
+            // Actualizar botones activos
+            const emojiMap = {
+                '🏆': 'emojiTrophy',
+                '🥇': 'emojiMedal',
+                '🏅': 'emojiCup',
+                '⭐': 'emojiStar',
+                '👑': 'emojiCrown'
+            };
+
+            // Remover active de todos
+            Object.values(emojiMap).forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.classList.remove('active');
+            });
+
+            // Activar el seleccionado
+            const activeId = emojiMap[emoji];
+            if (activeId) {
+                const btn = document.getElementById(activeId);
+                if (btn) btn.classList.add('active');
+            }
+
             updateDisplay();
         }
 
@@ -1834,6 +1931,31 @@
             document.getElementById('animationsOff').classList.toggle('active', !animationsEnabled);
         }
 
+        // Actualizar botones de emoji de celebración
+        function updateWinnerEmojiButtons() {
+            const currentEmoji = (gameState.winner && gameState.winner.emoji) || '🏆';
+            const emojiMap = {
+                '🏆': 'emojiTrophy',
+                '🥇': 'emojiMedal',
+                '🏅': 'emojiCup',
+                '⭐': 'emojiStar',
+                '👑': 'emojiCrown'
+            };
+
+            // Remover active de todos
+            Object.values(emojiMap).forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.classList.remove('active');
+            });
+
+            // Activar el seleccionado
+            const activeId = emojiMap[currentEmoji];
+            if (activeId) {
+                const btn = document.getElementById(activeId);
+                if (btn) btn.classList.add('active');
+            }
+        }
+
         // Detectar ganador del partido
         function checkMatchWinner() {
             const setsToWin = getSetsToWin();
@@ -1851,17 +1973,24 @@
 
         // Mostrar modal de confirmación de ganador del partido
         function showMatchWinnerModal(winnerPlayer) {
-            pendingMatchWinner = winnerPlayer;
+            // Guardar info del ganador
+            pendingMatchWinner = {
+                winner: winnerPlayer
+            };
 
             // Actualizar contenido del modal
             const winnerData = gameState[`player${winnerPlayer}`];
             const winnerFlagCode = getISO2Code(winnerData.flag);
 
             document.getElementById('matchWinnerName').textContent = winnerData.name;
-            document.getElementById('matchWinnerFlag').textContent = getFlagEmoji(winnerFlagCode);
+
+            // Actualizar bandera usando flag-icons
+            const flagElement = document.getElementById('matchWinnerFlag');
+            flagElement.className = `fi fi-${winnerFlagCode}`;
 
             document.getElementById('matchModalPlayer1Name').textContent = gameState.player1.name || 'Jugador 1';
             document.getElementById('matchModalPlayer2Name').textContent = gameState.player2.name || 'Jugador 2';
+            // Mostrar sets actuales (ya fueron incrementados)
             document.getElementById('matchModalPlayer1Sets').textContent = gameState.player1.sets;
             document.getElementById('matchModalPlayer2Sets').textContent = gameState.player2.sets;
 
@@ -1869,18 +1998,11 @@
             document.getElementById('matchWinnerModal').classList.add('show');
         }
 
-        // Función auxiliar para obtener emoji de bandera desde código ISO
-        function getFlagEmoji(countryCode) {
-            const codePoints = countryCode
-                .toUpperCase()
-                .split('')
-                .map(char => 127397 + char.charCodeAt());
-            return String.fromCodePoint(...codePoints);
-        }
-
         // Confirmar ganador del partido
         function confirmMatchWin() {
             if (!pendingMatchWinner) return;
+
+            const winnerPlayer = pendingMatchWinner.winner;
 
             // Ocultar modal
             document.getElementById('matchWinnerModal').classList.remove('show');
@@ -1890,7 +2012,7 @@
                 gameState.winner = {};
             }
             gameState.winner.detected = true;
-            gameState.winner.player = pendingMatchWinner;
+            gameState.winner.player = winnerPlayer;
             gameState.winner.finalScore = `${gameState.player1.sets}-${gameState.player2.sets}`;
             gameState.winner.showOverlay = true;
 
@@ -1898,10 +2020,15 @@
 
             updateDisplay();
 
-            // Ocultar automáticamente después de 7 segundos
+            // Ocultar automáticamente después de 7 segundos y cambiar a historial
             setTimeout(() => {
                 if (gameState.winner && gameState.winner.showOverlay) {
                     gameState.winner.showOverlay = false;
+
+                    // Cambiar a la pestaña de configuración (que muestra el historial)
+                    switchTab('config');
+
+                    // Actualizar después del cambio de tab
                     updateDisplay();
                 }
             }, 7000);
@@ -1915,7 +2042,8 @@
             // Limpiar ganador pendiente
             pendingMatchWinner = null;
 
-            // Los sets quedan como están, permitiendo corrección manual
+            // No revertir nada - el set ya fue confirmado y es válido
+            // El usuario puede editar manualmente los sets si se equivocó en la configuración
             updateDisplay();
         }
 
