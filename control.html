@@ -1897,6 +1897,14 @@
             pendingMatchWinner = null;
 
             updateDisplay();
+
+            // Ocultar automáticamente después de 7 segundos
+            setTimeout(() => {
+                if (gameState.winner && gameState.winner.showOverlay) {
+                    gameState.winner.showOverlay = false;
+                    updateDisplay();
+                }
+            }, 7000);
         }
 
         // Cancelar ganador del partido
