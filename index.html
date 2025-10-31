@@ -444,21 +444,34 @@
         /* ==================== WINNER OVERLAY ==================== */
 
         .winner-overlay {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            border-radius: 30px;
+            overflow: hidden;
             animation: fadeIn 0.5s ease;
         }
 
         .winner-overlay.show {
             display: flex;
+        }
+
+        /* Ocultar el scoreboard cuando se muestra el ganador */
+        .scoreboard.show-winner .player-row,
+        .scoreboard.show-winner .logo-container,
+        .scoreboard.show-winner .history-section {
+            display: none;
+        }
+
+        .scoreboard.show-winner {
+            position: relative;
+            min-height: 300px;
         }
 
         @keyframes fadeIn {
@@ -484,22 +497,22 @@
         }
 
         .winner-trophy {
-            font-size: 120px;
-            margin-bottom: 20px;
+            font-size: 80px;
+            margin-bottom: 15px;
             animation: bounce 1s ease infinite;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-15px); }
         }
 
         .winner-title {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             background: linear-gradient(135deg, #FFD700, #FFA500);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -510,24 +523,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .winner-flag {
-            font-size: 80px;
+            font-size: 60px;
         }
 
         .winner-name {
-            font-size: 64px;
+            font-size: 48px;
             font-weight: 700;
         }
 
         .winner-score {
-            font-size: 72px;
+            font-size: 56px;
             font-weight: 700;
             color: #FFD700;
-            margin-top: 20px;
+            margin-top: 15px;
             font-family: 'Courier New', monospace;
         }
 
@@ -554,23 +567,23 @@
         /* Responsive Winner Overlay */
         @media (max-width: 1000px) {
             .winner-trophy {
-                font-size: 80px;
-            }
-
-            .winner-title {
-                font-size: 36px;
-            }
-
-            .winner-flag {
                 font-size: 60px;
             }
 
+            .winner-title {
+                font-size: 28px;
+            }
+
+            .winner-flag {
+                font-size: 45px;
+            }
+
             .winner-name {
-                font-size: 48px;
+                font-size: 36px;
             }
 
             .winner-score {
-                font-size: 56px;
+                font-size: 42px;
             }
         }
     </style>
@@ -642,19 +655,19 @@
         <div id="historySection" class="history-section">
             <div id="historyTable"></div>
         </div>
-    </div>
 
-    <!-- Winner Overlay -->
-    <div id="winnerOverlay" class="winner-overlay">
-        <div id="confettiContainer"></div>
-        <div class="winner-content">
-            <div class="winner-trophy">🏆</div>
-            <div class="winner-title">¡Ganador!</div>
-            <div class="winner-player">
-                <span id="winnerFlag" class="winner-flag"></span>
-                <span id="winnerName" class="winner-name"></span>
+        <!-- Winner Overlay (dentro del scoreboard) -->
+        <div id="winnerOverlay" class="winner-overlay">
+            <div id="confettiContainer"></div>
+            <div class="winner-content">
+                <div class="winner-trophy">🏆</div>
+                <div class="winner-title">¡Ganador!</div>
+                <div class="winner-player">
+                    <span id="winnerFlag" class="winner-flag"></span>
+                    <span id="winnerName" class="winner-name"></span>
+                </div>
+                <div class="winner-score" id="winnerScore">3-0</div>
             </div>
-            <div class="winner-score" id="winnerScore">3-0</div>
         </div>
     </div>
 
@@ -1225,15 +1238,18 @@
         function updateWinnerOverlay() {
             const winner = gameState.winner;
             const overlay = document.getElementById('winnerOverlay');
+            const scoreboard = document.querySelector('.scoreboard');
 
             // Si no hay datos de ganador o no está activado, ocultar
             if (!winner || !winner.detected || !winner.showOverlay) {
                 overlay.classList.remove('show');
+                scoreboard.classList.remove('show-winner');
                 return;
             }
 
-            // Mostrar overlay
+            // Mostrar overlay y ocultar contenido del scoreboard
             overlay.classList.add('show');
+            scoreboard.classList.add('show-winner');
 
             // Obtener datos del ganador
             const winnerPlayer = gameState[`player${winner.player}`];

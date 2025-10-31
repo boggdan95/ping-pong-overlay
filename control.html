@@ -803,12 +803,6 @@
                     </button>
                 </div>
 
-                <div style="margin-bottom: 10px;">
-                    <button id="winnerOverlayToggle" class="visibility-toggle" onclick="toggleWinnerOverlay()" style="width: 100%; display: none;">
-                        🏆 Mostrar Pantalla de Ganador
-                    </button>
-                </div>
-
                 <div class="players-grid">
                     <!-- Jugador 1 -->
                     <div class="player-card" id="playerCard1">
@@ -900,9 +894,15 @@
                     </div>
                 </div>
 
-                <!-- Animaciones de Ganador -->
+                <!-- Pantalla de Ganador -->
                 <div class="config-section">
-                    <h3>✨ Animaciones</h3>
+                    <h3>🏆 Pantalla de Ganador</h3>
+                    <button id="winnerOverlayToggle" class="visibility-toggle" onclick="toggleWinnerOverlay()" style="width: 100%; display: none; margin-bottom: 8px;">
+                        🏆 Mostrar Pantalla de Ganador
+                    </button>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                        Animaciones (Confetti)
+                    </div>
                     <div class="logo-options">
                         <button class="btn-logo-option active" id="animationsOn" onclick="setAnimations(true)">
                             ✅ Activadas
@@ -910,9 +910,6 @@
                         <button class="btn-logo-option" id="animationsOff" onclick="setAnimations(false)">
                             🚫 Desactivadas
                         </button>
-                    </div>
-                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
-                        Confetti en pantalla de ganador
                     </div>
                 </div>
 
