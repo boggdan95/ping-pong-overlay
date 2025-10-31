@@ -25,28 +25,32 @@
             padding: 0;
         }
 
+        /* Wrapper para posicionar el scoreboard */
+        .scoreboard-container {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
         .scoreboard {
             background: linear-gradient(135deg, #003d8c 0%, #0052CC 100%);
             border-radius: 30px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             width: 100%;
-            max-width: 1200px;
             display: flex;
             flex-direction: column;
             gap: 0;
             overflow: hidden;
-            position: absolute;
-            bottom: 40px;
-            left: 40px;
+            position: relative;
             opacity: 1;
             transition: opacity 0.3s ease;
         }
 
-        /* Hacer el scoreboard relativo cuando muestra ganador para que el overlay se posicione dentro */
+        /* Espacio mínimo cuando muestra ganador */
         .scoreboard.show-winner {
-            position: relative;
             min-height: 250px;
-            padding: 40px;
         }
 
         .scoreboard.hidden {
@@ -592,6 +596,7 @@
     </style>
 </head>
 <body>
+    <div class="scoreboard-container">
     <div class="scoreboard">
         <!-- Logo -->
         <div id="logoContainer" class="logo-container">
@@ -672,6 +677,7 @@
                 <div class="winner-score" id="winnerScore">3-0</div>
             </div>
         </div>
+    </div>
     </div>
 
     <script>
