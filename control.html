@@ -897,10 +897,13 @@
                 <!-- Pantalla de Ganador -->
                 <div class="config-section">
                     <h3>🏆 Pantalla de Ganador</h3>
-                    <button id="winnerOverlayToggle" class="visibility-toggle" onclick="toggleWinnerOverlay()" style="width: 100%; display: none; margin-bottom: 8px;">
-                        🏆 Mostrar Pantalla de Ganador
-                    </button>
                     <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                        Se muestra automáticamente al ganar el partido
+                    </div>
+                    <button id="winnerOverlayToggle" class="visibility-toggle" onclick="toggleWinnerOverlay()" style="width: 100%; display: none; margin-bottom: 8px;">
+                        🙈 Ocultar Pantalla de Ganador
+                    </button>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px; margin-top: 8px;">
                         Animaciones (Confetti)
                     </div>
                     <div class="logo-options">
@@ -1273,12 +1276,12 @@
             updateDisplay();
         }
 
-        // Toggle pantalla de ganador
+        // Ocultar pantalla de ganador (se muestra automáticamente al ganar)
         function toggleWinnerOverlay() {
-            if (!gameState.winner) {
-                gameState.winner = { detected: false, player: null, finalScore: '', showOverlay: false };
-            }
-            gameState.winner.showOverlay = !gameState.winner.showOverlay;
+            if (!gameState.winner) return;
+
+            // Solo ocultar (la pantalla se muestra automáticamente al ganar)
+            gameState.winner.showOverlay = false;
             updateDisplay();
         }
 
@@ -1306,16 +1309,11 @@
             const btn = document.getElementById('winnerOverlayToggle');
             const hasWinner = gameState.winner && gameState.winner.detected;
 
-            if (hasWinner) {
+            if (hasWinner && gameState.winner.showOverlay) {
+                // Solo mostrar botón cuando la pantalla está visible (para poder ocultarla)
                 btn.style.display = 'block';
-
-                if (gameState.winner.showOverlay) {
-                    btn.textContent = '🙈 Ocultar Pantalla de Ganador';
-                    btn.classList.add('hidden');
-                } else {
-                    btn.textContent = '🏆 Mostrar Pantalla de Ganador';
-                    btn.classList.remove('hidden');
-                }
+                btn.textContent = '🙈 Ocultar Pantalla de Ganador';
+                btn.classList.add('hidden');
             } else {
                 btn.style.display = 'none';
             }
@@ -1668,6 +1666,7 @@
                         gameState.winner.detected = true;
                         gameState.winner.player = matchWinner;
                         gameState.winner.finalScore = `${gameState.player1.sets}-${gameState.player2.sets}`;
+                        gameState.winner.showOverlay = true; // Mostrar automáticamente
                         localStorage.setItem('gameState', JSON.stringify(gameState));
                     }
 
