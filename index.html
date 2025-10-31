@@ -42,6 +42,11 @@
             transition: opacity 0.3s ease;
         }
 
+        /* Hacer el scoreboard relativo cuando muestra ganador para que el overlay se posicione dentro */
+        .scoreboard.show-winner {
+            position: relative;
+        }
+
         .scoreboard.hidden {
             opacity: 0;
             pointer-events: none;
@@ -462,16 +467,11 @@
             display: flex;
         }
 
-        /* Ocultar el scoreboard cuando se muestra el ganador */
+        /* Ocultar el contenido del scoreboard cuando se muestra el ganador */
         .scoreboard.show-winner .player-row,
         .scoreboard.show-winner .logo-container,
         .scoreboard.show-winner .history-section {
             display: none;
-        }
-
-        .scoreboard.show-winner {
-            position: relative;
-            min-height: 300px;
         }
 
         @keyframes fadeIn {
