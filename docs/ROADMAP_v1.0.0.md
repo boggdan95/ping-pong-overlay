@@ -121,41 +121,81 @@ Lanzar la versión 1.0.0 del sistema de overlay de ping pong con funcionalidades
 - ✅ Documentación de sistema premium eliminada
 - ✅ Sincronización localStorage funcionando
 - ✅ Integración OBS validada (1 ventana + 3 pestañas)
+- ✅ Feature 1: Edición manual de marcadores completado
+- ✅ Feature 2: Configuración de sets para ganar completado
+- ✅ Feature 3: Pantalla de ganador con resultado final completado
+- ✅ Feature 4: Sistema de modalidades de juego completado
+  - Individual (1v1) ✅
+  - Dobles (2v2) ✅
+  - Equipos (País vs País) ✅
+- ⏳ Feature 5: Sistema de autosugerencia desde CSV (pendiente)
+- ⏳ Feature 6: Release v1.0.0 (pendiente)
 
 ## Notas técnicas importantes
 
-### Estructura gameState (actualizar según features)
+### Estructura gameState (implementada)
 ```javascript
 {
-  // Actual
-  player1: { name, role, points, sets, service, flag },
-  player2: { name, role, points, sets, service, flag },
+  // Jugadores base
+  player1: { name, points, sets, service, flag },
+  player2: { name, points, sets, service, flag },
 
-  // Nuevo en v1.0.0
-  matchConfig: {
-    mode: 'individual' | 'doubles' | 'teams',
-    setsToWin: 2 | 3 | 4 | null, // null = libre
-    animationsEnabled: true | false
-  },
+  // Modo de juego
+  gameMode: 'individual' | 'doubles' | 'teams',
 
+  // Configuración de partido
+  matchMode: 'best-of-3' | 'best-of-5' | 'best-of-7',
+
+  // Ganador
   winner: {
-    detected: true | false,
-    player: 'player1' | 'player2',
-    finalScore: '3-1'
+    detected: boolean,
+    player: 1 | 2,
+    finalScore: string,  // ej: '3-1'
+    showOverlay: boolean,
+    emoji: string        // emoji seleccionado
   },
 
-  // Solo para modo dobles
+  // Modo dobles
   doubles: {
-    player1A: { name, flag },
-    player1B: { name, flag },
-    player2A: { name, flag },
-    player2B: { name, flag }
+    team1: { name: 'Apellido1 / Apellido2', flag },
+    team2: { name: 'Apellido1 / Apellido2', flag }
   },
 
-  // Solo para modo equipos
+  // Modo equipos
   teams: {
-    team1: { name, wins: 0 },
-    team2: { name, wins: 0 }
+    team1: { name },  // Nombre del país
+    team2: { name },
+    currentMatch: {   // Partido individual actual
+      player1: { name, flag },
+      player2: { name, flag }
+    },
+    individualMatchSets: {  // Sets del partido individual
+      player1: 0,
+      player2: 0
+    },
+    countryPoints: {  // Partidos ganados por país
+      team1: 0,
+      team2: 0
+    }
+  },
+
+  // Historial
+  setsHistory: [],  // [{player1Points, player2Points}, ...]
+  showHistoryOverlay: boolean,
+
+  // Visualización
+  theme: 'azulModerno' | 'oscuroElegante' | ...,
+  background: { type, color },
+  logo: { url, position, enabled },
+  overlayVisible: boolean,
+
+  // Animaciones
+  animations: {
+    point1: timestamp,
+    point2: timestamp,
+    set1: timestamp,
+    set2: timestamp,
+    service: timestamp
   }
 }
 ```
