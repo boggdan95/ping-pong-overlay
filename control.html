@@ -803,6 +803,16 @@
                     </button>
                 </div>
 
+                <!-- Botón Siguiente Partido (solo visible en modo equipos) -->
+                <div style="margin-bottom: 10px; display: none;" id="nextMatchButtonContainer">
+                    <button class="visibility-toggle" onclick="nextMatch()" style="width: 100%; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                        ▶️ Siguiente Partido
+                    </button>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-top: 4px;">
+                        Resetea puntos y cambia jugadores en Configuración
+                    </div>
+                </div>
+
                 <div class="players-grid">
                     <!-- Jugador 1 -->
                     <div class="player-card" id="playerCard1">
@@ -811,7 +821,7 @@
                             <span class="fi fi-es" id="player1FlagDisplay"></span>
                         </div>
                         <div class="score-display" id="player1ScoreDisplay" onclick="editScore(1)" title="Click para editar">0</div>
-                        <div class="sets-display">Sets: <span id="player1SetsDisplay" onclick="editSets(1)" title="Click para editar">0</span></div>
+                        <div class="sets-display"><span id="setsLabel1">Sets</span>: <span id="player1SetsDisplay" onclick="editSets(1)" title="Click para editar">0</span></div>
                         <div class="point-buttons">
                             <button class="btn-point btn-point-minus" onclick="changePoints(1, -1)">−</button>
                             <button class="btn-point btn-point-plus" onclick="changePoints(1, 1)">+</button>
@@ -828,7 +838,7 @@
                             <span class="fi fi-ar" id="player2FlagDisplay"></span>
                         </div>
                         <div class="score-display" id="player2ScoreDisplay" onclick="editScore(2)" title="Click para editar">0</div>
-                        <div class="sets-display">Sets: <span id="player2SetsDisplay" onclick="editSets(2)" title="Click para editar">0</span></div>
+                        <div class="sets-display"><span id="setsLabel2">Sets</span>: <span id="player2SetsDisplay" onclick="editSets(2)" title="Click para editar">0</span></div>
                         <div class="point-buttons">
                             <button class="btn-point btn-point-minus" onclick="changePoints(2, -1)">−</button>
                             <button class="btn-point btn-point-plus" onclick="changePoints(2, 1)">+</button>
@@ -850,8 +860,21 @@
 
             <!-- TAB: CONFIGURACIÓN -->
             <div id="configTab" class="tab-content">
-                <!-- Jugadores -->
+                <!-- Modalidad de Juego -->
                 <div class="config-section">
+                    <h3>🎮 Modalidad de Juego</h3>
+                    <select id="gameModeSelector" onchange="changeGameMode()" style="width: 100%; padding: 10px; border-radius: 6px; border: 2px solid #e0e0e0; font-family: 'Montserrat', sans-serif; font-size: 13px; background: white; cursor: pointer;">
+                        <option value="individual">👤 Individual (1v1)</option>
+                        <option value="doubles">👥 Dobles (2v2)</option>
+                        <option value="teams">🏆 Equipos</option>
+                    </select>
+                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
+                        Selecciona el tipo de partido
+                    </div>
+                </div>
+
+                <!-- Jugadores -->
+                <div class="config-section" id="individualSection">
                     <h3>👥 Jugadores</h3>
                     <div class="form-row">
                         <div class="form-group">
@@ -872,6 +895,76 @@
                             <label>Bandera (3 letras)</label>
                             <input type="text" id="player2Flag" value="ARG" maxlength="3" onchange="updateData()" placeholder="ARG" style="text-transform: uppercase;">
                         </div>
+                    </div>
+                </div>
+
+                <!-- Dobles -->
+                <div class="config-section" id="doublesSection" style="display: none;">
+                    <h3>👥 Dobles</h3>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                        Usa formato: Apellido1 / Apellido2
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pareja 1</label>
+                            <input type="text" id="doublesTeam1Name" value="" onchange="updateData()" placeholder="López / García">
+                        </div>
+                        <div class="form-group">
+                            <label>Bandera (3 letras)</label>
+                            <input type="text" id="doublesTeam1Flag" value="ESP" maxlength="3" onchange="updateData()" placeholder="ESP" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pareja 2</label>
+                            <input type="text" id="doublesTeam2Name" value="" onchange="updateData()" placeholder="Martínez / Rodríguez">
+                        </div>
+                        <div class="form-group">
+                            <label>Bandera (3 letras)</label>
+                            <input type="text" id="doublesTeam2Flag" value="ARG" maxlength="3" onchange="updateData()" placeholder="ARG" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipos -->
+                <div class="config-section" id="teamsSection" style="display: none;">
+                    <h3>🏆 Nombres de Equipos</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Equipo 1</label>
+                            <input type="text" id="team1Name" value="" onchange="updateData()" placeholder="Equipo A">
+                        </div>
+                        <div class="form-group">
+                            <label>Equipo 2</label>
+                            <input type="text" id="team2Name" value="" onchange="updateData()" placeholder="Equipo B">
+                        </div>
+                    </div>
+                    <h3 style="margin-top: 12px;">👥 Partido Individual Actual</h3>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                        Jugadores que están compitiendo ahora
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Jugador (Equipo 1)</label>
+                            <input type="text" id="teamsCurrentPlayer1" value="" onchange="updateData()" placeholder="Nombre jugador">
+                        </div>
+                        <div class="form-group">
+                            <label>Bandera (3 letras)</label>
+                            <input type="text" id="teamsCurrentFlag1" value="ESP" maxlength="3" onchange="updateData()" placeholder="ESP" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Jugador (Equipo 2)</label>
+                            <input type="text" id="teamsCurrentPlayer2" value="" onchange="updateData()" placeholder="Nombre jugador">
+                        </div>
+                        <div class="form-group">
+                            <label>Bandera (3 letras)</label>
+                            <input type="text" id="teamsCurrentFlag2" value="ARG" maxlength="3" onchange="updateData()" placeholder="ARG" style="text-transform: uppercase;">
+                        </div>
+                    </div>
+                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
+                        Cada partido individual ganado suma 1 punto al país (se usan los "Sets" para contar)
                     </div>
                 </div>
 
@@ -1012,7 +1105,7 @@
     <div id="setConfirmModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">🏆 ¿Confirmar Set Ganado?</div>
+                <div class="modal-title" id="setModalTitle">🏆 ¿Confirmar Set Ganado?</div>
             </div>
             <div class="modal-scores">
                 <div class="modal-score-row">
@@ -1062,6 +1155,40 @@
                     ❌ Cancelar
                 </button>
                 <button class="modal-btn modal-btn-confirm" onclick="confirmMatchWin()">
+                    ✅ Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación de partido individual ganado (modo equipos) -->
+    <div id="individualMatchWinnerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">🎯 ¿Confirmar Partido Ganado?</div>
+            </div>
+            <div class="modal-scores">
+                <div style="text-align: center; margin-bottom: 8px;">
+                    <div style="font-size: 40px; margin-bottom: 4px;">
+                        <span id="individualMatchWinnerFlag" class="fi fi-es"></span>
+                    </div>
+                    <div style="font-size: 14px; font-weight: 700; color: #667eea;" id="individualMatchWinnerName">Jugador 1</div>
+                    <div style="font-size: 12px; margin-top: 4px; color: #888;">+1 punto para <span id="individualMatchWinnerCountry">País</span></div>
+                </div>
+                <div class="modal-score-row">
+                    <span class="modal-player-name" id="individualMatchModalPlayer1Name">Jugador 1</span>
+                    <span class="modal-player-score" id="individualMatchModalPlayer1Sets">3</span>
+                </div>
+                <div class="modal-score-row">
+                    <span class="modal-player-name" id="individualMatchModalPlayer2Name">Jugador 2</span>
+                    <span class="modal-player-score" id="individualMatchModalPlayer2Sets">0</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="cancelIndividualMatchWin()">
+                    ❌ Cancelar
+                </button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmIndividualMatchWin()">
                     ✅ Confirmar
                 </button>
             </div>
@@ -1147,8 +1274,29 @@
 
         // Estado global
         let gameState = {
+            gameMode: 'individual',    // 'individual', 'doubles' o 'teams'
             player1: { name: 'Héctor López', points: 0, sets: 0, service: true, flag: 'ESP' },
             player2: { name: 'Susana Martínez', points: 0, sets: 0, service: false, flag: 'ARG' },
+            doubles: {                 // Datos para modo dobles (formato: "Apellido1 / Apellido2")
+                team1: { name: '', flag: 'ESP' },
+                team2: { name: '', flag: 'ARG' }
+            },
+            teams: {                   // Datos para modo equipos
+                team1: { name: '' },   // Nombre del equipo
+                team2: { name: '' },   // Nombre del equipo
+                currentMatch: {        // Partido individual actual
+                    player1: { name: '', flag: 'ESP' },
+                    player2: { name: '', flag: 'ARG' }
+                },
+                individualMatchSets: {  // Sets del partido individual actual (resetea entre partidos)
+                    player1: 0,
+                    player2: 0
+                },
+                countryPoints: {        // Puntos acumulados del país (partidos ganados)
+                    team1: 0,
+                    team2: 0
+                }
+            },
             background: {
                 type: 'solid',
                 color: '#00FF00'
@@ -1243,29 +1391,124 @@
                 if (!gameState.winner.emoji) {
                     gameState.winner.emoji = '🏆';
                 }
+                // Asegurar que exista el campo gameMode
+                if (!gameState.gameMode) {
+                    gameState.gameMode = 'individual';
+                }
+                // Asegurar que existan estructuras para doubles y teams
+                if (!gameState.doubles) {
+                    gameState.doubles = {
+                        team1: { name: '', flag: 'ESP' },
+                        team2: { name: '', flag: 'ARG' }
+                    };
+                }
+                if (!gameState.teams) {
+                    gameState.teams = {
+                        team1: { name: '' },
+                        team2: { name: '' },
+                        currentMatch: {
+                            player1: { name: '', flag: 'ESP' },
+                            player2: { name: '', flag: 'ARG' }
+                        }
+                    };
+                }
+                // Asegurar que existe currentMatch en teams (para compatibilidad)
+                if (gameState.teams && !gameState.teams.currentMatch) {
+                    gameState.teams.currentMatch = {
+                        player1: { name: '', flag: 'ESP' },
+                        player2: { name: '', flag: 'ARG' }
+                    };
+                }
+                // Asegurar que existen individualMatchSets en teams
+                if (gameState.teams && !gameState.teams.individualMatchSets) {
+                    gameState.teams.individualMatchSets = {
+                        player1: 0,
+                        player2: 0
+                    };
+                }
+                // Asegurar que existen countryPoints en teams
+                if (gameState.teams && !gameState.teams.countryPoints) {
+                    gameState.teams.countryPoints = {
+                        team1: 0,
+                        team2: 0
+                    };
+                }
             }
             updateDisplay();
         }
 
         // Actualizar pantalla
         function updateDisplay() {
-            // Tab Configuración
+            // Actualizar selector de modalidad
+            document.getElementById('gameModeSelector').value = gameState.gameMode || 'individual';
+
+            // Mostrar/ocultar secciones según modalidad
+            document.getElementById('individualSection').style.display = (gameState.gameMode === 'individual') ? 'block' : 'none';
+            document.getElementById('doublesSection').style.display = (gameState.gameMode === 'doubles') ? 'block' : 'none';
+            document.getElementById('teamsSection').style.display = (gameState.gameMode === 'teams') ? 'block' : 'none';
+
+            // Tab Configuración - Individual
             document.getElementById('player1Name').value = gameState.player1.name;
             document.getElementById('player2Name').value = gameState.player2.name;
             document.getElementById('player1Flag').value = gameState.player1.flag;
             document.getElementById('player2Flag').value = gameState.player2.flag;
 
-            // Tab Partido - Display
-            document.getElementById('player1NameDisplay').textContent = gameState.player1.name;
-            document.getElementById('player2NameDisplay').textContent = gameState.player2.name;
+            // Tab Configuración - Dobles
+            if (gameState.doubles) {
+                document.getElementById('doublesTeam1Name').value = gameState.doubles.team1.name || '';
+                document.getElementById('doublesTeam1Flag').value = gameState.doubles.team1.flag || 'ESP';
+                document.getElementById('doublesTeam2Name').value = gameState.doubles.team2.name || '';
+                document.getElementById('doublesTeam2Flag').value = gameState.doubles.team2.flag || 'ARG';
+            }
+
+            // Tab Configuración - Equipos
+            if (gameState.teams) {
+                document.getElementById('team1Name').value = gameState.teams.team1.name || '';
+                document.getElementById('team2Name').value = gameState.teams.team2.name || '';
+                if (gameState.teams.currentMatch) {
+                    document.getElementById('teamsCurrentPlayer1').value = gameState.teams.currentMatch.player1.name || '';
+                    document.getElementById('teamsCurrentFlag1').value = gameState.teams.currentMatch.player1.flag || 'ESP';
+                    document.getElementById('teamsCurrentPlayer2').value = gameState.teams.currentMatch.player2.name || '';
+                    document.getElementById('teamsCurrentFlag2').value = gameState.teams.currentMatch.player2.flag || 'ARG';
+                }
+            }
+
+            // Tab Partido - Display (actualizar según modalidad)
+            let displayName1 = gameState.player1.name;
+            let displayName2 = gameState.player2.name;
+            let displayFlag1 = gameState.player1.flag;
+            let displayFlag2 = gameState.player2.flag;
+
+            // Obtener nombres según modalidad
+            if (gameState.gameMode === 'doubles') {
+                displayName1 = gameState.doubles.team1.name || 'Pareja 1';
+                displayName2 = gameState.doubles.team2.name || 'Pareja 2';
+                displayFlag1 = gameState.doubles.team1.flag;
+                displayFlag2 = gameState.doubles.team2.flag;
+            } else if (gameState.gameMode === 'teams') {
+                if (gameState.teams.currentMatch) {
+                    displayName1 = gameState.teams.currentMatch.player1.name || 'Jugador 1';
+                    displayName2 = gameState.teams.currentMatch.player2.name || 'Jugador 2';
+                    displayFlag1 = gameState.teams.currentMatch.player1.flag;
+                    displayFlag2 = gameState.teams.currentMatch.player2.flag;
+                }
+            }
+
+            document.getElementById('player1NameDisplay').textContent = displayName1;
+            document.getElementById('player2NameDisplay').textContent = displayName2;
             document.getElementById('player1ScoreDisplay').textContent = gameState.player1.points;
             document.getElementById('player2ScoreDisplay').textContent = gameState.player2.points;
             document.getElementById('player1SetsDisplay').textContent = gameState.player1.sets;
             document.getElementById('player2SetsDisplay').textContent = gameState.player2.sets;
 
+            // Cambiar label "Sets" o "Partidos" según modalidad
+            const setsLabelText = (gameState.gameMode === 'teams') ? 'Partidos' : 'Sets';
+            document.getElementById('setsLabel1').textContent = setsLabelText;
+            document.getElementById('setsLabel2').textContent = setsLabelText;
+
             // Banderas
-            const flag1 = getISO2Code(gameState.player1.flag);
-            const flag2 = getISO2Code(gameState.player2.flag);
+            const flag1 = getISO2Code(displayFlag1);
+            const flag2 = getISO2Code(displayFlag2);
             document.getElementById('player1FlagDisplay').className = `fi fi-${flag1}`;
             document.getElementById('player2FlagDisplay').className = `fi fi-${flag2}`;
 
@@ -1309,6 +1552,12 @@
 
             // Logo UI
             updateLogoUI();
+
+            // Mostrar/ocultar botón "Siguiente Partido" (solo en modo equipos)
+            const nextMatchBtn = document.getElementById('nextMatchButtonContainer');
+            if (nextMatchBtn) {
+                nextMatchBtn.style.display = (gameState.gameMode === 'teams') ? 'block' : 'none';
+            }
 
             // Guardar
             localStorage.setItem('gameState', JSON.stringify(gameState));
@@ -1405,10 +1654,43 @@
 
         // Actualizar datos
         function updateData() {
-            gameState.player1.name = document.getElementById('player1Name').value || 'Jugador 1';
-            gameState.player2.name = document.getElementById('player2Name').value || 'Jugador 2';
-            gameState.player1.flag = (document.getElementById('player1Flag').value || 'ESP').toUpperCase().slice(0, 3);
-            gameState.player2.flag = (document.getElementById('player2Flag').value || 'ARG').toUpperCase().slice(0, 3);
+            // Modo Individual
+            if (gameState.gameMode === 'individual') {
+                gameState.player1.name = document.getElementById('player1Name').value || 'Jugador 1';
+                gameState.player2.name = document.getElementById('player2Name').value || 'Jugador 2';
+                gameState.player1.flag = (document.getElementById('player1Flag').value || 'ESP').toUpperCase().slice(0, 3);
+                gameState.player2.flag = (document.getElementById('player2Flag').value || 'ARG').toUpperCase().slice(0, 3);
+            }
+            // Modo Dobles
+            else if (gameState.gameMode === 'doubles') {
+                gameState.doubles.team1.name = document.getElementById('doublesTeam1Name').value || 'Pareja 1';
+                gameState.doubles.team1.flag = (document.getElementById('doublesTeam1Flag').value || 'ESP').toUpperCase().slice(0, 3);
+                gameState.doubles.team2.name = document.getElementById('doublesTeam2Name').value || 'Pareja 2';
+                gameState.doubles.team2.flag = (document.getElementById('doublesTeam2Flag').value || 'ARG').toUpperCase().slice(0, 3);
+            }
+            // Modo Equipos
+            else if (gameState.gameMode === 'teams') {
+                gameState.teams.team1.name = document.getElementById('team1Name').value || 'Equipo 1';
+                gameState.teams.team2.name = document.getElementById('team2Name').value || 'Equipo 2';
+                gameState.teams.currentMatch.player1.name = document.getElementById('teamsCurrentPlayer1').value || 'Jugador 1';
+                gameState.teams.currentMatch.player1.flag = (document.getElementById('teamsCurrentFlag1').value || 'ESP').toUpperCase().slice(0, 3);
+                gameState.teams.currentMatch.player2.name = document.getElementById('teamsCurrentPlayer2').value || 'Jugador 2';
+                gameState.teams.currentMatch.player2.flag = (document.getElementById('teamsCurrentFlag2').value || 'ARG').toUpperCase().slice(0, 3);
+            }
+
+            updateDisplay();
+        }
+
+        // Cambiar modalidad de juego
+        function changeGameMode() {
+            const newMode = document.getElementById('gameModeSelector').value;
+            gameState.gameMode = newMode;
+
+            // Mostrar/ocultar secciones según modalidad
+            document.getElementById('individualSection').style.display = (newMode === 'individual') ? 'block' : 'none';
+            document.getElementById('doublesSection').style.display = (newMode === 'doubles') ? 'block' : 'none';
+            document.getElementById('teamsSection').style.display = (newMode === 'teams') ? 'block' : 'none';
+
             updateDisplay();
         }
 
@@ -1672,9 +1954,27 @@
                 previousPlayer2Points: gameState.player2.points - (winnerPlayer === 2 ? 1 : 0)
             };
 
+            // Cambiar título según modalidad
+            const modalTitle = (gameState.gameMode === 'teams') ? '🏆 ¿Confirmar Partido Ganado?' : '🏆 ¿Confirmar Set Ganado?';
+            document.getElementById('setModalTitle').textContent = modalTitle;
+
+            // Obtener nombres según modalidad
+            let player1DisplayName = gameState.player1.name || 'Jugador 1';
+            let player2DisplayName = gameState.player2.name || 'Jugador 2';
+
+            if (gameState.gameMode === 'doubles') {
+                player1DisplayName = gameState.doubles.team1.name || 'Pareja 1';
+                player2DisplayName = gameState.doubles.team2.name || 'Pareja 2';
+            } else if (gameState.gameMode === 'teams') {
+                if (gameState.teams.currentMatch) {
+                    player1DisplayName = `${gameState.teams.currentMatch.player1.name} (${gameState.teams.team1.name})`;
+                    player2DisplayName = `${gameState.teams.currentMatch.player2.name} (${gameState.teams.team2.name})`;
+                }
+            }
+
             // Actualizar contenido del modal
-            document.getElementById('modalPlayer1Name').textContent = gameState.player1.name || 'Jugador 1';
-            document.getElementById('modalPlayer2Name').textContent = gameState.player2.name || 'Jugador 2';
+            document.getElementById('modalPlayer1Name').textContent = player1DisplayName;
+            document.getElementById('modalPlayer2Name').textContent = player2DisplayName;
             document.getElementById('modalPlayer1Score').textContent = gameState.player1.points;
             document.getElementById('modalPlayer2Score').textContent = gameState.player2.points;
 
@@ -1718,8 +2018,13 @@
                     // Guardar historial del set
                     gameState.setsHistory.push(setData);
 
-                    // Incrementar sets del ganador
-                    gameState['player' + player].sets++;
+                    // En modo equipos, incrementar individualMatchSets en lugar de sets
+                    if (gameState.gameMode === 'teams') {
+                        gameState.teams.individualMatchSets['player' + player]++;
+                    } else {
+                        // En otros modos, incrementar sets normalmente
+                        gameState['player' + player].sets++;
+                    }
 
                     // Animación de set ganado
                     gameState.animations['set' + player] = Date.now();
@@ -1727,11 +2032,20 @@
                     // Actualizar para mostrar el set acreditado
                     updateDisplay();
 
-                    // Verificar si hay ganador del partido
-                    const matchWinner = checkMatchWinner();
-                    if (matchWinner) {
-                        // Mostrar modal de confirmación de ganador
-                        showMatchWinnerModal(matchWinner);
+                    // En modo equipos, verificar si se ganó el partido individual
+                    if (gameState.gameMode === 'teams') {
+                        const individualMatchWinner = checkIndividualMatchWinner();
+                        if (individualMatchWinner) {
+                            // Mostrar modal de confirmación de partido individual
+                            showIndividualMatchWinnerModal(individualMatchWinner);
+                        }
+                    } else {
+                        // En otros modos, verificar si hay ganador del partido
+                        const matchWinner = checkMatchWinner();
+                        if (matchWinner) {
+                            // Mostrar modal de confirmación de ganador
+                            showMatchWinnerModal(matchWinner);
+                        }
                     }
 
                     // Liberar procesamiento después de la animación
@@ -1968,8 +2282,23 @@
             return null;
         }
 
+        // Verificar ganador de partido individual en modo equipos
+        function checkIndividualMatchWinner() {
+            if (gameState.gameMode !== 'teams') return null;
+
+            const setsToWin = getSetsToWin();
+
+            if (gameState.teams.individualMatchSets.player1 >= setsToWin) {
+                return 1;
+            } else if (gameState.teams.individualMatchSets.player2 >= setsToWin) {
+                return 2;
+            }
+            return null;
+        }
+
         // Variable para almacenar info del ganador pendiente
         let pendingMatchWinner = null;
+        let pendingIndividualMatchWinner = null;
 
         // Mostrar modal de confirmación de ganador del partido
         function showMatchWinnerModal(winnerPlayer) {
@@ -1978,24 +2307,84 @@
                 winner: winnerPlayer
             };
 
-            // Actualizar contenido del modal
-            const winnerData = gameState[`player${winnerPlayer}`];
-            const winnerFlagCode = getISO2Code(winnerData.flag);
+            // Obtener nombres y banderas según modalidad
+            let winnerName = '';
+            let winnerFlagCode = '';
+            let player1DisplayName = '';
+            let player2DisplayName = '';
 
-            document.getElementById('matchWinnerName').textContent = winnerData.name;
+            if (gameState.gameMode === 'individual') {
+                const winnerData = gameState[`player${winnerPlayer}`];
+                winnerName = winnerData.name;
+                winnerFlagCode = getISO2Code(winnerData.flag);
+                player1DisplayName = gameState.player1.name || 'Jugador 1';
+                player2DisplayName = gameState.player2.name || 'Jugador 2';
+            } else if (gameState.gameMode === 'doubles') {
+                const winnerTeam = gameState.doubles[`team${winnerPlayer}`];
+                winnerName = winnerTeam.name || `Pareja ${winnerPlayer}`;
+                winnerFlagCode = getISO2Code(winnerTeam.flag);
+                player1DisplayName = gameState.doubles.team1.name || 'Pareja 1';
+                player2DisplayName = gameState.doubles.team2.name || 'Pareja 2';
+            } else if (gameState.gameMode === 'teams') {
+                const winnerTeam = gameState.teams[`team${winnerPlayer}`];
+                winnerName = winnerTeam.name || `Equipo ${winnerPlayer}`;
+                player1DisplayName = gameState.teams.team1.name || 'Equipo 1';
+                player2DisplayName = gameState.teams.team2.name || 'Equipo 2';
+                // Usar bandera del equipo ganador (del jugador actual)
+                if (gameState.teams.currentMatch) {
+                    winnerFlagCode = getISO2Code(gameState.teams.currentMatch[`player${winnerPlayer}`].flag);
+                } else {
+                    winnerFlagCode = 'es';
+                }
+            }
+
+            // Actualizar contenido del modal
+            document.getElementById('matchWinnerName').textContent = winnerName;
 
             // Actualizar bandera usando flag-icons
             const flagElement = document.getElementById('matchWinnerFlag');
             flagElement.className = `fi fi-${winnerFlagCode}`;
 
-            document.getElementById('matchModalPlayer1Name').textContent = gameState.player1.name || 'Jugador 1';
-            document.getElementById('matchModalPlayer2Name').textContent = gameState.player2.name || 'Jugador 2';
+            document.getElementById('matchModalPlayer1Name').textContent = player1DisplayName;
+            document.getElementById('matchModalPlayer2Name').textContent = player2DisplayName;
             // Mostrar sets actuales (ya fueron incrementados)
             document.getElementById('matchModalPlayer1Sets').textContent = gameState.player1.sets;
             document.getElementById('matchModalPlayer2Sets').textContent = gameState.player2.sets;
 
             // Mostrar modal
             document.getElementById('matchWinnerModal').classList.add('show');
+        }
+
+        // Mostrar modal de confirmación de partido individual ganado (modo equipos)
+        function showIndividualMatchWinnerModal(winnerPlayer) {
+            // Guardar info del ganador
+            pendingIndividualMatchWinner = {
+                winner: winnerPlayer
+            };
+
+            // Obtener nombres del partido actual
+            const player1Name = gameState.teams.currentMatch.player1.name || 'Jugador 1';
+            const player2Name = gameState.teams.currentMatch.player2.name || 'Jugador 2';
+            const winnerName = winnerPlayer === 1 ? player1Name : player2Name;
+            const winnerFlagCode = getISO2Code(gameState.teams.currentMatch[`player${winnerPlayer}`].flag);
+            const winnerCountryName = gameState.teams[`team${winnerPlayer}`].name || `Equipo ${winnerPlayer}`;
+
+            // Actualizar contenido del modal
+            document.getElementById('individualMatchWinnerName').textContent = winnerName;
+            document.getElementById('individualMatchWinnerCountry').textContent = winnerCountryName;
+
+            // Actualizar bandera usando flag-icons
+            const flagElement = document.getElementById('individualMatchWinnerFlag');
+            flagElement.className = `fi fi-${winnerFlagCode}`;
+
+            document.getElementById('individualMatchModalPlayer1Name').textContent = player1Name;
+            document.getElementById('individualMatchModalPlayer2Name').textContent = player2Name;
+            // Mostrar sets del partido individual actual
+            document.getElementById('individualMatchModalPlayer1Sets').textContent = gameState.teams.individualMatchSets.player1;
+            document.getElementById('individualMatchModalPlayer2Sets').textContent = gameState.teams.individualMatchSets.player2;
+
+            // Mostrar modal
+            document.getElementById('individualMatchWinnerModal').classList.add('show');
         }
 
         // Confirmar ganador del partido
@@ -2013,7 +2402,14 @@
             }
             gameState.winner.detected = true;
             gameState.winner.player = winnerPlayer;
-            gameState.winner.finalScore = `${gameState.player1.sets}-${gameState.player2.sets}`;
+
+            // En modo equipos, mostrar puntos del país; en otros modos, mostrar sets
+            if (gameState.gameMode === 'teams') {
+                gameState.winner.finalScore = `${gameState.teams.countryPoints.team1}-${gameState.teams.countryPoints.team2}`;
+            } else {
+                gameState.winner.finalScore = `${gameState.player1.sets}-${gameState.player2.sets}`;
+            }
+
             gameState.winner.showOverlay = true;
 
             pendingMatchWinner = null;
@@ -2045,6 +2441,72 @@
             // No revertir nada - el set ya fue confirmado y es válido
             // El usuario puede editar manualmente los sets si se equivocó en la configuración
             updateDisplay();
+        }
+
+        // Confirmar ganador del partido individual (modo equipos)
+        function confirmIndividualMatchWin() {
+            if (!pendingIndividualMatchWinner) return;
+
+            const winnerPlayer = pendingIndividualMatchWinner.winner;
+
+            // Ocultar modal
+            document.getElementById('individualMatchWinnerModal').classList.remove('show');
+
+            // Incrementar puntos del país ganador
+            gameState.teams.countryPoints[`team${winnerPlayer}`]++;
+
+            // Resetear sets del partido individual para el siguiente partido
+            gameState.teams.individualMatchSets.player1 = 0;
+            gameState.teams.individualMatchSets.player2 = 0;
+
+            // Resetear puntos
+            gameState.player1.points = 0;
+            gameState.player2.points = 0;
+
+            // Limpiar historial de sets para el siguiente partido individual
+            gameState.setsHistory = [];
+
+            pendingIndividualMatchWinner = null;
+
+            updateDisplay();
+
+            // Verificar si hay ganador del encuentro (país ganador)
+            const encounterWinner = checkEncounterWinner();
+            if (encounterWinner) {
+                // Mostrar modal de ganador del encuentro
+                showMatchWinnerModal(encounterWinner);
+            } else {
+                // Mostrar mensaje para cambiar jugadores
+                setTimeout(() => {
+                    alert('💡 Partido completado!\n\n1. Oculta el marcador del overlay\n2. Ve a Configuración para cambiar los jugadores del siguiente partido\n3. Usa el botón "Siguiente Partido" cuando estés listo');
+                }, 500);
+            }
+        }
+
+        // Cancelar ganador del partido individual
+        function cancelIndividualMatchWin() {
+            // Ocultar modal
+            document.getElementById('individualMatchWinnerModal').classList.remove('show');
+
+            // Limpiar ganador pendiente
+            pendingIndividualMatchWinner = null;
+
+            // No revertir nada - los sets ya fueron confirmados
+            updateDisplay();
+        }
+
+        // Verificar ganador del encuentro (en modo equipos)
+        function checkEncounterWinner() {
+            if (gameState.gameMode !== 'teams') return null;
+
+            const setsToWin = getSetsToWin();
+
+            if (gameState.teams.countryPoints.team1 >= setsToWin) {
+                return 1;
+            } else if (gameState.teams.countryPoints.team2 >= setsToWin) {
+                return 2;
+            }
+            return null;
         }
 
         // Actualizar historial de sets
@@ -2146,9 +2608,43 @@
                     player: null,
                     finalScore: ''
                 };
+                // Resetear marcadores de equipos
+                if (gameState.teams && gameState.teams.individualMatchSets) {
+                    gameState.teams.individualMatchSets.player1 = 0;
+                    gameState.teams.individualMatchSets.player2 = 0;
+                }
+                if (gameState.teams && gameState.teams.countryPoints) {
+                    gameState.teams.countryPoints.team1 = 0;
+                    gameState.teams.countryPoints.team2 = 0;
+                }
                 manualServiceOverride = false;  // Resetear override manual
                 firstServer = null;  // Resetear primer servidor
                 updateDisplay();
+            }
+        }
+
+        // Siguiente partido (modo equipos)
+        function nextMatch() {
+            if (confirm('¿Iniciar siguiente partido? (Los sets se mantienen, los puntos se resetean a 0)')) {
+                // Solo resetear puntos, mantener sets
+                gameState.player1.points = 0;
+                gameState.player2.points = 0;
+                gameState.player1.service = true;
+                gameState.player2.service = false;
+
+                // Resetear override manual de servicio
+                manualServiceOverride = false;
+                firstServer = null;
+
+                // Ocultar ganador del partido anterior si estaba visible
+                if (gameState.winner && gameState.winner.showOverlay) {
+                    gameState.winner.showOverlay = false;
+                }
+
+                updateDisplay();
+
+                // Mensaje de ayuda
+                alert('💡 Listo para el siguiente partido!\n\nRecuerda cambiar los nombres de los jugadores en la pestaña Configuración.');
             }
         }
 

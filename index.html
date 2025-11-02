@@ -229,6 +229,19 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
+        /* Ocultar/mostrar secciones según modo */
+        .mode-individual {
+            display: block;
+        }
+
+        .mode-doubles {
+            display: none;
+        }
+
+        .mode-teams {
+            display: none;
+        }
+
         /* Animaciones */
         @keyframes pointScore {
             0% {
@@ -623,58 +636,197 @@
             <img id="logoImage" src="" alt="Logo">
         </div>
 
-        <!-- Jugador 1 -->
-        <div class="player-row">
-            <div class="player-info">
-                <div class="flag">
-                    <span id="flag1" class="fi fi-es"></span>
+        <!-- MODO INDIVIDUAL -->
+        <div id="individualMode" class="mode-individual">
+            <!-- Jugador 1 -->
+            <div class="player-row">
+                <div class="player-info">
+                    <div class="flag">
+                        <span id="flag1" class="fi fi-es"></span>
+                    </div>
+                    <div class="player-details">
+                        <div class="player-name" id="player1Name">Héctor López</div>
+                    </div>
                 </div>
-                <div class="player-details">
-                    <div class="player-name" id="player1Name">Héctor López</div>
+
+                <div class="stats-section">
+                    <div class="stat-block">
+                        <span class="stat-label">Puntos</span>
+                        <span class="stat-value" id="points1">7</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <span class="stat-label">Sets</span>
+                        <span class="stat-value" id="sets1">1</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <div class="service-ball" id="serviceBall1"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="stats-section">
-                <div class="stat-block">
-                    <span class="stat-label">Puntos</span>
-                    <span class="stat-value" id="points1">7</span>
+            <!-- Jugador 2 -->
+            <div class="player-row">
+                <div class="player-info">
+                    <div class="flag">
+                        <span id="flag2" class="fi fi-ar"></span>
+                    </div>
+                    <div class="player-details">
+                        <div class="player-name" id="player2Name">Susana Martínez</div>
+                    </div>
                 </div>
 
-                <div class="stat-block">
-                    <span class="stat-label">Sets</span>
-                    <span class="stat-value" id="sets1">1</span>
-                </div>
+                <div class="stats-section">
+                    <div class="stat-block">
+                        <span class="stat-label">Puntos</span>
+                        <span class="stat-value" id="points2">5</span>
+                    </div>
 
-                <div class="stat-block">
-                    <div class="service-ball" id="serviceBall1"></div>
+                    <div class="stat-block">
+                        <span class="stat-label">Sets</span>
+                        <span class="stat-value" id="sets2">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <div class="service-ball inactive" id="serviceBall2"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Jugador 2 -->
-        <div class="player-row">
-            <div class="player-info">
-                <div class="flag">
-                    <span id="flag2" class="fi fi-ar"></span>
+        <!-- MODO DOBLES -->
+        <div id="doublesMode" class="mode-doubles">
+            <!-- Pareja 1 -->
+            <div class="player-row">
+                <div class="player-info">
+                    <div class="flag">
+                        <span id="doublesFlag1" class="fi fi-es"></span>
+                    </div>
+                    <div class="player-details">
+                        <div class="player-name" id="doublesTeam1Name">López / García</div>
+                    </div>
                 </div>
-                <div class="player-details">
-                    <div class="player-name" id="player2Name">Susana Martínez</div>
+
+                <div class="stats-section">
+                    <div class="stat-block">
+                        <span class="stat-label">Puntos</span>
+                        <span class="stat-value" id="doublesPoints1">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <span class="stat-label">Sets</span>
+                        <span class="stat-value" id="doublesSets1">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <div class="service-ball" id="doublesServiceBall1"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="stats-section">
-                <div class="stat-block">
-                    <span class="stat-label">Puntos</span>
-                    <span class="stat-value" id="points2">5</span>
+            <!-- Pareja 2 -->
+            <div class="player-row">
+                <div class="player-info">
+                    <div class="flag">
+                        <span id="doublesFlag2" class="fi fi-ar"></span>
+                    </div>
+                    <div class="player-details">
+                        <div class="player-name" id="doublesTeam2Name">Martínez / Rodríguez</div>
+                    </div>
                 </div>
 
-                <div class="stat-block">
-                    <span class="stat-label">Sets</span>
-                    <span class="stat-value" id="sets2">0</span>
+                <div class="stats-section">
+                    <div class="stat-block">
+                        <span class="stat-label">Puntos</span>
+                        <span class="stat-value" id="doublesPoints2">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <span class="stat-label">Sets</span>
+                        <span class="stat-value" id="doublesSets2">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <div class="service-ball inactive" id="doublesServiceBall2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODO EQUIPOS -->
+        <div id="teamsMode" class="mode-teams">
+            <!-- Jugador 1 (con nombre de equipo) -->
+            <div class="player-row">
+                <div class="player-info">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="font-size: 32px; font-weight: 700; color: #ffffff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
+                            <span id="teamsCountryPoints1">0</span>
+                        </div>
+                        <div class="flag">
+                            <span id="teamsFlag1" class="fi fi-es"></span>
+                        </div>
+                    </div>
+                    <div class="player-details">
+                        <div class="player-name" id="teamsPlayer1Name">Jugador 1</div>
+                        <div class="player-role">
+                            <span id="teamsTeam1Flag" class="fi fi-gt" style="margin-right: 6px;"></span>
+                            <span id="teamsTeam1Name">Equipo A</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="stat-block">
-                    <div class="service-ball inactive" id="serviceBall2"></div>
+                <div class="stats-section">
+                    <div class="stat-block">
+                        <span class="stat-label">Puntos</span>
+                        <span class="stat-value" id="teamsPoints1">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <span class="stat-label">Sets</span>
+                        <span class="stat-value" id="teamsIndividualSets1">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <div class="service-ball" id="teamsServiceBall1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jugador 2 (con nombre de equipo) -->
+            <div class="player-row">
+                <div class="player-info">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="font-size: 32px; font-weight: 700; color: #ffffff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">
+                            <span id="teamsCountryPoints2">0</span>
+                        </div>
+                        <div class="flag">
+                            <span id="teamsFlag2" class="fi fi-ar"></span>
+                        </div>
+                    </div>
+                    <div class="player-details">
+                        <div class="player-name" id="teamsPlayer2Name">Jugador 2</div>
+                        <div class="player-role">
+                            <span id="teamsTeam2Flag" class="fi fi-es" style="margin-right: 6px;"></span>
+                            <span id="teamsTeam2Name">Equipo B</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stat-block">
+                        <span class="stat-label">Puntos</span>
+                        <span class="stat-value" id="teamsPoints2">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <span class="stat-label">Sets</span>
+                        <span class="stat-value" id="teamsIndividualSets2">0</span>
+                    </div>
+
+                    <div class="stat-block">
+                        <div class="service-ball inactive" id="teamsServiceBall2"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -781,8 +933,29 @@
 
         // Estado global
         let gameState = {
-            player1: { name: 'Héctor López', points: 7, sets: 1, service: true, flag: 'ESP' },
-            player2: { name: 'Susana Martínez', points: 5, sets: 0, service: false, flag: 'ARG' },
+            gameMode: 'individual',    // 'individual', 'doubles' o 'teams'
+            player1: { name: 'Héctor López', points: 0, sets: 0, service: true, flag: 'ESP' },
+            player2: { name: 'Susana Martínez', points: 0, sets: 0, service: false, flag: 'ARG' },
+            doubles: {                 // Datos para modo dobles (formato: "Apellido1 / Apellido2")
+                team1: { name: '', flag: 'ESP' },
+                team2: { name: '', flag: 'ARG' }
+            },
+            teams: {                   // Datos para modo equipos
+                team1: { name: '' },   // Nombre del equipo
+                team2: { name: '' },   // Nombre del equipo
+                currentMatch: {        // Partido individual actual
+                    player1: { name: '', flag: 'ESP' },
+                    player2: { name: '', flag: 'ARG' }
+                },
+                individualMatchSets: {  // Sets del partido individual actual
+                    player1: 0,
+                    player2: 0
+                },
+                countryPoints: {        // Puntos del país (partidos ganados)
+                    team1: 0,
+                    team2: 0
+                }
+            },
             background: {
                 type: 'solid',     // 'solid', 'gradient', 'transparent'
                 color: '#00FF00'   // Verde por defecto para chroma key
@@ -815,22 +988,21 @@
 
         // Función para actualizar la pantalla
         function updateDisplay() {
-            document.getElementById('player1Name').textContent = gameState.player1.name;
-            document.getElementById('player2Name').textContent = gameState.player2.name;
-            document.getElementById('points1').textContent = gameState.player1.points;
-            document.getElementById('points2').textContent = gameState.player2.points;
-            document.getElementById('sets1').textContent = gameState.player1.sets;
-            document.getElementById('sets2').textContent = gameState.player2.sets;
+            const gameMode = gameState.gameMode || 'individual';
 
-            // Actualizar banderas usando códigos de país
-            const flag1Code = getISO2Code(gameState.player1.flag);
-            const flag2Code = getISO2Code(gameState.player2.flag);
-            document.getElementById('flag1').className = `fi fi-${flag1Code}`;
-            document.getElementById('flag2').className = `fi fi-${flag2Code}`;
+            // Mostrar/ocultar secciones según modalidad
+            document.getElementById('individualMode').style.display = (gameMode === 'individual') ? 'block' : 'none';
+            document.getElementById('doublesMode').style.display = (gameMode === 'doubles') ? 'block' : 'none';
+            document.getElementById('teamsMode').style.display = (gameMode === 'teams') ? 'block' : 'none';
 
-            // Actualizar indicadores de servicio
-            document.getElementById('serviceBall1').className = gameState.player1.service ? 'service-ball' : 'service-ball inactive';
-            document.getElementById('serviceBall2').className = gameState.player2.service ? 'service-ball' : 'service-ball inactive';
+            // Actualizar según modalidad
+            if (gameMode === 'individual') {
+                updateIndividualDisplay();
+            } else if (gameMode === 'doubles') {
+                updateDoublesDisplay();
+            } else if (gameMode === 'teams') {
+                updateTeamsDisplay();
+            }
 
             // Actualizar logo
             applyLogo();
@@ -857,6 +1029,92 @@
 
             // Guardar en localStorage
             localStorage.setItem('gameState', JSON.stringify(gameState));
+        }
+
+        // Actualizar display para modo Individual
+        function updateIndividualDisplay() {
+            document.getElementById('player1Name').textContent = gameState.player1.name;
+            document.getElementById('player2Name').textContent = gameState.player2.name;
+            document.getElementById('points1').textContent = gameState.player1.points;
+            document.getElementById('points2').textContent = gameState.player2.points;
+            document.getElementById('sets1').textContent = gameState.player1.sets;
+            document.getElementById('sets2').textContent = gameState.player2.sets;
+
+            // Actualizar banderas usando códigos de país
+            const flag1Code = getISO2Code(gameState.player1.flag);
+            const flag2Code = getISO2Code(gameState.player2.flag);
+            document.getElementById('flag1').className = `fi fi-${flag1Code}`;
+            document.getElementById('flag2').className = `fi fi-${flag2Code}`;
+
+            // Actualizar indicadores de servicio
+            document.getElementById('serviceBall1').className = gameState.player1.service ? 'service-ball' : 'service-ball inactive';
+            document.getElementById('serviceBall2').className = gameState.player2.service ? 'service-ball' : 'service-ball inactive';
+        }
+
+        // Actualizar display para modo Dobles
+        function updateDoublesDisplay() {
+            // Pareja 1
+            document.getElementById('doublesTeam1Name').textContent = gameState.doubles.team1.name || 'Pareja 1';
+            const flag1Code = getISO2Code(gameState.doubles.team1.flag);
+            document.getElementById('doublesFlag1').className = `fi fi-${flag1Code}`;
+
+            // Pareja 2
+            document.getElementById('doublesTeam2Name').textContent = gameState.doubles.team2.name || 'Pareja 2';
+            const flag2Code = getISO2Code(gameState.doubles.team2.flag);
+            document.getElementById('doublesFlag2').className = `fi fi-${flag2Code}`;
+
+            // Puntos y sets (usa player1/player2 para los datos)
+            document.getElementById('doublesPoints1').textContent = gameState.player1.points;
+            document.getElementById('doublesPoints2').textContent = gameState.player2.points;
+            document.getElementById('doublesSets1').textContent = gameState.player1.sets;
+            document.getElementById('doublesSets2').textContent = gameState.player2.sets;
+
+            // Actualizar indicadores de servicio
+            document.getElementById('doublesServiceBall1').className = gameState.player1.service ? 'service-ball' : 'service-ball inactive';
+            document.getElementById('doublesServiceBall2').className = gameState.player2.service ? 'service-ball' : 'service-ball inactive';
+        }
+
+        // Actualizar display para modo Equipos
+        function updateTeamsDisplay() {
+            // Nombres de equipos (se muestran como "role" debajo del nombre del jugador)
+            document.getElementById('teamsTeam1Name').textContent = gameState.teams.team1.name || 'Equipo 1';
+            document.getElementById('teamsTeam2Name').textContent = gameState.teams.team2.name || 'Equipo 2';
+
+            // Jugadores actuales
+            if (gameState.teams.currentMatch) {
+                document.getElementById('teamsPlayer1Name').textContent = gameState.teams.currentMatch.player1.name || 'Jugador 1';
+                document.getElementById('teamsPlayer2Name').textContent = gameState.teams.currentMatch.player2.name || 'Jugador 2';
+
+                // Banderas de los jugadores actuales
+                const flag1Code = getISO2Code(gameState.teams.currentMatch.player1.flag);
+                const flag2Code = getISO2Code(gameState.teams.currentMatch.player2.flag);
+                document.getElementById('teamsFlag1').className = `fi fi-${flag1Code}`;
+                document.getElementById('teamsFlag2').className = `fi fi-${flag2Code}`;
+
+                // Banderas de los equipos (junto al nombre del país)
+                document.getElementById('teamsTeam1Flag').className = `fi fi-${flag1Code}`;
+                document.getElementById('teamsTeam2Flag').className = `fi fi-${flag2Code}`;
+            }
+
+            // Puntos del partido actual
+            document.getElementById('teamsPoints1').textContent = gameState.player1.points;
+            document.getElementById('teamsPoints2').textContent = gameState.player2.points;
+
+            // Sets del partido individual actual
+            if (gameState.teams.individualMatchSets) {
+                document.getElementById('teamsIndividualSets1').textContent = gameState.teams.individualMatchSets.player1;
+                document.getElementById('teamsIndividualSets2').textContent = gameState.teams.individualMatchSets.player2;
+            }
+
+            // Puntos del país (partidos ganados por el equipo)
+            if (gameState.teams.countryPoints) {
+                document.getElementById('teamsCountryPoints1').textContent = gameState.teams.countryPoints.team1;
+                document.getElementById('teamsCountryPoints2').textContent = gameState.teams.countryPoints.team2;
+            }
+
+            // Actualizar indicadores de servicio
+            document.getElementById('teamsServiceBall1').className = gameState.player1.service ? 'service-ball' : 'service-ball inactive';
+            document.getElementById('teamsServiceBall2').className = gameState.player2.service ? 'service-ball' : 'service-ball inactive';
         }
 
         // Aplicar logo dinámicamente
@@ -970,17 +1228,38 @@
                 // Determinar total de sets según modo
                 const totalSets = gameState.matchMode === 'best-of-7' ? 7 : 5;
 
+                // Obtener nombres y banderas según modalidad
+                let player1Name = gameState.player1.name;
+                let player2Name = gameState.player2.name;
+                let flag1 = gameState.player1.flag;
+                let flag2 = gameState.player2.flag;
+
+                if (gameState.gameMode === 'doubles') {
+                    player1Name = gameState.doubles.team1.name || 'Pareja 1';
+                    player2Name = gameState.doubles.team2.name || 'Pareja 2';
+                    flag1 = gameState.doubles.team1.flag;
+                    flag2 = gameState.doubles.team2.flag;
+                } else if (gameState.gameMode === 'teams') {
+                    // En modo equipos, mostrar nombre del jugador actual
+                    if (gameState.teams.currentMatch) {
+                        player1Name = gameState.teams.currentMatch.player1.name || 'Jugador 1';
+                        player2Name = gameState.teams.currentMatch.player2.name || 'Jugador 2';
+                        flag1 = gameState.teams.currentMatch.player1.flag;
+                        flag2 = gameState.teams.currentMatch.player2.flag;
+                    }
+                }
+
                 // Generar HTML con el mismo diseño que player-row
                 let html = '';
 
                 // Fila Jugador 1
                 html += '<div class="history-row">';
                 html += '<div class="history-player-info">';
-                const flag1Code = getISO2Code(gameState.player1.flag);
+                const flag1Code = getISO2Code(flag1);
                 html += `<div class="flag">`;
                 html += `<span class="fi fi-${flag1Code}"></span>`;
                 html += `</div>`;
-                html += `<span class="history-player-name">${gameState.player1.name}</span>`;
+                html += `<span class="history-player-name">${player1Name}</span>`;
                 html += '</div>';
                 html += '<div class="history-sets-container">';
                 for (let i = 0; i < totalSets; i++) {
@@ -999,11 +1278,11 @@
                 // Fila Jugador 2
                 html += '<div class="history-row">';
                 html += '<div class="history-player-info">';
-                const flag2Code = getISO2Code(gameState.player2.flag);
+                const flag2Code = getISO2Code(flag2);
                 html += `<div class="flag">`;
                 html += `<span class="fi fi-${flag2Code}"></span>`;
                 html += `</div>`;
-                html += `<span class="history-player-name">${gameState.player2.name}</span>`;
+                html += `<span class="history-player-name">${player2Name}</span>`;
                 html += '</div>';
                 html += '<div class="history-sets-container">';
                 for (let i = 0; i < totalSets; i++) {
@@ -1056,6 +1335,50 @@
                 // Asegurar que exista el campo theme (para compatibilidad con versiones anteriores)
                 if (!gameState.theme) {
                     gameState.theme = 'azulModerno';
+                }
+
+                // Asegurar que exista el campo gameMode
+                if (!gameState.gameMode) {
+                    gameState.gameMode = 'individual';
+                }
+
+                // Asegurar que existan estructuras para doubles y teams
+                if (!gameState.doubles) {
+                    gameState.doubles = {
+                        team1: { name: '', flag: 'ESP' },
+                        team2: { name: '', flag: 'ARG' }
+                    };
+                }
+                if (!gameState.teams) {
+                    gameState.teams = {
+                        team1: { name: '' },
+                        team2: { name: '' },
+                        currentMatch: {
+                            player1: { name: '', flag: 'ESP' },
+                            player2: { name: '', flag: 'ARG' }
+                        }
+                    };
+                }
+                // Asegurar que existe currentMatch en teams (para compatibilidad)
+                if (gameState.teams && !gameState.teams.currentMatch) {
+                    gameState.teams.currentMatch = {
+                        player1: { name: '', flag: 'ESP' },
+                        player2: { name: '', flag: 'ARG' }
+                    };
+                }
+                // Asegurar que existen individualMatchSets en teams
+                if (gameState.teams && !gameState.teams.individualMatchSets) {
+                    gameState.teams.individualMatchSets = {
+                        player1: 0,
+                        player2: 0
+                    };
+                }
+                // Asegurar que existen countryPoints en teams
+                if (gameState.teams && !gameState.teams.countryPoints) {
+                    gameState.teams.countryPoints = {
+                        team1: 0,
+                        team2: 0
+                    };
                 }
 
                 updateDisplay();
@@ -1287,19 +1610,46 @@
             overlay.classList.add('show');
             scoreboard.classList.add('show-winner');
 
-            // Obtener datos del ganador
-            const winnerPlayer = gameState[`player${winner.player}`];
-            const winnerFlagCode = getISO2Code(winnerPlayer.flag);
+            // Obtener datos del ganador según modalidad
+            let winnerName = '';
+            let winnerFlagCode = '';
 
-            console.log('Winner data:', { winnerPlayer, winnerFlagCode });
+            const gameMode = gameState.gameMode || 'individual';
+            const winnerPlayer = gameState[`player${winner.player}`];
+
+            if (gameMode === 'individual') {
+                winnerName = winnerPlayer.name;
+                winnerFlagCode = getISO2Code(winnerPlayer.flag);
+            } else if (gameMode === 'doubles') {
+                const winnerTeam = gameState.doubles[`team${winner.player}`];
+                winnerName = winnerTeam.name || `Pareja ${winner.player}`;
+                winnerFlagCode = getISO2Code(winnerTeam.flag);
+            } else if (gameMode === 'teams') {
+                const winnerTeam = gameState.teams[`team${winner.player}`];
+                winnerName = winnerTeam.name || `Equipo ${winner.player}`;
+                // En modo equipos, usar la bandera del jugador actual
+                if (gameState.teams.currentMatch) {
+                    winnerFlagCode = getISO2Code(gameState.teams.currentMatch[`player${winner.player}`].flag);
+                } else {
+                    winnerFlagCode = 'es'; // Flag por defecto
+                }
+            }
+
+            console.log('Winner data:', { winnerName, winnerFlagCode });
 
             // Actualizar contenido
-            document.getElementById('winnerName').textContent = winnerPlayer.name;
+            document.getElementById('winnerName').textContent = winnerName;
             document.getElementById('winnerScore').textContent = winner.finalScore;
 
             // Actualizar bandera usando fi (flag-icons)
             const flagElement = document.getElementById('winnerFlag');
-            flagElement.className = `winner-flag fi fi-${winnerFlagCode}`;
+            if (gameMode === 'teams' && gameState.teams[`team${winner.player}`].logo) {
+                // Si es modo equipos y tiene logo, ocultar bandera y mostrar logo
+                flagElement.style.display = 'none';
+            } else {
+                flagElement.style.display = 'inline-block';
+                flagElement.className = `winner-flag fi fi-${winnerFlagCode}`;
+            }
 
             // Actualizar emoji de celebración
             const trophyElement = document.getElementById('winnerTrophy');
