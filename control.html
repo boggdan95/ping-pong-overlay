@@ -1815,6 +1815,7 @@
 
                 // Resetear variables de servicio
                 firstServer = null;
+                firstServerHistory = [];
                 manualServiceOverride = false;
                 manualServiceStartPoint = null;
             }
@@ -1906,7 +1907,8 @@
         let switchingFromHistory = false; // Prevenir clicks durante transición
         let manualServiceOverride = false; // Indica que el servicio fue cambiado manualmente
         let manualServiceStartPoint = null; // Punto total cuando se hizo el cambio manual
-        let firstServer = null; // Quién sirvió primero (1 o 2), determina la rotación
+        let firstServer = null; // Quién sirvió primero en el SET ACTUAL (1 o 2), determina la rotación
+        let firstServerHistory = []; // Array de quién sirvió primero en cada set ([1, 2, 1, ...])
         let editingScore = null; // Player number being edited (1 or 2), null if none
         let editingSets = null; // Player number being edited for sets (1 or 2), null if none
 
@@ -2151,7 +2153,26 @@
                 gameState.player1.points = 0;
                 gameState.player2.points = 0;
                 manualServiceOverride = false;  // Resetear override al iniciar nuevo set
-                firstServer = null;  // Resetear primer servidor para el nuevo set
+
+                // Guardar quién sirvió primero en el set que acaba de terminar
+                if (firstServer !== null) {
+                    firstServerHistory.push(firstServer);
+                }
+
+                // Calcular quién debe servir en el NUEVO set (alternar)
+                if (firstServerHistory.length > 0) {
+                    const lastSetFirstServer = firstServerHistory[firstServerHistory.length - 1];
+                    const newFirstServer = lastSetFirstServer === 1 ? 2 : 1;
+
+                    // Establecer el servicio para el nuevo set
+                    firstServer = newFirstServer;
+                    gameState.player1.service = (newFirstServer === 1);
+                    gameState.player2.service = (newFirstServer === 2);
+                } else {
+                    // Si no hay historial (primer set), resetear para que operador elija
+                    firstServer = null;
+                }
+
                 updateDisplay();
 
                 // DESPUÉS de resetear, acreditar el set con animación
@@ -2760,6 +2781,7 @@
                 }
                 manualServiceOverride = false;  // Resetear override manual
                 firstServer = null;  // Resetear primer servidor
+                firstServerHistory = [];  // Limpiar historial de servidores por set
                 updateDisplay();
             }
         }
