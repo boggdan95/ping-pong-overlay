@@ -1781,12 +1781,56 @@
         // Cambiar modalidad de juego
         function changeGameMode() {
             const newMode = document.getElementById('gameModeSelector').value;
+            const previousMode = gameState.gameMode;
+
+            // Solo limpiar si realmente cambió el modo
+            if (previousMode !== newMode) {
+                // Confirmar antes de cambiar y limpiar
+                const confirmChange = confirm('Al cambiar el modo de juego se resetearán todos los puntos y sets. ¿Deseas continuar?');
+
+                if (!confirmChange) {
+                    // Restaurar selector al modo anterior
+                    document.getElementById('gameModeSelector').value = previousMode;
+                    return;
+                }
+
+                // Limpiar puntos y sets
+                gameState.player1.points = 0;
+                gameState.player2.points = 0;
+                gameState.player1.sets = 0;
+                gameState.player2.sets = 0;
+                gameState.player1.service = true;
+                gameState.player2.service = false;
+                gameState.setsHistory = [];
+                gameState.showHistoryOverlay = false;
+
+                // Resetear ganador
+                gameState.winner = {
+                    detected: false,
+                    player: null,
+                    finalScore: '',
+                    showOverlay: false,
+                    emoji: '🏆'
+                };
+
+                // Resetear variables de servicio
+                firstServer = null;
+                manualServiceOverride = false;
+                manualServiceStartPoint = null;
+            }
+
             gameState.gameMode = newMode;
 
             // Mostrar/ocultar secciones según modalidad
             document.getElementById('individualSection').style.display = (newMode === 'individual') ? 'block' : 'none';
             document.getElementById('doublesSection').style.display = (newMode === 'doubles') ? 'block' : 'none';
             document.getElementById('teamsSection').style.display = (newMode === 'teams') ? 'block' : 'none';
+
+            // Mostrar/ocultar botón "Siguiente Partido" solo en modo equipos
+            const nextMatchContainer = document.getElementById('nextMatchButtonContainer');
+            if (nextMatchContainer) {
+                nextMatchContainer.style.display = (newMode === 'teams') ? 'block' : 'none';
+            }
 
             updateDisplay();
         }
