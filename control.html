@@ -768,6 +768,55 @@
             }
         }
 
+        /* Autocomplete styles */
+        .autocomplete-container {
+            position: relative;
+        }
+
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .autocomplete-list.active {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .autocomplete-item:hover {
+            background: #f0f5ff;
+        }
+
+        .autocomplete-item .flag-code {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 11px;
+        }
+
+        .autocomplete-item .country {
+            color: #999;
+            font-size: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -879,7 +928,10 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Nombre Jugador 1</label>
-                            <input type="text" id="player1Name" value="Héctor López" onchange="updateData()">
+                            <div class="autocomplete-container">
+                                <input type="text" id="player1Name" value="Héctor López" onchange="updateData()" oninput="handleAutocomplete(this, 1)" onfocus="handleAutocompleteFocus(this, 1)" onblur="hideAutocomplete(1)">
+                                <div id="autocomplete1" class="autocomplete-list"></div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Bandera (3 letras)</label>
@@ -889,7 +941,10 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Nombre Jugador 2</label>
-                            <input type="text" id="player2Name" value="Susana Martínez" onchange="updateData()">
+                            <div class="autocomplete-container">
+                                <input type="text" id="player2Name" value="Susana Martínez" onchange="updateData()" oninput="handleAutocomplete(this, 2)" onfocus="handleAutocompleteFocus(this, 2)" onblur="hideAutocomplete(2)">
+                                <div id="autocomplete2" class="autocomplete-list"></div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Bandera (3 letras)</label>
@@ -946,7 +1001,10 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Jugador (Equipo 1)</label>
-                            <input type="text" id="teamsCurrentPlayer1" value="" onchange="updateData()" placeholder="Nombre jugador">
+                            <div class="autocomplete-container">
+                                <input type="text" id="teamsCurrentPlayer1" value="" onchange="updateData()" placeholder="Nombre jugador" oninput="handleAutocomplete(this, 3)" onfocus="handleAutocompleteFocus(this, 3)" onblur="hideAutocomplete(3)">
+                                <div id="autocomplete3" class="autocomplete-list"></div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Bandera (3 letras)</label>
@@ -956,7 +1014,10 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Jugador (Equipo 2)</label>
-                            <input type="text" id="teamsCurrentPlayer2" value="" onchange="updateData()" placeholder="Nombre jugador">
+                            <div class="autocomplete-container">
+                                <input type="text" id="teamsCurrentPlayer2" value="" onchange="updateData()" placeholder="Nombre jugador" oninput="handleAutocomplete(this, 4)" onfocus="handleAutocompleteFocus(this, 4)" onblur="hideAutocomplete(4)">
+                                <div id="autocomplete4" class="autocomplete-list"></div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Bandera (3 letras)</label>
@@ -1095,6 +1156,29 @@
                     <div id="logoPreview" class="logo-preview">
                         <img id="logoPreviewImg" src="" alt="Vista previa del logo">
                     </div>
+                </div>
+
+                <!-- Sistema de Autosugerencia -->
+                <div class="config-section">
+                    <h3>📋 Base de Datos de Jugadores</h3>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                        Carga un CSV para autocompletar nombres rápidamente
+                    </div>
+                    <div class="logo-input-group">
+                        <input type="file" id="csvFile" accept=".csv" style="display: none;" onchange="handleCSVFile(event)">
+                        <button class="logo-file-btn" onclick="document.getElementById('csvFile').click()" style="width: 100%;">
+                            📁 Cargar CSV de Jugadores
+                        </button>
+                    </div>
+                    <div style="font-size: 9px; color: #999; text-align: center; margin-top: 4px;">
+                        Formato: nombre,bandera,país (ej: Juan Pérez,ESP,España)
+                    </div>
+                    <div id="playersDbStatus" style="margin-top: 8px; font-size: 11px; color: #667eea; text-align: center; display: none;">
+                        ✅ <span id="playersCount">0</span> jugadores cargados
+                    </div>
+                    <button id="clearPlayersDb" onclick="clearPlayersDatabase()" style="width: 100%; padding: 6px; margin-top: 6px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; display: none;">
+                        🗑️ Limpiar Base de Datos
+                    </button>
                 </div>
             </div>
             </div>
@@ -2667,6 +2751,183 @@
 
         // Cargar estado al iniciar
         loadState();
+
+        // ==================== SISTEMA DE AUTOSUGERENCIA ====================
+
+        // Base de datos de jugadores en localStorage
+        function getPlayersDatabase() {
+            const data = localStorage.getItem('playersDatabase');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function savePlayersDatabase(players) {
+            localStorage.setItem('playersDatabase', JSON.stringify(players));
+            updatePlayersDbStatus();
+        }
+
+        function updatePlayersDbStatus() {
+            const players = getPlayersDatabase();
+            const statusDiv = document.getElementById('playersDbStatus');
+            const clearBtn = document.getElementById('clearPlayersDb');
+            const countSpan = document.getElementById('playersCount');
+
+            if (players.length > 0) {
+                statusDiv.style.display = 'block';
+                clearBtn.style.display = 'block';
+                countSpan.textContent = players.length;
+            } else {
+                statusDiv.style.display = 'none';
+                clearBtn.style.display = 'none';
+            }
+        }
+
+        // Manejar carga de CSV
+        function handleCSVFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n');
+                const players = [];
+
+                for (let line of lines) {
+                    line = line.trim();
+                    if (!line) continue;
+
+                    const parts = line.split(',').map(p => p.trim());
+                    if (parts.length >= 2) {
+                        players.push({
+                            name: parts[0],
+                            flag: parts[1].toUpperCase(),
+                            country: parts[2] || ''
+                        });
+                    }
+                }
+
+                if (players.length > 0) {
+                    savePlayersDatabase(players);
+                    alert(`✅ ${players.length} jugadores cargados exitosamente`);
+                } else {
+                    alert('❌ No se encontraron jugadores válidos en el archivo CSV');
+                }
+            };
+            reader.readAsText(file);
+
+            // Reset input para permitir cargar el mismo archivo
+            event.target.value = '';
+        }
+
+        // Limpiar base de datos
+        function clearPlayersDatabase() {
+            if (confirm('¿Estás seguro de que quieres eliminar todos los jugadores de la base de datos?')) {
+                localStorage.removeItem('playersDatabase');
+                updatePlayersDbStatus();
+                alert('✅ Base de datos limpiada');
+            }
+        }
+
+        // Buscar jugadores que coincidan con el texto
+        function searchPlayers(query) {
+            if (!query || query.length < 2) return [];
+
+            const players = getPlayersDatabase();
+            const lowerQuery = query.toLowerCase();
+
+            return players.filter(player =>
+                player.name.toLowerCase().includes(lowerQuery)
+            );
+        }
+
+        // Mostrar lista de autocompletado
+        function showAutocomplete(inputElement, playerNumber, matches) {
+            const listElement = document.getElementById(`autocomplete${playerNumber}`);
+
+            if (matches.length === 0) {
+                listElement.classList.remove('active');
+                return;
+            }
+
+            listElement.innerHTML = '';
+            matches.forEach(player => {
+                const item = document.createElement('div');
+                item.className = 'autocomplete-item';
+                item.innerHTML = `
+                    <span>${player.name}</span>
+                    <span class="flag-code">${player.flag}</span>
+                    ${player.country ? `<span class="country">(${player.country})</span>` : ''}
+                `;
+
+                // Usar mousedown en lugar de click para que se ejecute antes del blur
+                item.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    selectPlayer(inputElement, playerNumber, player);
+                });
+
+                listElement.appendChild(item);
+            });
+
+            listElement.classList.add('active');
+        }
+
+        // Ocultar lista de autocompletado
+        function hideAutocomplete(playerNumber) {
+            setTimeout(() => {
+                const listElement = document.getElementById(`autocomplete${playerNumber}`);
+                if (listElement) {
+                    listElement.classList.remove('active');
+                }
+            }, 200);
+        }
+
+        // Seleccionar un jugador del autocompletado
+        function selectPlayer(inputElement, playerNumber, player) {
+            inputElement.value = player.name;
+
+            // Actualizar el campo de bandera correspondiente
+            let flagInputId;
+            if (inputElement.id === 'player1Name') {
+                flagInputId = 'player1Flag';
+            } else if (inputElement.id === 'player2Name') {
+                flagInputId = 'player2Flag';
+            } else if (inputElement.id === 'teamsCurrentPlayer1') {
+                flagInputId = 'teamsCurrentFlag1';
+            } else if (inputElement.id === 'teamsCurrentPlayer2') {
+                flagInputId = 'teamsCurrentFlag2';
+            }
+
+            if (flagInputId) {
+                const flagInput = document.getElementById(flagInputId);
+                if (flagInput) {
+                    flagInput.value = player.flag;
+                }
+            }
+
+            // Actualizar datos
+            updateData();
+
+            // Ocultar lista
+            hideAutocomplete(playerNumber);
+        }
+
+        // Manejar input en campo de autocompletado
+        function handleAutocomplete(inputElement, playerNumber) {
+            const query = inputElement.value;
+            const matches = searchPlayers(query);
+            showAutocomplete(inputElement, playerNumber, matches);
+        }
+
+        // Manejar focus para mostrar todos los jugadores
+        function handleAutocompleteFocus(inputElement, playerNumber) {
+            const players = getPlayersDatabase();
+            if (players.length > 0 && !inputElement.value) {
+                showAutocomplete(inputElement, playerNumber, players);
+            }
+        }
+
+        // Inicializar estado de la base de datos al cargar
+        updatePlayersDbStatus();
     </script>
 </body>
 </html>

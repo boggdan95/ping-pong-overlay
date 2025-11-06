@@ -23,34 +23,45 @@ Este proyecto proporciona:
 - ✅ Controles rápidos por teclado (1, 2, S)
 - ✅ Almacenamiento local (localStorage)
 
-### ✨ NEW in v0.2.1
+### ✨ NEW in v1.0.0 (En desarrollo)
+- 📋 **Sistema de Autosugerencia**: Carga jugadores desde CSV para autocompletado rápido
+- 🎮 **Modalidades de Juego**: Individual (1v1), Dobles (2v2), Equipos
+- 🏆 **Pantalla de Ganador**: Overlay automático al ganar el partido
+- ⚙️ **Configuración de Sets**: Mejor de 3, 5 o 7 sets
+- ✏️ **Edición Manual**: Click en puntos/sets para corregir errores
+- 📊 **Historial de Sets**: Visualización completa de sets jugados
+
+### ✨ Features v0.3.x
 - 🎬 **Animaciones**: Efectos visuales al anotar puntos, ganar sets y cambiar servicio
+- 🎨 **Sistema de Temas**: 6 temas predefinidos para el scoreboard
 - 🎮 **Panel de Control Mejorado**: Interfaz con 2 tabs (Partido/Configuración)
 - 👁️ **Toggle de Visibilidad**: Oculta el overlay mientras configuras
 - 🖼️ **Sistema de Logo**: Sube logos que se adaptan automáticamente
 - 📱 **Diseño Responsive**: Panel compacto para usar en cuarto de pantalla
-- 🎨 **Botones Grandes**: Controles optimizados para uso en vivo
 
 ## 📁 Estructura del Proyecto
 
 ```
 ping-pong-overlay/
-├── 📄 LEEME.txt            # ⭐ Instrucciones rápidas (empieza aquí)
-├── 🌐 hub.html             # ⭐ Página de inicio con botones
-├── 🖥️ index.html           # Overlay principal (capturar en OBS)
-├── 🎮 control.html         # Panel de control
-├── docs/                   # Documentación técnica y guías
-│   ├── GUIA_OBS.md        # Guía completa de OBS
-│   ├── DESCARGAR.txt      # Guía de descarga
-│   ├── PROMPT.md          # Guía para desarrolladores
-│   ├── ROADMAP_v0.3.0.md  # Roadmap de desarrollo
-│   ├── SETUP_GITHUB.md    # Configuración de GitHub
-│   └── START.md           # Guía de inicio rápido
-├── CLAUDE.md              # Guía para Claude Code AI
-├── CONTRIBUTING.md        # Guía de contribución
-├── LICENSE                # Licencia MIT
-├── package.json           # Metadata del proyecto
-└── README.md              # Este archivo
+├── 📄 LEEME.txt               # ⭐ Instrucciones rápidas (empieza aquí)
+├── 🌐 hub.html                # ⭐ Página de inicio con botones
+├── 🖥️ index.html              # Overlay principal (capturar en OBS)
+├── 🎮 control.html            # Panel de control
+├── 🗑️ clear-storage.html     # Utilidad para limpiar localStorage
+├── 📋 jugadores-ejemplo.csv   # Ejemplo de CSV para autosugerencia
+├── docs/                      # Documentación técnica y guías
+│   ├── GUIA_OBS.md           # Guía completa de OBS
+│   ├── DESCARGAR.txt         # Guía de descarga
+│   ├── AUTOSUGERENCIA.md     # ⭐ Guía del sistema de autosugerencia
+│   ├── ROADMAP_v1.0.0.md     # Roadmap actual
+│   ├── SETUP_GITHUB.md       # Configuración de GitHub
+│   └── START.md              # Guía de inicio rápido
+├── logos/                     # Logos para el overlay
+├── CLAUDE.md                  # Guía para Claude Code AI
+├── CONTRIBUTING.md            # Guía de contribución
+├── LICENSE                    # Licencia MIT
+├── package.json               # Metadata del proyecto
+└── README.md                  # Este archivo
 ```
 
 ## 🚀 Cómo Usar en OBS
@@ -173,14 +184,21 @@ R: Ajusta el Chroma Key manualmente en OBS. Puede variar según iluminación.
 **P: Quiero cambiar el diseño completamente**
 R: Edita el CSS en la sección `<style>` de `index.html`.
 
-## 📋 Roadmap
+## 📋 Roadmap v1.0.0
 
+### Completado ✅
+- [x] Sistema de autosugerencia desde CSV
+- [x] Soporte para múltiples modos (individual, dobles, equipos)
+- [x] Animaciones y transiciones
+- [x] Sistema de temas visuales
+- [x] Historial de sets
+- [x] Pantalla de ganador automática
+
+### Pendiente
 - [ ] Base de datos para guardar partidos
-- [ ] Historial de puntos
-- [ ] Animaciones de transición
-- [ ] Soporte para múltiples modos (individual, dobles)
-- [ ] Exportar resultados
+- [ ] Exportar resultados en múltiples formatos
 - [ ] API REST para control remoto
+- [ ] Sistema de estadísticas avanzadas
 
 ## 📄 Licencia
 
@@ -387,9 +405,11 @@ Actualmente no, pero puedes abrir en navegadores diferentes.
 Para más información, consulta la documentación en la carpeta `docs/`:
 
 - **[Guía de Inicio Rápido](docs/START.md)** - Instrucciones rápidas para comenzar
+- **[Sistema de Autosugerencia](docs/AUTOSUGERENCIA.md)** - ⭐ Cómo usar el autocompletado de jugadores
+- **[Guía Completa de OBS](docs/GUIA_OBS.md)** - Configuración detallada para streaming
 - **[Configuración de GitHub](docs/SETUP_GITHUB.md)** - Cómo configurar y desplegar con GitHub Pages
-- **[Guía para Desarrolladores](docs/PROMPT.md)** - Documentación técnica y estructura de código
 - **[Guía de Descarga](docs/DESCARGAR.txt)** - Instrucciones de descarga e instalación
+- **[Roadmap v1.0.0](docs/ROADMAP_v1.0.0.md)** - Plan de desarrollo actual
 
 ## 💝 Apoyo al Proyecto
 

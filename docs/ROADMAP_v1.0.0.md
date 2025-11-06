@@ -128,7 +128,11 @@ Lanzar la versión 1.0.0 del sistema de overlay de ping pong con funcionalidades
   - Individual (1v1) ✅
   - Dobles (2v2) ✅
   - Equipos (País vs País) ✅
-- ⏳ Feature 5: Sistema de autosugerencia desde CSV (pendiente)
+- ✅ Feature 5: Sistema de autosugerencia desde CSV completado
+  - Carga de CSV ✅
+  - Autocompletado inteligente ✅
+  - Persistencia en localStorage ✅
+  - Documentación completa ✅
 - ⏳ Feature 6: Release v1.0.0 (pendiente)
 
 ## Notas técnicas importantes
