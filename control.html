@@ -1176,6 +1176,19 @@
                     <div id="playersDbStatus" style="margin-top: 8px; font-size: 11px; color: #667eea; text-align: center; display: none;">
                         ✅ <span id="playersCount">0</span> jugadores cargados
                     </div>
+                    <div id="autocompleteToggleContainer" style="margin-top: 8px; display: none;">
+                        <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 6px;">
+                            Autocompletado
+                        </div>
+                        <div class="logo-options">
+                            <button class="btn-logo-option active" id="autocompleteOn" onclick="setAutocompleteEnabled(true)">
+                                ✅ Activado
+                            </button>
+                            <button class="btn-logo-option" id="autocompleteOff" onclick="setAutocompleteEnabled(false)">
+                                🚫 Desactivado
+                            </button>
+                        </div>
+                    </div>
                     <button id="clearPlayersDb" onclick="clearPlayersDatabase()" style="width: 100%; padding: 6px; margin-top: 6px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; display: none;">
                         🗑️ Limpiar Base de Datos
                     </button>
@@ -2754,6 +2767,28 @@
 
         // ==================== SISTEMA DE AUTOSUGERENCIA ====================
 
+        // Estado del autocompletado
+        function isAutocompleteEnabled() {
+            const enabled = localStorage.getItem('autocompleteEnabled');
+            return enabled === null ? true : enabled === 'true';
+        }
+
+        function setAutocompleteEnabled(enabled) {
+            localStorage.setItem('autocompleteEnabled', enabled.toString());
+
+            // Actualizar UI de botones
+            const onBtn = document.getElementById('autocompleteOn');
+            const offBtn = document.getElementById('autocompleteOff');
+
+            if (enabled) {
+                onBtn.classList.add('active');
+                offBtn.classList.remove('active');
+            } else {
+                onBtn.classList.remove('active');
+                offBtn.classList.add('active');
+            }
+        }
+
         // Base de datos de jugadores en localStorage
         function getPlayersDatabase() {
             const data = localStorage.getItem('playersDatabase');
@@ -2770,14 +2805,21 @@
             const statusDiv = document.getElementById('playersDbStatus');
             const clearBtn = document.getElementById('clearPlayersDb');
             const countSpan = document.getElementById('playersCount');
+            const toggleContainer = document.getElementById('autocompleteToggleContainer');
 
             if (players.length > 0) {
                 statusDiv.style.display = 'block';
                 clearBtn.style.display = 'block';
+                toggleContainer.style.display = 'block';
                 countSpan.textContent = players.length;
+
+                // Actualizar estado de botones toggle
+                const enabled = isAutocompleteEnabled();
+                setAutocompleteEnabled(enabled);
             } else {
                 statusDiv.style.display = 'none';
                 clearBtn.style.display = 'none';
+                toggleContainer.style.display = 'none';
             }
         }
 
@@ -2913,6 +2955,11 @@
 
         // Manejar input en campo de autocompletado
         function handleAutocomplete(inputElement, playerNumber) {
+            // Verificar si el autocompletado está habilitado
+            if (!isAutocompleteEnabled()) {
+                return;
+            }
+
             const query = inputElement.value;
             const matches = searchPlayers(query);
             showAutocomplete(inputElement, playerNumber, matches);
@@ -2920,6 +2967,11 @@
 
         // Manejar focus para mostrar todos los jugadores
         function handleAutocompleteFocus(inputElement, playerNumber) {
+            // Verificar si el autocompletado está habilitado
+            if (!isAutocompleteEnabled()) {
+                return;
+            }
+
             const players = getPlayersDatabase();
             if (players.length > 0 && !inputElement.value) {
                 showAutocomplete(inputElement, playerNumber, players);
