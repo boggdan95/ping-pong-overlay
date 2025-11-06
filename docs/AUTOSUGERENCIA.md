@@ -10,6 +10,7 @@ El sistema de autosugerencia permite cargar una base de datos de jugadores desde
 - ✅ Autocompletado inteligente al escribir
 - ✅ Búsqueda por nombre (mínimo 2 caracteres)
 - ✅ Autocompletado de nombre + bandera automático
+- ✅ Toggle para activar/desactivar el autocompletado
 - ✅ Persistencia en localStorage (los datos se mantienen entre sesiones)
 - ✅ Funciona en modo Individual y modo Equipos
 - ✅ Lista desplegable al hacer click en el campo vacío
@@ -60,7 +61,22 @@ Carlos Rodríguez,MEX,México
 3. Scroll para ver todos
 4. Click en el jugador deseado
 
-### 4. Gestionar la Base de Datos
+### 4. Activar/Desactivar Autocompletado
+
+Una vez que tengas jugadores cargados, puedes controlar si el autocompletado está activo:
+
+1. En la sección **"📋 Base de Datos de Jugadores"** verás los botones:
+   - **✅ Activado** - El autocompletado funciona normalmente
+   - **🚫 Desactivado** - No se muestran sugerencias
+
+2. Click en el botón deseado para cambiar el estado
+3. El estado se guarda automáticamente y persiste entre sesiones
+
+**Casos de uso:**
+- **Activado**: Ideal para operación rápida con jugadores conocidos
+- **Desactivado**: Útil cuando prefieres escribir manualmente o evitar distracciones
+
+### 5. Gestionar la Base de Datos
 
 #### Ver estado
 En la sección **"📋 Base de Datos de Jugadores"** verás:
