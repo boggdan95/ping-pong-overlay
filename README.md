@@ -229,6 +229,92 @@ Actualmente no, pero puedes abrir en navegadores diferentes.
 
 ## 📋 Changelog
 
+### v1.0.0 (2025-11-06) 🎉
+**🚀 Release Oficial - Sistema Completo de Overlay Profesional**
+
+#### Nuevas Funcionalidades Mayores
+
+**📋 Sistema de Autosugerencia desde CSV (Feature 5)**
+- ✅ Carga de jugadores desde archivo CSV (formato: nombre,bandera,país)
+- ✅ Autocompletado inteligente al escribir (mínimo 2 caracteres)
+- ✅ Dropdown con todos los jugadores al hacer focus
+- ✅ Toggle On/Off para activar/desactivar según necesidad
+- ✅ Relleno automático de nombre + bandera
+- ✅ Persistencia en localStorage entre sesiones
+- ✅ Compatible con modo Individual y Equipos
+- ✅ Archivo de ejemplo incluido: `jugadores-ejemplo.csv`
+- 📚 Documentación: `docs/AUTOSUGERENCIA.md`
+
+**🎮 Modalidades de Juego Completas (Feature 4)**
+- ✅ Individual (1v1) - Modo clásico
+- ✅ Dobles (2v2) - Parejas con formato apellidos
+- ✅ Equipos (País vs País) - Tracking de partidos individuales + puntos por país
+
+**🏆 Pantalla de Ganador Automática (Feature 3)**
+- ✅ Detección automática al alcanzar sets necesarios
+- ✅ Modal de confirmación antes de declarar ganador
+- ✅ Overlay fullscreen con nombre, bandera y score final
+- ✅ Animación de confetti (configurable)
+- ✅ Selector de emoji (🏆, 🥇, 🏅, ⭐, 👑)
+- ✅ Flujo post-ganador: Ganador (7s) → Historial (5s) → Diálogo ocultar overlay
+
+**⚙️ Configuración de Sets (Feature 2)**
+- ✅ Mejor de 3 (primero en ganar 2)
+- ✅ Mejor de 5 (primero en ganar 3)
+- ✅ Mejor de 7 (primero en ganar 4)
+- ✅ Detección automática de ganador
+
+**✏️ Edición Manual de Marcadores (Feature 1)**
+- ✅ Click en puntos/sets para editar directamente
+- ✅ Input temporal con validación
+- ✅ Sincronización automática con overlay
+
+#### Bug Fixes Críticos
+
+**🔧 Alternancia Automática de Servicio Entre Sets**
+- ❌ Problema: Al ganar set, sistema no alternaba servicio automáticamente
+- ✅ Solución: Sistema de tracking `firstServerHistory[]`
+- ✅ Ahora alterna correctamente: Set 1 (J1) → Set 2 (J2) → Set 3 (J1)
+- ✅ Respeta regla ITTF de alternancia oficial
+- 📚 Documentación completa: `docs/BUG_FIX_SERVICIO_ENTRE_SETS.md`
+
+**🔒 Reset Automático al Cambiar Modo de Juego**
+- ❌ Problema: Se perdían datos sin confirmación
+- ✅ Solución: Modal de confirmación con opción de cancelar
+- ✅ Reset completo de estado: puntos, sets, servicio, historial
+
+#### Mejoras de UX/DX
+
+- ✅ Flujo post-ganador profesional (Ganador → Historial → Preparar siguiente)
+- ✅ Confirmaciones antes de acciones destructivas
+- ✅ Toggle para habilitar/deshabilitar autocompletado
+- ✅ Plan de testing exhaustivo (90+ tests documentados)
+- ✅ Limpieza del repositorio (archivos obsoletos eliminados)
+
+#### Documentación Nueva
+
+- 📚 `docs/AUTOSUGERENCIA.md` - Guía completa del sistema de autocompletado
+- 📚 `docs/TESTING_v1.0.0.md` - Plan de testing con 90+ tests
+- 📚 `docs/BUG_FIX_SERVICIO_ENTRE_SETS.md` - Análisis del bug crítico
+- 📚 `jugadores-ejemplo.csv` - 15 jugadores latinoamericanos de ejemplo
+
+#### Archivos del Release
+
+**Total de líneas agregadas:** ~1,200
+- `control.html`: ~350 líneas nuevas
+- Documentación: ~850 líneas
+- 6 commits en esta versión
+
+#### Estado Final
+
+- ✅ Todas las features planificadas (6/6 - 100%)
+- ✅ 0 bugs críticos conocidos
+- ✅ Documentación exhaustiva
+- ✅ Listo para producción
+- ✅ Compatible con OBS Studio
+
+---
+
 ### v0.3.4 (2025-01-24)
 **🚨 Selección Manual del Servidor Inicial - Hotfix Crítico**
 
