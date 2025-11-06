@@ -2578,16 +2578,27 @@
 
             updateDisplay();
 
-            // Ocultar automáticamente después de 7 segundos y cambiar a historial
+            // Flujo post-ganador:
+            // 1. Mostrar pantalla de ganador (7 segundos)
+            // 2. Cambiar a historial completo en overlay
+            // 3. Preguntar si desea ocultar el overlay
             setTimeout(() => {
                 if (gameState.winner && gameState.winner.showOverlay) {
                     gameState.winner.showOverlay = false;
 
-                    // Cambiar a la pestaña de configuración (que muestra el historial)
-                    switchTab('config');
-
-                    // Actualizar después del cambio de tab
+                    // Mostrar historial en el overlay
+                    gameState.showHistoryOverlay = true;
                     updateDisplay();
+
+                    // Después de 5 segundos mostrando historial, preguntar si ocultar overlay
+                    setTimeout(() => {
+                        const hideOverlay = confirm('¿Deseas ocultar el overlay para preparar el siguiente juego?\n\n(Puedes volver a mostrarlo con el botón "👁️ Mostrar Overlay")');
+
+                        if (hideOverlay) {
+                            gameState.overlayVisible = false;
+                            updateDisplay();
+                        }
+                    }, 5000);
                 }
             }, 7000);
         }
