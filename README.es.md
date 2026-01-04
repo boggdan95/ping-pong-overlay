@@ -74,29 +74,37 @@ ping-pong-overlay/
 
 ### ⚡ Configuración Rápida (5 minutos)
 
-1. **En OBS Studio:**
-   - Agrega una fuente → **Browser** (Fuente de Navegador)
-   - ✅ Marca "Local file"
-   - Selecciona `index.html` de este proyecto
-   - Width: 1920, Height: 1080
-   - Click OK
+1. **Abre ambos archivos en el MISMO navegador:**
+   - Abre `index.html` en Chrome/Edge/Firefox (este es el overlay)
+   - Abre `control.html` en otra pestaña del **mismo navegador**
+   - **Importante:** Ambos deben estar en el mismo navegador para que sincronicen
 
-2. **Abre el Panel de Control:**
-   - Abre `control.html` en tu navegador (Chrome/Edge/Firefox)
-   - Configura nombres, banderas, etc.
-   - Los cambios se reflejan **INSTANTÁNEAMENTE** en OBS
+2. **En OBS Studio:**
+   - Agrega una fuente → **Captura de Ventana** (Window Capture)
+   - Selecciona la ventana del navegador que muestra `index.html`
+   - Aplica filtro **Chroma Key** (fondo verde o azul)
+   - En control.html, configura el color de fondo que coincida con tu chroma key
 
 3. **Durante el partido:**
    - Usa el panel de control para cambiar puntajes
+   - Los cambios se reflejan **INSTANTÁNEAMENTE** en el overlay
    - O usa atajos de teclado: `1` = +1 J1, `2` = +1 J2, `S` = Cambiar servicio
+
+### ⚠️ ¿Por qué NO usar Browser Source?
+
+**Browser Source NO sincroniza** con tu panel de control porque:
+- El Browser Source de OBS usa un navegador Chromium integrado (CEF)
+- Este es un **navegador separado** de Chrome/Edge/Firefox de tu sistema
+- localStorage **NO se comparte** entre navegadores diferentes
+- Resultado: Los cambios en control.html no aparecerán en OBS
+
+**Método correcto:** Usar **Captura de Ventana** + **Chroma Key** para capturar tu navegador del sistema donde ambos archivos comparten localStorage.
 
 ### 📚 Guía Completa
 
-**⚠️ IMPORTANTE:** NO uses "Captura de Ventana". Usa "Browser Source" para mejor calidad y transparencia nativa.
-
 👉 **[Guía Completa de OBS](docs/GUIA_OBS.md)** - Incluye:
-- Configuración paso a paso con screenshots conceptuales
-- Uso de chroma key (opcional)
+- Configuración paso a paso con screenshots
+- Configuración de chroma key para transparencia
 - Workflow para 1 o 2 pantallas
 - Troubleshooting común
 - Tips profesionales
@@ -160,17 +168,25 @@ Los datos se guardan automáticamente en `localStorage` del navegador. Esto sign
 
 ## 📝 Ejemplo de Uso en OBS
 
-1. Abre OBS Studio
-2. Crea nueva escena
-3. Añade "Fuente de navegador" o "Ventana"
-4. Si usas navegador local:
-   - URL: `file:///C:/ruta/a/index.html` (Windows)
-   - URL: `file:///Users/usuario/ruta/a/index.html` (Mac)
-5. Resolución: 1920x1080 (ajusta según necesidad)
-6. Aplica Chroma Key (verde o azul)
-7. Ajusta posición y tamaño
+1. **En tu navegador (Chrome/Edge/Firefox):**
+   - Abre `index.html` (el overlay)
+   - Abre `control.html` en otra pestaña (¡mismo navegador!)
+   - En control.html → Configuración → Pon fondo Verde o Azul
 
-En otra ventana, abre `control.html` para controlar el marcador mientras transmites.
+2. **En OBS Studio:**
+   - Crea nueva escena
+   - Añade fuente → **Captura de Ventana**
+   - Selecciona la ventana del navegador con `index.html`
+   - Click derecho en la fuente → **Filtros** → Añade **Chroma Key**
+   - Configura: Key Color = Verde (o Azul), ajusta Similarity/Smoothness
+
+3. **Posiciona el overlay:**
+   - Redimensiona y posiciona el marcador en tu escena
+   - El chroma key elimina el fondo, dejando solo el marcador
+
+4. **Controla el partido:**
+   - Usa la pestaña `control.html` para actualizar puntajes
+   - Los cambios aparecen instantáneamente en OBS
 
 ## 🐛 Troubleshooting
 

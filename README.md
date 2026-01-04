@@ -75,29 +75,37 @@ ping-pong-overlay/
 
 ### ⚡ Quick Setup (5 minutes)
 
-1. **In OBS Studio:**
-   - Add a source → **Browser** (Browser Source)
-   - ✅ Check "Local file"
-   - Select `index.html` from this project
-   - Width: 1920, Height: 1080
-   - Click OK
+1. **Open both files in the SAME browser:**
+   - Open `index.html` in Chrome/Edge/Firefox (this is the overlay)
+   - Open `control.html` in another tab of the **same browser**
+   - **Important:** Both must be in the same browser for sync to work
 
-2. **Open the Control Panel:**
-   - Open `control.html` in your browser (Chrome/Edge/Firefox)
-   - Configure names, flags, etc.
-   - Changes reflect **INSTANTLY** in OBS
+2. **In OBS Studio:**
+   - Add a source → **Window Capture**
+   - Select the browser window showing `index.html`
+   - Apply **Chroma Key** filter (green or blue background)
+   - In control.html, set the background color to match your chroma key
 
 3. **During the match:**
    - Use the control panel to change scores
+   - Changes reflect **INSTANTLY** in the overlay
    - Or use keyboard shortcuts: `1` = +1 P1, `2` = +1 P2, `S` = Change service
+
+### ⚠️ Why NOT Browser Source?
+
+**Browser Source does NOT sync** with your control panel because:
+- OBS Browser Source uses an embedded Chromium browser (CEF)
+- This is a **separate browser** from Chrome/Edge/Firefox on your system
+- localStorage is **not shared** between different browsers
+- Result: Changes in control.html won't appear in OBS
+
+**Correct method:** Use **Window Capture** + **Chroma Key** to capture your system browser where both files share localStorage.
 
 ### 📚 Complete Guide
 
-**⚠️ IMPORTANT:** DON'T use "Window Capture". Use "Browser Source" for better quality and native transparency.
-
 👉 **[Complete OBS Guide](docs/GUIA_OBS.md)** (Spanish) - Includes:
-- Step-by-step configuration with conceptual screenshots
-- Chroma key usage (optional)
+- Step-by-step configuration with screenshots
+- Chroma key setup for transparency
 - Workflow for 1 or 2 screens
 - Common troubleshooting
 - Professional tips
@@ -161,17 +169,25 @@ Data is automatically saved in the browser's `localStorage`. This means:
 
 ## 📝 OBS Usage Example
 
-1. Open OBS Studio
-2. Create new scene
-3. Add "Browser source" or "Window"
-4. If using local browser:
-   - URL: `file:///C:/path/to/index.html` (Windows)
-   - URL: `file:///Users/user/path/to/index.html` (Mac)
-5. Resolution: 1920x1080 (adjust as needed)
-6. Apply Chroma Key (green or blue)
-7. Adjust position and size
+1. **In your browser (Chrome/Edge/Firefox):**
+   - Open `index.html` (the overlay)
+   - Open `control.html` in another tab (same browser!)
+   - In control.html → Settings → Set background to Green or Blue
 
-In another window, open `control.html` to control the scoreboard while streaming.
+2. **In OBS Studio:**
+   - Create new scene
+   - Add source → **Window Capture**
+   - Select the browser window with `index.html`
+   - Right-click source → **Filters** → Add **Chroma Key**
+   - Configure: Key Color = Green (or Blue), adjust Similarity/Smoothness
+
+3. **Position the overlay:**
+   - Resize and position the scoreboard in your scene
+   - The chroma key removes the background, leaving only the scoreboard
+
+4. **Control the match:**
+   - Use `control.html` tab to update scores
+   - Changes appear instantly in OBS
 
 ## 🐛 Troubleshooting
 

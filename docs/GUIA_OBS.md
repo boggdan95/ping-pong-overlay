@@ -1,136 +1,93 @@
 # 🎥 Guía Completa: Usar Ping Pong Overlay en OBS
 
 ## 📋 Índice
-1. [Método Recomendado: Browser Source](#método-recomendado-browser-source)
-2. [Configuración Paso a Paso](#configuración-paso-a-paso)
-3. [Usar Chroma Key (Fondo Verde)](#usar-chroma-key-fondo-verde)
-4. [Workflow con Una Sola Pantalla](#workflow-con-una-sola-pantalla)
-5. [Workflow con Dos Pantallas](#workflow-con-dos-pantallas)
-6. [Atajos de Teclado](#atajos-de-teclado)
-7. [Troubleshooting](#troubleshooting)
+1. [Método Recomendado: Captura de Ventana](#método-recomendado-captura-de-ventana)
+2. [¿Por qué NO usar Browser Source?](#por-qué-no-usar-browser-source)
+3. [Configuración Paso a Paso](#configuración-paso-a-paso)
+4. [Usar Chroma Key (Obligatorio)](#usar-chroma-key-obligatorio)
+5. [Workflow con Una Sola Pantalla](#workflow-con-una-sola-pantalla)
+6. [Workflow con Dos Pantallas](#workflow-con-dos-pantallas)
+7. [Atajos de Teclado](#atajos-de-teclado)
+8. [Troubleshooting](#troubleshooting)
 
 ---
 
-## 🎯 Método Recomendado: Browser Source
+## 🎯 Método Recomendado: Captura de Ventana
 
-### ¿Por qué NO usar Captura de Ventana?
-❌ **NO recomendado:**
-- Captura de Ventana (Window Capture)
-- Captura de Pantalla (Display Capture)
-
+### Resumen
 ✅ **SÍ recomendado:**
-- **Browser Source** (Fuente de Navegador)
+- **Captura de Ventana** (Window Capture) + Chroma Key
 
-### Ventajas del Browser Source:
-- ✅ Transparencia nativa (sin chroma key necesario)
-- ✅ Mejor rendimiento
-- ✅ Actualización en tiempo real
-- ✅ No necesita ventana visible
-- ✅ Calidad perfecta sin pérdida
+❌ **NO funciona para sincronización:**
+- Browser Source (Fuente de Navegador)
+
+### ¿Por qué Captura de Ventana?
+- ✅ **Sincronización real** entre overlay y panel de control
+- ✅ Ambos archivos comparten localStorage en el mismo navegador
+- ✅ Cambios instantáneos desde control.html
+- ✅ Funciona 100% con el sistema de comunicación del overlay
+
+---
+
+## ⚠️ ¿Por qué NO usar Browser Source?
+
+### El Problema Técnico
+El **Browser Source de OBS** usa un navegador Chromium integrado (CEF - Chromium Embedded Framework) que es **completamente independiente** de tu navegador del sistema.
+
+**Esto significa:**
+- `index.html` en Browser Source = navegador CEF de OBS
+- `control.html` en Chrome/Edge/Firefox = tu navegador del sistema
+- localStorage **NO se comparte** entre navegadores diferentes
+- **Resultado:** Los cambios en control.html **NUNCA** aparecerán en el overlay de OBS
+
+### La Solución
+Usar ambos archivos (`index.html` y `control.html`) en el **mismo navegador** de tu sistema, y capturar esa ventana con **Window Capture** + **Chroma Key**.
 
 ---
 
 ## 🔧 Configuración Paso a Paso
 
-### Opción A: Archivos Locales (Recomendado)
+### Paso 1: Preparar el Navegador
 
-#### 1️⃣ Agregar el Overlay a OBS
+1. **Abre `index.html` en tu navegador** (Chrome/Edge/Firefox)
+   - Haz doble clic en `index.html`
+   - O desde el navegador: File → Open File → index.html
+
+2. **Abre `control.html` en otra pestaña del MISMO navegador**
+   - Haz doble clic en `control.html`
+   - **IMPORTANTE:** Debe ser el mismo navegador, no otro diferente
+
+3. **Configura el fondo para Chroma Key:**
+   - En `control.html`, ve a la pestaña **Configuración**
+   - En **COLOR FONDO**, selecciona:
+     - 🟢 **Verde** (recomendado)
+     - 🔵 Azul (alternativa)
+     - 🟣 Magenta (si tu video tiene verde/azul)
+
+4. **Deja la ventana de `index.html` visible:**
+   - Cambia a la pestaña de `index.html`
+   - Esta es la ventana que capturarás en OBS
+
+### Paso 2: Agregar Captura de Ventana en OBS
 
 1. **Abre OBS Studio**
 2. En la sección "Fuentes" (Sources), click en **+**
-3. Selecciona **"Browser"** (Fuente de Navegador)
+3. Selecciona **"Window Capture"** (Captura de Ventana)
 4. Dale un nombre: `Ping Pong Overlay`
-5. Configura así:
-
-**Configuración del Browser Source:**
-```
-✅ Local file: MARCADO
-   Busca y selecciona: index.html
-
-Width: 1920
-Height: 1080
-
-✅ Shutdown source when not visible: MARCADO
-✅ Refresh browser when scene becomes active: DESMARCADO
-
-Custom CSS: (dejar vacío)
-```
-
+5. Configura:
+   - **Window:** Selecciona la ventana del navegador con `index.html`
+   - **Capture Method:** Automatic (o Windows Graphics Capture)
 6. Click **OK**
 
-#### 2️⃣ Ajustar Posición y Tamaño
+### Paso 3: Aplicar Chroma Key
 
-1. El overlay aparecerá en el canvas
-2. Arrastra para posicionar
-3. Usa las esquinas para redimensionar si es necesario
-4. **Recomendación:** Déjalo centrado y a tamaño completo
-
-#### 3️⃣ Abrir el Panel de Control
-
-1. **Abre `control.html` en tu navegador** (Chrome/Edge/Firefox)
-   - Haz doble clic en `control.html`
-   - O desde el navegador: File → Open File → control.html
-
-2. **Posiciona la ventana del panel:**
-   - Si tienes 2 pantallas: En la segunda pantalla
-   - Si tienes 1 pantalla: En 1/4 de la pantalla (lado derecho o abajo)
-
-3. **El panel de control y el overlay están sincronizados:**
-   - Los cambios en el panel se reflejan INSTANTÁNEAMENTE en OBS
-   - Los atajos de teclado en el overlay actualizan el panel
-
----
-
-### Opción B: Archivos en la Web (GitHub Pages)
-
-Si subes el proyecto a GitHub Pages:
-
-1. **Configuración del Browser Source:**
-```
-❌ Local file: DESMARCADO
-   URL: https://TU-USUARIO.github.io/ping-pong-overlay/index.html
-
-Width: 1920
-Height: 1080
-
-✅ Shutdown source when not visible: MARCADO
-✅ Refresh browser when scene becomes active: DESMARCADO
-```
-
-2. **Panel de control:**
-   - URL: https://TU-USUARIO.github.io/ping-pong-overlay/control.html
-   - Ábrelo en una pestaña del navegador
-
----
-
-## 🟢 Usar Chroma Key (Fondo Verde)
-
-### ¿Cuándo usar Chroma Key?
-
-**NO es necesario** si usas Browser Source con fondo transparente, PERO puedes usarlo si:
-- Quieres superponer el overlay sobre video
-- Necesitas mayor control sobre el fondo
-- Quieres experimentar con composición avanzada
-
-### Configuración del Chroma Key en OBS
-
-#### 1️⃣ Configurar Fondo en el Panel de Control
-
-1. Abre `control.html`
-2. En la sección **COLOR FONDO**, selecciona:
-   - 🟢 Verde (recomendado para chroma)
-   - 🔵 Azul (alternativa)
-   - 🟣 Magenta (para fondos verdes/azules en video)
-
-#### 2️⃣ Agregar Filtro Chroma Key en OBS
-
-1. **Haz clic derecho** en el Browser Source "Ping Pong Overlay"
-2. **Filters** → **+** (en "Effect Filters")
-3. Selecciona **"Chroma Key"**
+1. **Click derecho** en la fuente "Ping Pong Overlay"
+2. Selecciona **Filters** (Filtros)
+3. En "Effect Filters", click **+** y selecciona **Chroma Key**
 4. Configura:
 
 ```
-Key Color Type: Green (o el color que elegiste)
+Key Color Type: Green (o el color que elegiste en control.html)
 Similarity: 400-500
 Smoothness: 80-100
 Key Color Spill Reduction: 100
@@ -139,6 +96,43 @@ Key Color Spill Reduction: 100
 ```
 
 5. Ajusta hasta que solo el scoreboard sea visible
+6. Click **Close**
+
+### Paso 4: Posicionar el Overlay
+
+1. Arrastra el overlay a la posición deseada
+2. Usa las esquinas para redimensionar (mantén Shift para proporciones)
+3. **Recomendación:** Parte inferior o superior de la pantalla
+
+---
+
+## 🟢 Usar Chroma Key (Obligatorio)
+
+### ¿Por qué es obligatorio?
+Al usar Captura de Ventana, necesitas Chroma Key para:
+- Eliminar el fondo del navegador
+- Dejar solo el scoreboard visible
+- Superponer sobre tu video de la mesa
+
+### Colores Disponibles en control.html
+
+| Color | Cuándo Usarlo |
+|-------|---------------|
+| 🟢 Verde | Recomendado para la mayoría de casos |
+| 🔵 Azul | Si tu video tiene elementos verdes |
+| 🟣 Magenta | Si tu video tiene verde Y azul |
+| ⚫ Transparente | Solo funciona con Browser Source (no sincroniza) |
+
+### Configuración Óptima del Chroma Key
+
+```
+Key Color Type: Green (o tu color elegido)
+Similarity: 400-500 (ajusta si hay bordes)
+Smoothness: 80-100 (suaviza bordes)
+Key Color Spill Reduction: 100
+```
+
+**Tip:** Si ves bordes del color de fondo, aumenta Similarity. Si desaparece parte del overlay, disminúyelo.
 
 ---
 
@@ -156,21 +150,25 @@ Key Color Spill Reduction: 100
 │  Overlay         │  Panel Control   │
 │  (index.html)    │  (control.html)  │
 │  Cuarto inferior │  Cuarto inferior │
+│  [CAPTURAR ESTA] │  [PARA CONTROL]  │
 │                  │                  │
 └──────────────────┴──────────────────┘
 ```
 
 ### Pasos:
 
-1. **OBS**: Pantalla completa superior (50%)
-2. **Navegador con overlay** (index.html): Cuarto inferior izquierdo (25%)
-3. **Navegador con panel** (control.html): Cuarto inferior derecho (25%)
+1. **Navegador**: Abre dos ventanas del mismo navegador (o usa pestañas)
+   - Ventana 1: `index.html` (overlay) - **Esta es la que capturas**
+   - Ventana 2: `control.html` (panel de control)
+2. **OBS**: Captura de Ventana de la ventana con `index.html`
+3. **Posiciona**: OBS arriba, ventanas del navegador abajo
 
 ### Uso durante el stream:
 
-**Opción 1: Usar Panel de Control**
-- Click en los botones +/- para puntos
+**Opción 1: Usar Panel de Control (Recomendado)**
+- Click en los botones +/- para puntos en `control.html`
 - Todo se actualiza en tiempo real en OBS
+- No necesitas cambiar de ventana
 
 **Opción 2: Usar Atajos de Teclado**
 - Con focus en `index.html` (overlay):
@@ -303,58 +301,65 @@ Key Color Spill Reduction: 100
 
 ### El overlay no se ve en OBS
 
-**Solución 1: Verificar la ruta del archivo**
-- Asegúrate que la ruta a `index.html` sea correcta
-- Usa ruta absoluta: `C:\Users\...\ping-pong-overlay\index.html`
+**Solución 1: Verificar la Captura de Ventana**
+- Asegúrate de haber seleccionado la ventana correcta del navegador
+- La ventana debe estar visible (no minimizada)
 
-**Solución 2: Refrescar el Browser Source**
-- Click derecho en la fuente → Interact
-- Presiona F5 para refrescar
-
-**Solución 3: Borrar caché del navegador**
-- OBS Settings → Advanced → Browser Source Hardware Acceleration
-- Desmarca y vuelve a marcar
+**Solución 2: Verificar el Chroma Key**
+- Si el fondo no desaparece, verifica que el color en control.html coincida con el filtro
+- Ajusta Similarity si hay problemas
 
 ### Los cambios no se actualizan en OBS
 
-**Causa**: localStorage no está sincronizando
+**Causa más común**: Navegadores diferentes
 
 **Solución:**
-1. Cierra `index.html` si lo tienes abierto en navegador
-2. El overlay SOLO debe estar en OBS (Browser Source)
-3. Usa `control.html` para hacer cambios
-4. Los cambios se verán INSTANTÁNEAMENTE en OBS
+1. Verifica que `index.html` y `control.html` estén en el **MISMO navegador**
+2. No uses Browser Source - usa Captura de Ventana
+3. Si usas pestañas, ambas deben estar en la misma ventana del navegador
+4. Prueba refrescando ambas pestañas (F5)
+
+**¿Por qué no sincroniza con Browser Source?**
+- El Browser Source de OBS es un navegador Chromium **separado**
+- No comparte localStorage con Chrome/Edge/Firefox
+- Esta es una limitación técnica, no un bug
 
 ### El chroma key no funciona bien
 
-**Problema**: Bordes verdes alrededor del scoreboard
+**Problema**: Bordes del color de fondo visibles
 
 **Solución:**
 1. Aumenta "Smoothness" a 100
 2. Aumenta "Similarity" a 500-600
 3. Activa "Key Color Spill Reduction" a 100
-4. Si persiste, usa fondo **transparente** en lugar de chroma
+4. Asegúrate que el color en control.html sea exactamente verde/azul puro
+
+**Problema**: El scoreboard desaparece parcialmente
+
+**Solución:**
+1. Reduce "Similarity" a 300-400
+2. Verifica que no haya elementos del mismo color en el scoreboard
 
 ### Los atajos de teclado no funcionan
 
-**Causa**: OBS no tiene foco en el Browser Source
+**Causa**: La ventana del navegador no tiene foco
 
 **Solución:**
-1. Click derecho en el Browser Source → **Interact**
-2. Se abrirá una ventana interactiva
-3. Click dentro de la ventana
-4. Ahora los atajos funcionarán
+1. Click en la ventana del navegador con `index.html`
+2. Ahora los atajos funcionarán
 
-**Alternativa:**
+**Alternativa (Recomendada):**
 - Usa `control.html` con el mouse
+- Es más práctico durante el stream
 - Los atajos de teclado son opcionales
 
 ### El overlay se ve pixelado
 
 **Solución:**
-1. Asegúrate que Width y Height sean 1920x1080
+1. Maximiza la ventana del navegador antes de capturar
 2. No escales el overlay demasiado en OBS
 3. Usa la resolución nativa del canvas
+4. En Chrome: Ctrl+0 para resetear zoom a 100%
 
 ---
 
@@ -365,7 +370,7 @@ Key Color Spill Reduction: 100
 ```
 Fuentes (de arriba hacia abajo):
 1. 🎥 Cámara Web (1920x1080)
-2. 🏓 Ping Pong Overlay (Browser Source)
+2. 🏓 Ping Pong Overlay (Window Capture + Chroma Key)
 3. 🎵 Audio/Mic (opcional)
 ```
 
@@ -377,13 +382,14 @@ Fuentes (de arriba hacia abajo):
    - Filtros: Color Correction (opcional)
 
 2. **Ping Pong Overlay:**
-   - Fuente: Browser → index.html
-   - Tamaño: 1200x400 (ajustado)
-   - Posición: Centrado abajo
-   - Fondo: Transparente (sin chroma key)
+   - Fuente: Window Capture → Ventana del navegador con index.html
+   - Filtro: Chroma Key (Verde)
+   - Tamaño: Ajustado según necesidad
+   - Posición: Centrado abajo o arriba
 
 3. **Panel de Control:**
-   - Abierto en navegador (fuera de OBS)
+   - `control.html` abierto en otra pestaña del MISMO navegador
+   - Configura fondo Verde para que coincida con el Chroma Key
    - Listo para actualizar puntajes
 
 ### Durante el Partido:
