@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control Panel</title>
+    <script src="i18n.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
@@ -817,19 +818,62 @@
             font-size: 10px;
         }
 
+        /* Language selector */
+        .language-selector {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .lang-btn {
+            padding: 4px 8px;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🏓 Control Panel</h1>
+        <div class="header-row">
+            <h1 style="margin-bottom: 0;">🏓 Control Panel</h1>
+            <div class="language-selector">
+                <button class="lang-btn" id="langEs" onclick="switchLanguage('es')">ES</button>
+                <button class="lang-btn" id="langEn" onclick="switchLanguage('en')">EN</button>
+            </div>
+        </div>
 
         <div class="main-layout">
             <!-- Tabs (lateral) -->
             <div class="tabs">
-                <button class="tab-button active" onclick="switchTab('match')" title="Partido">
+                <button class="tab-button active" onclick="switchTab('match')" data-i18n-title="match">
                     🏓
                 </button>
-                <button class="tab-button" onclick="switchTab('config')" title="Configuración">
+                <button class="tab-button" onclick="switchTab('config')" data-i18n-title="config">
                     ⚙️
                 </button>
             </div>
@@ -839,25 +883,25 @@
             <div id="matchTab" class="tab-content active">
                 <div class="match-header">
                     <button id="visibilityToggle" class="visibility-toggle" onclick="toggleOverlayVisibility()">
-                        👁️ Mostrar Overlay
+                        👁️ <span data-i18n="showOverlay">Mostrar Overlay</span>
                     </button>
                     <button class="btn-reset-match" onclick="resetAll()">
-                        🔄 Reset
+                        🔄 <span data-i18n="reset">Reset</span>
                     </button>
                 </div>
 
                 <div style="margin-bottom: 10px;">
                     <button id="historyOverlayToggle" class="visibility-toggle" onclick="toggleHistoryOverlay()" style="width: 100%;">
-                        📊 Mostrar Historial en Pantalla
+                        📊 <span data-i18n="showHistoryOnScreen">Mostrar Historial en Pantalla</span>
                     </button>
                 </div>
 
                 <!-- Botón Siguiente Partido (solo visible en modo equipos) -->
                 <div style="margin-bottom: 10px; display: none;" id="nextMatchButtonContainer">
                     <button class="visibility-toggle" onclick="nextMatch()" style="width: 100%; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
-                        ▶️ Siguiente Partido
+                        ▶️ <span data-i18n="nextMatch">Siguiente Partido</span>
                     </button>
-                    <div style="font-size: 10px; color: #666; text-align: center; margin-top: 4px;">
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-top: 4px;" data-i18n="nextMatchHint">
                         Resetea puntos y cambia jugadores en Configuración
                     </div>
                 </div>
@@ -870,13 +914,13 @@
                             <span class="fi fi-es" id="player1FlagDisplay"></span>
                         </div>
                         <div class="score-display" id="player1ScoreDisplay" onclick="editScore(1)" title="Click para editar">0</div>
-                        <div class="sets-display"><span id="setsLabel1">Sets</span>: <span id="player1SetsDisplay" onclick="editSets(1)" title="Click para editar">0</span></div>
+                        <div class="sets-display"><span id="setsLabel1" data-i18n="sets">Sets</span>: <span id="player1SetsDisplay" onclick="editSets(1)" title="Click para editar">0</span></div>
                         <div class="point-buttons">
                             <button class="btn-point btn-point-minus" onclick="changePoints(1, -1)">−</button>
                             <button class="btn-point btn-point-plus" onclick="changePoints(1, 1)">+</button>
                         </div>
                         <div class="service-indicator" onclick="setService(1)">
-                            🎾 Servicio
+                            🎾 <span data-i18n="service">Servicio</span>
                         </div>
                     </div>
 
@@ -887,13 +931,13 @@
                             <span class="fi fi-ar" id="player2FlagDisplay"></span>
                         </div>
                         <div class="score-display" id="player2ScoreDisplay" onclick="editScore(2)" title="Click para editar">0</div>
-                        <div class="sets-display"><span id="setsLabel2">Sets</span>: <span id="player2SetsDisplay" onclick="editSets(2)" title="Click para editar">0</span></div>
+                        <div class="sets-display"><span id="setsLabel2" data-i18n="sets">Sets</span>: <span id="player2SetsDisplay" onclick="editSets(2)" title="Click para editar">0</span></div>
                         <div class="point-buttons">
                             <button class="btn-point btn-point-minus" onclick="changePoints(2, -1)">−</button>
                             <button class="btn-point btn-point-plus" onclick="changePoints(2, 1)">+</button>
                         </div>
                         <div class="service-indicator" onclick="setService(2)">
-                            🎾 Servicio
+                            🎾 <span data-i18n="service">Servicio</span>
                         </div>
                     </div>
                 </div>
@@ -901,7 +945,7 @@
                 <!-- Historial de Sets -->
                 <div id="setsHistoryContainer" style="margin-top: 12px; display: none;">
                     <div style="background: #f8f9fa; border-radius: 8px; padding: 10px;">
-                        <h4 style="font-size: 12px; color: #667eea; margin-bottom: 8px; text-transform: uppercase; font-weight: 700;">📊 Historial de Sets</h4>
+                        <h4 style="font-size: 12px; color: #667eea; margin-bottom: 8px; text-transform: uppercase; font-weight: 700;">📊 <span data-i18n="setsHistory">Historial de Sets</span></h4>
                         <div id="setsHistoryList" style="font-size: 12px; color: #555;"></div>
                     </div>
                 </div>
@@ -911,43 +955,43 @@
             <div id="configTab" class="tab-content">
                 <!-- Modalidad de Juego -->
                 <div class="config-section">
-                    <h3>🎮 Modalidad de Juego</h3>
+                    <h3>🎮 <span data-i18n="gameMode">Modalidad de Juego</span></h3>
                     <select id="gameModeSelector" onchange="changeGameMode()" style="width: 100%; padding: 10px; border-radius: 6px; border: 2px solid #e0e0e0; font-family: 'Montserrat', sans-serif; font-size: 13px; background: white; cursor: pointer;">
-                        <option value="individual">👤 Individual (1v1)</option>
-                        <option value="doubles">👥 Dobles (2v2)</option>
-                        <option value="teams">🏆 Equipos</option>
+                        <option value="individual" data-i18n="individual">👤 Individual (1v1)</option>
+                        <option value="doubles" data-i18n="doubles">👥 Dobles (2v2)</option>
+                        <option value="teams" data-i18n="teams">🏆 Equipos</option>
                     </select>
-                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
+                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;" data-i18n="selectMatchType">
                         Selecciona el tipo de partido
                     </div>
                 </div>
 
                 <!-- Jugadores -->
                 <div class="config-section" id="individualSection">
-                    <h3>👥 Jugadores</h3>
+                    <h3>👥 <span data-i18n="players">Jugadores</span></h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Nombre Jugador 1</label>
+                            <label><span data-i18n="playerName">Nombre Jugador</span> 1</label>
                             <div class="autocomplete-container">
                                 <input type="text" id="player1Name" value="Héctor López" onchange="updateData()" oninput="handleAutocomplete(this, 1)" onfocus="handleAutocompleteFocus(this, 1)" onblur="hideAutocomplete(1)">
                                 <div id="autocomplete1" class="autocomplete-list"></div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Bandera (3 letras)</label>
+                            <label data-i18n="flag3Letters">Bandera (3 letras)</label>
                             <input type="text" id="player1Flag" value="ESP" maxlength="3" onchange="updateData()" placeholder="ESP" style="text-transform: uppercase;">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Nombre Jugador 2</label>
+                            <label><span data-i18n="playerName">Nombre Jugador</span> 2</label>
                             <div class="autocomplete-container">
                                 <input type="text" id="player2Name" value="Susana Martínez" onchange="updateData()" oninput="handleAutocomplete(this, 2)" onfocus="handleAutocompleteFocus(this, 2)" onblur="hideAutocomplete(2)">
                                 <div id="autocomplete2" class="autocomplete-list"></div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Bandera (3 letras)</label>
+                            <label data-i18n="flag3Letters">Bandera (3 letras)</label>
                             <input type="text" id="player2Flag" value="ARG" maxlength="3" onchange="updateData()" placeholder="ARG" style="text-transform: uppercase;">
                         </div>
                     </div>
@@ -955,27 +999,27 @@
 
                 <!-- Dobles -->
                 <div class="config-section" id="doublesSection" style="display: none;">
-                    <h3>👥 Dobles</h3>
-                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                    <h3>👥 <span data-i18n="doublesTitle">Dobles</span></h3>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;" data-i18n="doublesFormat">
                         Usa formato: Apellido1 / Apellido2
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Pareja 1</label>
+                            <label><span data-i18n="pair">Pareja</span> 1</label>
                             <input type="text" id="doublesTeam1Name" value="" onchange="updateData()" placeholder="López / García">
                         </div>
                         <div class="form-group">
-                            <label>Bandera (3 letras)</label>
+                            <label data-i18n="flag3Letters">Bandera (3 letras)</label>
                             <input type="text" id="doublesTeam1Flag" value="ESP" maxlength="3" onchange="updateData()" placeholder="ESP" style="text-transform: uppercase;">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Pareja 2</label>
+                            <label><span data-i18n="pair">Pareja</span> 2</label>
                             <input type="text" id="doublesTeam2Name" value="" onchange="updateData()" placeholder="Martínez / Rodríguez">
                         </div>
                         <div class="form-group">
-                            <label>Bandera (3 letras)</label>
+                            <label data-i18n="flag3Letters">Bandera (3 letras)</label>
                             <input type="text" id="doublesTeam2Flag" value="ARG" maxlength="3" onchange="updateData()" placeholder="ARG" style="text-transform: uppercase;">
                         </div>
                     </div>
@@ -983,214 +1027,214 @@
 
                 <!-- Equipos -->
                 <div class="config-section" id="teamsSection" style="display: none;">
-                    <h3>🏆 Nombres de Equipos</h3>
+                    <h3>🏆 <span data-i18n="teamNames">Nombres de Equipos</span></h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Equipo 1</label>
+                            <label><span data-i18n="team">Equipo</span> 1</label>
                             <input type="text" id="team1Name" value="" onchange="updateData()" placeholder="Equipo A">
                         </div>
                         <div class="form-group">
-                            <label>Equipo 2</label>
+                            <label><span data-i18n="team">Equipo</span> 2</label>
                             <input type="text" id="team2Name" value="" onchange="updateData()" placeholder="Equipo B">
                         </div>
                     </div>
-                    <h3 style="margin-top: 12px;">👥 Partido Individual Actual</h3>
-                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                    <h3 style="margin-top: 12px;">👥 <span data-i18n="currentIndividualMatch">Partido Individual Actual</span></h3>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;" data-i18n="playersCompetingNow">
                         Jugadores que están compitiendo ahora
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Jugador (Equipo 1)</label>
+                            <label><span data-i18n="playerFromTeam">Jugador (Equipo</span> 1)</label>
                             <div class="autocomplete-container">
                                 <input type="text" id="teamsCurrentPlayer1" value="" onchange="updateData()" placeholder="Nombre jugador" oninput="handleAutocomplete(this, 3)" onfocus="handleAutocompleteFocus(this, 3)" onblur="hideAutocomplete(3)">
                                 <div id="autocomplete3" class="autocomplete-list"></div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Bandera (3 letras)</label>
+                            <label data-i18n="flag3Letters">Bandera (3 letras)</label>
                             <input type="text" id="teamsCurrentFlag1" value="ESP" maxlength="3" onchange="updateData()" placeholder="ESP" style="text-transform: uppercase;">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Jugador (Equipo 2)</label>
+                            <label><span data-i18n="playerFromTeam">Jugador (Equipo</span> 2)</label>
                             <div class="autocomplete-container">
                                 <input type="text" id="teamsCurrentPlayer2" value="" onchange="updateData()" placeholder="Nombre jugador" oninput="handleAutocomplete(this, 4)" onfocus="handleAutocompleteFocus(this, 4)" onblur="hideAutocomplete(4)">
                                 <div id="autocomplete4" class="autocomplete-list"></div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Bandera (3 letras)</label>
+                            <label data-i18n="flag3Letters">Bandera (3 letras)</label>
                             <input type="text" id="teamsCurrentFlag2" value="ARG" maxlength="3" onchange="updateData()" placeholder="ARG" style="text-transform: uppercase;">
                         </div>
                     </div>
-                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
+                    <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;" data-i18n="eachWinAddsPoint">
                         Cada partido individual ganado suma 1 punto al país (se usan los "Sets" para contar)
                     </div>
                 </div>
 
                 <!-- Modo de Partido -->
                 <div class="config-section">
-                    <h3>🏆 Sets para Ganar</h3>
+                    <h3>🏆 <span data-i18n="setsToWin">Sets para Ganar</span></h3>
                     <div class="logo-options">
-                        <button class="btn-logo-option" id="modeBest3" onclick="setMatchMode('best-of-3')">
+                        <button class="btn-logo-option" id="modeBest3" onclick="setMatchMode('best-of-3')" data-i18n="bestOf3">
                             Mejor de 3
                         </button>
-                        <button class="btn-logo-option active" id="modeBest5" onclick="setMatchMode('best-of-5')">
+                        <button class="btn-logo-option active" id="modeBest5" onclick="setMatchMode('best-of-5')" data-i18n="bestOf5">
                             Mejor de 5
                         </button>
-                        <button class="btn-logo-option" id="modeBest7" onclick="setMatchMode('best-of-7')">
+                        <button class="btn-logo-option" id="modeBest7" onclick="setMatchMode('best-of-7')" data-i18n="bestOf7">
                             Mejor de 7
                         </button>
                     </div>
                     <div style="margin-top: 8px; font-size: 10px; color: #666; text-align: center;">
-                        <span id="setsToWinLabel">Primero en ganar 3 sets</span>
+                        <span id="setsToWinLabel" data-i18n-template="firstToWin">Primero en ganar 3 sets</span>
                     </div>
                 </div>
 
                 <!-- Pantalla de Ganador -->
                 <div class="config-section">
-                    <h3>🏆 Pantalla de Ganador</h3>
-                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                    <h3>🏆 <span data-i18n="winnerScreen">Pantalla de Ganador</span></h3>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;" data-i18n="showsAutomatically">
                         Se muestra automáticamente al ganar el partido
                     </div>
                     <button id="winnerOverlayToggle" class="visibility-toggle" onclick="toggleWinnerOverlay()" style="width: 100%; display: none; margin-bottom: 8px;">
-                        🙈 Ocultar Pantalla de Ganador
+                        🙈 <span data-i18n="hideWinnerScreen">Ocultar Pantalla de Ganador</span>
                     </button>
-                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px; margin-top: 8px;">
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px; margin-top: 8px;" data-i18n="animations">
                         Animaciones (Confetti)
                     </div>
                     <div class="logo-options">
                         <button class="btn-logo-option active" id="animationsOn" onclick="setAnimations(true)">
-                            ✅ Activadas
+                            ✅ <span data-i18n="enabled">Activadas</span>
                         </button>
                         <button class="btn-logo-option" id="animationsOff" onclick="setAnimations(false)">
-                            🚫 Desactivadas
+                            🚫 <span data-i18n="disabled">Desactivadas</span>
                         </button>
                     </div>
-                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px; margin-top: 12px;">
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px; margin-top: 12px;" data-i18n="celebrationEmoji">
                         Emoji de Celebración
                     </div>
                     <div class="logo-options">
                         <button class="btn-logo-option active" id="emojiTrophy" onclick="setWinnerEmoji('🏆')">
-                            🏆 Trofeo
+                            🏆 <span data-i18n="trophy">Trofeo</span>
                         </button>
                         <button class="btn-logo-option" id="emojiMedal" onclick="setWinnerEmoji('🥇')">
-                            🥇 Medalla
+                            🥇 <span data-i18n="medal">Medalla</span>
                         </button>
                         <button class="btn-logo-option" id="emojiCup" onclick="setWinnerEmoji('🏅')">
-                            🏅 Medalla 2
+                            🏅 <span data-i18n="medal2">Medalla 2</span>
                         </button>
                         <button class="btn-logo-option" id="emojiStar" onclick="setWinnerEmoji('⭐')">
-                            ⭐ Estrella
+                            ⭐ <span data-i18n="star">Estrella</span>
                         </button>
                         <button class="btn-logo-option" id="emojiCrown" onclick="setWinnerEmoji('👑')">
-                            👑 Corona
+                            👑 <span data-i18n="crown">Corona</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Tema del Scoreboard -->
                 <div class="config-section">
-                    <h3>🎨 Tema del Scoreboard</h3>
+                    <h3>🎨 <span data-i18n="scoreboardTheme">Tema del Scoreboard</span></h3>
                     <div class="theme-grid">
                         <button class="btn-theme" id="themeAzulModerno" onclick="setTheme('azulModerno')">
-                            🔵 Azul Moderno
+                            🔵 <span data-i18n="blueModern">Azul Moderno</span>
                         </button>
                         <button class="btn-theme" id="themeOscuroElegante" onclick="setTheme('oscuroElegante')">
-                            🌑 Oscuro Elegante
+                            🌑 <span data-i18n="darkElegant">Oscuro Elegante</span>
                         </button>
                         <button class="btn-theme" id="themeClaroMinimalista" onclick="setTheme('claroMinimalista')">
-                            ☀️ Claro Minimalista
+                            ☀️ <span data-i18n="lightMinimalist">Claro Minimalista</span>
                         </button>
                         <button class="btn-theme" id="themeNeonNocturno" onclick="setTheme('neonNocturno')">
-                            🌆 Neón Nocturno
+                            🌆 <span data-i18n="neonNight">Neón Nocturno</span>
                         </button>
                         <button class="btn-theme" id="themeDoradoPremium" onclick="setTheme('doradoPremium')">
-                            🏆 Dorado Premium
+                            🏆 <span data-i18n="goldPremium">Dorado Premium</span>
                         </button>
                         <button class="btn-theme" id="themeVerdeDeportivo" onclick="setTheme('verdeDeportivo')">
-                            🎾 Verde Deportivo
+                            🎾 <span data-i18n="greenSport">Verde Deportivo</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Color de Fondo -->
                 <div class="config-section">
-                    <h3>🎨 Color de Fondo (Chroma Key)</h3>
+                    <h3>🎨 <span data-i18n="chromaKeyBackground">Color de Fondo (Chroma Key)</span></h3>
                     <div class="color-grid">
                         <button class="btn-color green active" onclick="setBackground('green')" id="bgGreen">
-                            🟢 Verde
+                            🟢 <span data-i18n="green">Verde</span>
                         </button>
                         <button class="btn-color blue" onclick="setBackground('blue')" id="bgBlue">
-                            🔵 Azul
+                            🔵 <span data-i18n="blue">Azul</span>
                         </button>
                         <button class="btn-color magenta" onclick="setBackground('magenta')" id="bgMagenta">
-                            🟣 Magenta
+                            🟣 <span data-i18n="magenta">Magenta</span>
                         </button>
                         <button class="btn-color red" onclick="setBackground('red')" id="bgRed">
-                            🔴 Rojo
+                            🔴 <span data-i18n="red">Rojo</span>
                         </button>
                         <button class="btn-color gradient" onclick="setBackground('gradient')" id="bgGradient">
-                            🌈 Degradado
+                            🌈 <span data-i18n="gradient">Degradado</span>
                         </button>
                         <button class="btn-color transparent" onclick="setBackground('transparent')" id="bgTransparent">
-                            ⚪ Transparente
+                            ⚪ <span data-i18n="transparent">Transparente</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Logo -->
                 <div class="config-section">
-                    <h3>🖼️ Logo</h3>
+                    <h3>🖼️ <span data-i18n="logo">Logo</span></h3>
                     <div class="logo-input-group">
-                        <input type="text" id="logoUrl" class="logo-url-input" placeholder="URL del logo o pega imagen" onchange="updateLogoUrl()">
+                        <input type="text" id="logoUrl" class="logo-url-input" data-i18n-placeholder="logoUrlPlaceholder" placeholder="URL del logo o pega imagen" onchange="updateLogoUrl()">
                         <input type="file" id="logoFile" accept="image/*" style="display: none;" onchange="handleLogoFile(event)">
-                        <button class="logo-file-btn" onclick="document.getElementById('logoFile').click()">📁 Subir</button>
+                        <button class="logo-file-btn" onclick="document.getElementById('logoFile').click()">📁 <span data-i18n="upload">Subir</span></button>
                     </div>
                     <div class="logo-options">
-                        <button class="btn-logo-option active" id="logoLeft" onclick="setLogoPosition('left')">⬅️ Izquierda</button>
-                        <button class="btn-logo-option" id="logoRight" onclick="setLogoPosition('right')">Derecha ➡️</button>
-                        <button class="btn-logo-option" id="logoToggle" onclick="toggleLogo()">🚫 Desactivado</button>
+                        <button class="btn-logo-option active" id="logoLeft" onclick="setLogoPosition('left')">⬅️ <span data-i18n="left">Izquierda</span></button>
+                        <button class="btn-logo-option" id="logoRight" onclick="setLogoPosition('right')"><span data-i18n="right">Derecha</span> ➡️</button>
+                        <button class="btn-logo-option" id="logoToggle" onclick="toggleLogo()">🚫 <span id="logoToggleText" data-i18n="logoDisabled">Desactivado</span></button>
                     </div>
                     <div id="logoPreview" class="logo-preview">
-                        <img id="logoPreviewImg" src="" alt="Vista previa del logo">
+                        <img id="logoPreviewImg" src="" data-i18n-alt="logoPreviewAlt" alt="Vista previa del logo">
                     </div>
                 </div>
 
                 <!-- Sistema de Autosugerencia -->
                 <div class="config-section">
-                    <h3>📋 Base de Datos de Jugadores</h3>
-                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;">
+                    <h3>📋 <span data-i18n="playersDatabase">Base de Datos de Jugadores</span></h3>
+                    <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 8px;" data-i18n="loadCsvHint">
                         Carga un CSV para autocompletar nombres rápidamente
                     </div>
                     <div class="logo-input-group">
                         <input type="file" id="csvFile" accept=".csv" style="display: none;" onchange="handleCSVFile(event)">
                         <button class="logo-file-btn" onclick="document.getElementById('csvFile').click()" style="width: 100%;">
-                            📁 Cargar CSV de Jugadores
+                            📁 <span data-i18n="loadPlayersCsv">Cargar CSV de Jugadores</span>
                         </button>
                     </div>
-                    <div style="font-size: 9px; color: #999; text-align: center; margin-top: 4px;">
+                    <div style="font-size: 9px; color: #999; text-align: center; margin-top: 4px;" data-i18n="csvFormat">
                         Formato: nombre,bandera,país (ej: Juan Pérez,ESP,España)
                     </div>
                     <div id="playersDbStatus" style="margin-top: 8px; font-size: 11px; color: #667eea; text-align: center; display: none;">
-                        ✅ <span id="playersCount">0</span> jugadores cargados
+                        ✅ <span id="playersCount">0</span> <span data-i18n="playersLoaded">jugadores cargados</span>
                     </div>
                     <div id="autocompleteToggleContainer" style="margin-top: 8px; display: none;">
-                        <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 6px;">
+                        <div style="font-size: 10px; color: #666; text-align: center; margin-bottom: 6px;" data-i18n="autocomplete">
                             Autocompletado
                         </div>
                         <div class="logo-options">
                             <button class="btn-logo-option active" id="autocompleteOn" onclick="setAutocompleteEnabled(true)">
-                                ✅ Activado
+                                ✅ <span data-i18n="enabled">Activado</span>
                             </button>
                             <button class="btn-logo-option" id="autocompleteOff" onclick="setAutocompleteEnabled(false)">
-                                🚫 Desactivado
+                                🚫 <span data-i18n="disabled">Desactivado</span>
                             </button>
                         </div>
                     </div>
                     <button id="clearPlayersDb" onclick="clearPlayersDatabase()" style="width: 100%; padding: 6px; margin-top: 6px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; display: none;">
-                        🗑️ Limpiar Base de Datos
+                        🗑️ <span data-i18n="clearDatabase">Limpiar Base de Datos</span>
                     </button>
                 </div>
             </div>
@@ -1202,7 +1246,7 @@
     <div id="setConfirmModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" id="setModalTitle">🏆 ¿Confirmar Set Ganado?</div>
+                <div class="modal-title" id="setModalTitle">🏆 <span data-i18n="confirmSetWon">¿Confirmar Set Ganado?</span></div>
             </div>
             <div class="modal-scores">
                 <div class="modal-score-row">
@@ -1216,10 +1260,10 @@
             </div>
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn-cancel" onclick="cancelSetWin()">
-                    ❌ Cancelar
+                    ❌ <span data-i18n="cancel">Cancelar</span>
                 </button>
                 <button class="modal-btn modal-btn-confirm" onclick="confirmSetWin()">
-                    ✅ Confirmar
+                    ✅ <span data-i18n="confirm">Confirmar</span>
                 </button>
             </div>
         </div>
@@ -1229,7 +1273,7 @@
     <div id="matchWinnerModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">🏆 ¿Confirmar Ganador?</div>
+                <div class="modal-title">🏆 <span data-i18n="confirmWinner">¿Confirmar Ganador?</span></div>
             </div>
             <div class="modal-scores">
                 <div style="text-align: center; margin-bottom: 8px;">
@@ -1249,10 +1293,10 @@
             </div>
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn-cancel" onclick="cancelMatchWin()">
-                    ❌ Cancelar
+                    ❌ <span data-i18n="cancel">Cancelar</span>
                 </button>
                 <button class="modal-btn modal-btn-confirm" onclick="confirmMatchWin()">
-                    ✅ Confirmar
+                    ✅ <span data-i18n="confirm">Confirmar</span>
                 </button>
             </div>
         </div>
@@ -1262,7 +1306,7 @@
     <div id="individualMatchWinnerModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">🎯 ¿Confirmar Partido Ganado?</div>
+                <div class="modal-title">🎯 <span data-i18n="confirmMatchWon">¿Confirmar Partido Ganado?</span></div>
             </div>
             <div class="modal-scores">
                 <div style="text-align: center; margin-bottom: 8px;">
@@ -1270,7 +1314,7 @@
                         <span id="individualMatchWinnerFlag" class="fi fi-es"></span>
                     </div>
                     <div style="font-size: 14px; font-weight: 700; color: #667eea;" id="individualMatchWinnerName">Jugador 1</div>
-                    <div style="font-size: 12px; margin-top: 4px; color: #888;">+1 punto para <span id="individualMatchWinnerCountry">País</span></div>
+                    <div style="font-size: 12px; margin-top: 4px; color: #888;"><span data-i18n="pointForCountry">+1 punto para</span> <span id="individualMatchWinnerCountry">País</span></div>
                 </div>
                 <div class="modal-score-row">
                     <span class="modal-player-name" id="individualMatchModalPlayer1Name">Jugador 1</span>
@@ -1283,10 +1327,10 @@
             </div>
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn-cancel" onclick="cancelIndividualMatchWin()">
-                    ❌ Cancelar
+                    ❌ <span data-i18n="cancel">Cancelar</span>
                 </button>
                 <button class="modal-btn modal-btn-confirm" onclick="confirmIndividualMatchWin()">
-                    ✅ Confirmar
+                    ✅ <span data-i18n="confirm">Confirmar</span>
                 </button>
             </div>
         </div>
@@ -1578,14 +1622,14 @@
 
             // Obtener nombres según modalidad
             if (gameState.gameMode === 'doubles') {
-                displayName1 = gameState.doubles.team1.name || 'Pareja 1';
-                displayName2 = gameState.doubles.team2.name || 'Pareja 2';
+                displayName1 = gameState.doubles.team1.name || t('pair1Default');
+                displayName2 = gameState.doubles.team2.name || t('pair2Default');
                 displayFlag1 = gameState.doubles.team1.flag;
                 displayFlag2 = gameState.doubles.team2.flag;
             } else if (gameState.gameMode === 'teams') {
                 if (gameState.teams.currentMatch) {
-                    displayName1 = gameState.teams.currentMatch.player1.name || 'Jugador 1';
-                    displayName2 = gameState.teams.currentMatch.player2.name || 'Jugador 2';
+                    displayName1 = gameState.teams.currentMatch.player1.name || t('player1Default');
+                    displayName2 = gameState.teams.currentMatch.player2.name || t('player2Default');
                     displayFlag1 = gameState.teams.currentMatch.player1.flag;
                     displayFlag2 = gameState.teams.currentMatch.player2.flag;
                 }
@@ -1663,11 +1707,12 @@
         // Actualizar botón de visibilidad
         function updateVisibilityButton() {
             const btn = document.getElementById('visibilityToggle');
+            const span = btn.querySelector('span[data-i18n]');
             if (gameState.overlayVisible) {
-                btn.textContent = '🙈 Ocultar Overlay';
+                btn.innerHTML = '🙈 <span data-i18n="hideOverlay">' + t('hideOverlay') + '</span>';
                 btn.classList.remove('hidden');
             } else {
-                btn.textContent = '👁️ Mostrar Overlay';
+                btn.innerHTML = '👁️ <span data-i18n="showOverlay">' + t('showOverlay') + '</span>';
                 btn.classList.add('hidden');
             }
         }
@@ -1699,10 +1744,10 @@
             const hasHistory = gameState.setsHistory && gameState.setsHistory.length > 0;
 
             if (gameState.showHistoryOverlay) {
-                btn.textContent = '🙈 Ocultar Historial en Pantalla';
+                btn.innerHTML = '🙈 <span data-i18n="hideHistoryOnScreen">' + t('hideHistoryOnScreen') + '</span>';
                 btn.classList.add('hidden');
             } else {
-                btn.textContent = '📊 Mostrar Historial en Pantalla';
+                btn.innerHTML = '📊 <span data-i18n="showHistoryOnScreen">' + t('showHistoryOnScreen') + '</span>';
                 btn.classList.remove('hidden');
             }
 
@@ -1720,7 +1765,7 @@
             if (hasWinner && gameState.winner.showOverlay) {
                 // Solo mostrar botón cuando la pantalla está visible (para poder ocultarla)
                 btn.style.display = 'block';
-                btn.textContent = '🙈 Ocultar Pantalla de Ganador';
+                btn.innerHTML = '🙈 <span data-i18n="hideWinnerScreen">' + t('hideWinnerScreen') + '</span>';
                 btn.classList.add('hidden');
             } else {
                 btn.style.display = 'none';
@@ -1753,25 +1798,25 @@
         function updateData() {
             // Modo Individual
             if (gameState.gameMode === 'individual') {
-                gameState.player1.name = document.getElementById('player1Name').value || 'Jugador 1';
-                gameState.player2.name = document.getElementById('player2Name').value || 'Jugador 2';
+                gameState.player1.name = document.getElementById('player1Name').value || t('player1Default');
+                gameState.player2.name = document.getElementById('player2Name').value || t('player2Default');
                 gameState.player1.flag = (document.getElementById('player1Flag').value || 'ESP').toUpperCase().slice(0, 3);
                 gameState.player2.flag = (document.getElementById('player2Flag').value || 'ARG').toUpperCase().slice(0, 3);
             }
             // Modo Dobles
             else if (gameState.gameMode === 'doubles') {
-                gameState.doubles.team1.name = document.getElementById('doublesTeam1Name').value || 'Pareja 1';
+                gameState.doubles.team1.name = document.getElementById('doublesTeam1Name').value || t('pair1Default');
                 gameState.doubles.team1.flag = (document.getElementById('doublesTeam1Flag').value || 'ESP').toUpperCase().slice(0, 3);
-                gameState.doubles.team2.name = document.getElementById('doublesTeam2Name').value || 'Pareja 2';
+                gameState.doubles.team2.name = document.getElementById('doublesTeam2Name').value || t('pair2Default');
                 gameState.doubles.team2.flag = (document.getElementById('doublesTeam2Flag').value || 'ARG').toUpperCase().slice(0, 3);
             }
             // Modo Equipos
             else if (gameState.gameMode === 'teams') {
-                gameState.teams.team1.name = document.getElementById('team1Name').value || 'Equipo 1';
-                gameState.teams.team2.name = document.getElementById('team2Name').value || 'Equipo 2';
-                gameState.teams.currentMatch.player1.name = document.getElementById('teamsCurrentPlayer1').value || 'Jugador 1';
+                gameState.teams.team1.name = document.getElementById('team1Name').value || t('team1Default');
+                gameState.teams.team2.name = document.getElementById('team2Name').value || t('team2Default');
+                gameState.teams.currentMatch.player1.name = document.getElementById('teamsCurrentPlayer1').value || t('player1Default');
                 gameState.teams.currentMatch.player1.flag = (document.getElementById('teamsCurrentFlag1').value || 'ESP').toUpperCase().slice(0, 3);
-                gameState.teams.currentMatch.player2.name = document.getElementById('teamsCurrentPlayer2').value || 'Jugador 2';
+                gameState.teams.currentMatch.player2.name = document.getElementById('teamsCurrentPlayer2').value || t('player2Default');
                 gameState.teams.currentMatch.player2.flag = (document.getElementById('teamsCurrentFlag2').value || 'ARG').toUpperCase().slice(0, 3);
             }
 
@@ -2102,12 +2147,12 @@
             document.getElementById('setModalTitle').textContent = modalTitle;
 
             // Obtener nombres según modalidad
-            let player1DisplayName = gameState.player1.name || 'Jugador 1';
-            let player2DisplayName = gameState.player2.name || 'Jugador 2';
+            let player1DisplayName = gameState.player1.name || t('player1Default');
+            let player2DisplayName = gameState.player2.name || t('player2Default');
 
             if (gameState.gameMode === 'doubles') {
-                player1DisplayName = gameState.doubles.team1.name || 'Pareja 1';
-                player2DisplayName = gameState.doubles.team2.name || 'Pareja 2';
+                player1DisplayName = gameState.doubles.team1.name || t('pair1Default');
+                player2DisplayName = gameState.doubles.team2.name || t('pair2Default');
             } else if (gameState.gameMode === 'teams') {
                 if (gameState.teams.currentMatch) {
                     player1DisplayName = `${gameState.teams.currentMatch.player1.name} (${gameState.teams.team1.name})`;
@@ -2389,15 +2434,9 @@
             document.getElementById('modeBest5').classList.toggle('active', gameState.matchMode === 'best-of-5');
             document.getElementById('modeBest7').classList.toggle('active', gameState.matchMode === 'best-of-7');
 
-            // Actualizar label
+            // Actualizar label con traducciones
             const setsToWin = getSetsToWin();
-            const modeNames = {
-                'best-of-3': 'Mejor de 3',
-                'best-of-5': 'Mejor de 5',
-                'best-of-7': 'Mejor de 7'
-            };
-            const modeName = modeNames[gameState.matchMode] || 'Mejor de 5';
-            document.getElementById('setsToWinLabel').textContent = `${modeName} - Primero en ganar ${setsToWin} sets`;
+            document.getElementById('setsToWinLabel').textContent = tReplace('firstToWin', { n: setsToWin });
         }
 
         // Actualizar botones de animaciones
@@ -2479,19 +2518,19 @@
                 const winnerData = gameState[`player${winnerPlayer}`];
                 winnerName = winnerData.name;
                 winnerFlagCode = getISO2Code(winnerData.flag);
-                player1DisplayName = gameState.player1.name || 'Jugador 1';
-                player2DisplayName = gameState.player2.name || 'Jugador 2';
+                player1DisplayName = gameState.player1.name || t('player1Default');
+                player2DisplayName = gameState.player2.name || t('player2Default');
             } else if (gameState.gameMode === 'doubles') {
                 const winnerTeam = gameState.doubles[`team${winnerPlayer}`];
-                winnerName = winnerTeam.name || `Pareja ${winnerPlayer}`;
+                winnerName = winnerTeam.name || t(winnerPlayer === 1 ? 'pair1Default' : 'pair2Default');
                 winnerFlagCode = getISO2Code(winnerTeam.flag);
-                player1DisplayName = gameState.doubles.team1.name || 'Pareja 1';
-                player2DisplayName = gameState.doubles.team2.name || 'Pareja 2';
+                player1DisplayName = gameState.doubles.team1.name || t('pair1Default');
+                player2DisplayName = gameState.doubles.team2.name || t('pair2Default');
             } else if (gameState.gameMode === 'teams') {
                 const winnerTeam = gameState.teams[`team${winnerPlayer}`];
-                winnerName = winnerTeam.name || `Equipo ${winnerPlayer}`;
-                player1DisplayName = gameState.teams.team1.name || 'Equipo 1';
-                player2DisplayName = gameState.teams.team2.name || 'Equipo 2';
+                winnerName = winnerTeam.name || t(winnerPlayer === 1 ? 'team1Default' : 'team2Default');
+                player1DisplayName = gameState.teams.team1.name || t('team1Default');
+                player2DisplayName = gameState.teams.team2.name || t('team2Default');
                 // Usar bandera del equipo ganador (del jugador actual)
                 if (gameState.teams.currentMatch) {
                     winnerFlagCode = getISO2Code(gameState.teams.currentMatch[`player${winnerPlayer}`].flag);
@@ -2525,11 +2564,11 @@
             };
 
             // Obtener nombres del partido actual
-            const player1Name = gameState.teams.currentMatch.player1.name || 'Jugador 1';
-            const player2Name = gameState.teams.currentMatch.player2.name || 'Jugador 2';
+            const player1Name = gameState.teams.currentMatch.player1.name || t('player1Default');
+            const player2Name = gameState.teams.currentMatch.player2.name || t('player2Default');
             const winnerName = winnerPlayer === 1 ? player1Name : player2Name;
             const winnerFlagCode = getISO2Code(gameState.teams.currentMatch[`player${winnerPlayer}`].flag);
-            const winnerCountryName = gameState.teams[`team${winnerPlayer}`].name || `Equipo ${winnerPlayer}`;
+            const winnerCountryName = gameState.teams[`team${winnerPlayer}`].name || t(winnerPlayer === 1 ? 'team1Default' : 'team2Default');
 
             // Actualizar contenido del modal
             document.getElementById('individualMatchWinnerName').textContent = winnerName;
@@ -2696,7 +2735,7 @@
                     const winnerStyle = winner === 1 ? 'color: #667eea; font-weight: 700;' : 'color: #764ba2; font-weight: 700;';
 
                     html += `<div style="display: flex; justify-content: space-between; padding: 4px 8px; background: white; border-radius: 4px;">
-                        <span>Set ${index + 1}:</span>
+                        <span>${t('setNumber')} ${index + 1}:</span>
                         <span style="${winnerStyle}">${set.player1Points} - ${set.player2Points}</span>
                     </div>`;
                 });
@@ -2716,7 +2755,9 @@
             document.getElementById('logoRight').classList.toggle('active', logo.position === 'right');
 
             const toggleBtn = document.getElementById('logoToggle');
-            toggleBtn.textContent = logo.enabled ? '✅ Activado' : '🚫 Desactivado';
+            const logoKey = logo.enabled ? 'logoEnabled' : 'logoDisabled';
+            const logoIcon = logo.enabled ? '✅' : '🚫';
+            toggleBtn.innerHTML = logoIcon + ' <span id="logoToggleText" data-i18n="' + logoKey + '">' + t(logoKey) + '</span>';
             toggleBtn.classList.toggle('active', logo.enabled);
 
             const preview = document.getElementById('logoPreviewImg');
@@ -3057,6 +3098,110 @@
 
         // Inicializar estado de la base de datos al cargar
         updatePlayersDbStatus();
+
+        // ==================== SISTEMA DE INTERNACIONALIZACIÓN ====================
+
+        // Cambiar idioma
+        function switchLanguage(lang) {
+            setLanguage(lang);
+            applyTranslations();
+
+            // Actualizar botones de idioma
+            document.getElementById('langEs').classList.toggle('active', lang === 'es');
+            document.getElementById('langEn').classList.toggle('active', lang === 'en');
+
+            // Guardar preferencia en gameState para sincronizar con overlay
+            gameState.language = lang;
+            saveState();
+        }
+
+        // Aplicar traducciones a todos los elementos
+        function applyTranslations() {
+            const lang = getCurrentLanguage();
+
+            // Actualizar botones de idioma
+            document.getElementById('langEs').classList.toggle('active', lang === 'es');
+            document.getElementById('langEn').classList.toggle('active', lang === 'en');
+
+            // Traducir elementos con data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // Traducir elementos con data-i18n-title (para tooltips)
+            document.querySelectorAll('[data-i18n-title]').forEach(el => {
+                const key = el.getAttribute('data-i18n-title');
+                if (translations[lang][key]) {
+                    el.title = translations[lang][key];
+                }
+            });
+
+            // Traducir elementos con data-i18n-placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // Traducir elementos con data-i18n-alt
+            document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+                const key = el.getAttribute('data-i18n-alt');
+                if (translations[lang][key]) {
+                    el.alt = translations[lang][key];
+                }
+            });
+
+            // Actualizar opciones del select de modalidad de juego
+            const gameModeSelector = document.getElementById('gameModeSelector');
+            if (gameModeSelector) {
+                gameModeSelector.options[0].text = '👤 ' + t('individual');
+                gameModeSelector.options[1].text = '👥 ' + t('doubles');
+                gameModeSelector.options[2].text = '🏆 ' + t('teams');
+            }
+
+            // Actualizar label de sets para ganar (con número dinámico)
+            updateSetsToWinLabelI18n();
+
+            // Actualizar botón de logo toggle
+            updateLogoToggleText();
+        }
+
+        // Actualizar texto del label de sets para ganar (i18n)
+        function updateSetsToWinLabelI18n() {
+            const label = document.getElementById('setsToWinLabel');
+            if (label) {
+                const mode = gameState.matchMode || 'best-of-5';
+                let setsNeeded = 3;
+                if (mode === 'best-of-3') setsNeeded = 2;
+                else if (mode === 'best-of-7') setsNeeded = 4;
+
+                label.textContent = tReplace('firstToWin', { n: setsNeeded });
+            }
+        }
+
+        // Actualizar texto del botón de logo toggle
+        function updateLogoToggleText() {
+            const toggleText = document.getElementById('logoToggleText');
+            if (toggleText) {
+                const key = (gameState.logo && gameState.logo.enabled) ? 'logoEnabled' : 'logoDisabled';
+                toggleText.setAttribute('data-i18n', key);
+                toggleText.textContent = t(key);
+            }
+        }
+
+        // Sobreescribir la función updateLogoUI para usar traducciones
+        const originalUpdateLogoUI = updateLogoUI;
+        updateLogoUI = function() {
+            originalUpdateLogoUI();
+            updateLogoToggleText();
+        };
+
+        // Aplicar traducciones al cargar
+        applyTranslations();
     </script>
 </body>
 </html>

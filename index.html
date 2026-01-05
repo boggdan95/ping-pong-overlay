@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ping Pong Overlay</title>
+    <script src="i18n.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
@@ -651,12 +652,12 @@
 
                 <div class="stats-section">
                     <div class="stat-block">
-                        <span class="stat-label">Puntos</span>
+                        <span class="stat-label" data-i18n="points">Puntos</span>
                         <span class="stat-value" id="points1">7</span>
                     </div>
 
                     <div class="stat-block">
-                        <span class="stat-label">Sets</span>
+                        <span class="stat-label" data-i18n="sets">Sets</span>
                         <span class="stat-value" id="sets1">1</span>
                     </div>
 
@@ -679,12 +680,12 @@
 
                 <div class="stats-section">
                     <div class="stat-block">
-                        <span class="stat-label">Puntos</span>
+                        <span class="stat-label" data-i18n="points">Puntos</span>
                         <span class="stat-value" id="points2">5</span>
                     </div>
 
                     <div class="stat-block">
-                        <span class="stat-label">Sets</span>
+                        <span class="stat-label" data-i18n="sets">Sets</span>
                         <span class="stat-value" id="sets2">0</span>
                     </div>
 
@@ -710,12 +711,12 @@
 
                 <div class="stats-section">
                     <div class="stat-block">
-                        <span class="stat-label">Puntos</span>
+                        <span class="stat-label" data-i18n="points">Puntos</span>
                         <span class="stat-value" id="doublesPoints1">0</span>
                     </div>
 
                     <div class="stat-block">
-                        <span class="stat-label">Sets</span>
+                        <span class="stat-label" data-i18n="sets">Sets</span>
                         <span class="stat-value" id="doublesSets1">0</span>
                     </div>
 
@@ -738,12 +739,12 @@
 
                 <div class="stats-section">
                     <div class="stat-block">
-                        <span class="stat-label">Puntos</span>
+                        <span class="stat-label" data-i18n="points">Puntos</span>
                         <span class="stat-value" id="doublesPoints2">0</span>
                     </div>
 
                     <div class="stat-block">
-                        <span class="stat-label">Sets</span>
+                        <span class="stat-label" data-i18n="sets">Sets</span>
                         <span class="stat-value" id="doublesSets2">0</span>
                     </div>
 
@@ -778,12 +779,12 @@
 
                 <div class="stats-section">
                     <div class="stat-block">
-                        <span class="stat-label">Puntos</span>
+                        <span class="stat-label" data-i18n="points">Puntos</span>
                         <span class="stat-value" id="teamsPoints1">0</span>
                     </div>
 
                     <div class="stat-block">
-                        <span class="stat-label">Sets</span>
+                        <span class="stat-label" data-i18n="sets">Sets</span>
                         <span class="stat-value" id="teamsIndividualSets1">0</span>
                     </div>
 
@@ -815,12 +816,12 @@
 
                 <div class="stats-section">
                     <div class="stat-block">
-                        <span class="stat-label">Puntos</span>
+                        <span class="stat-label" data-i18n="points">Puntos</span>
                         <span class="stat-value" id="teamsPoints2">0</span>
                     </div>
 
                     <div class="stat-block">
-                        <span class="stat-label">Sets</span>
+                        <span class="stat-label" data-i18n="sets">Sets</span>
                         <span class="stat-value" id="teamsIndividualSets2">0</span>
                     </div>
 
@@ -841,7 +842,7 @@
             <div id="confettiContainer"></div>
             <div class="winner-content">
                 <div class="winner-info">
-                    <div class="winner-title">¡Ganador!</div>
+                    <div class="winner-title" data-i18n="winner">¡Ganador!</div>
                     <div class="winner-player">
                         <span id="winnerFlag" class="winner-flag"></span>
                         <span id="winnerName" class="winner-name"></span>
@@ -1054,12 +1055,12 @@
         // Actualizar display para modo Dobles
         function updateDoublesDisplay() {
             // Pareja 1
-            document.getElementById('doublesTeam1Name').textContent = gameState.doubles.team1.name || 'Pareja 1';
+            document.getElementById('doublesTeam1Name').textContent = gameState.doubles.team1.name || t('pair1Default');
             const flag1Code = getISO2Code(gameState.doubles.team1.flag);
             document.getElementById('doublesFlag1').className = `fi fi-${flag1Code}`;
 
             // Pareja 2
-            document.getElementById('doublesTeam2Name').textContent = gameState.doubles.team2.name || 'Pareja 2';
+            document.getElementById('doublesTeam2Name').textContent = gameState.doubles.team2.name || t('pair2Default');
             const flag2Code = getISO2Code(gameState.doubles.team2.flag);
             document.getElementById('doublesFlag2').className = `fi fi-${flag2Code}`;
 
@@ -1077,13 +1078,13 @@
         // Actualizar display para modo Equipos
         function updateTeamsDisplay() {
             // Nombres de equipos (se muestran como "role" debajo del nombre del jugador)
-            document.getElementById('teamsTeam1Name').textContent = gameState.teams.team1.name || 'Equipo 1';
-            document.getElementById('teamsTeam2Name').textContent = gameState.teams.team2.name || 'Equipo 2';
+            document.getElementById('teamsTeam1Name').textContent = gameState.teams.team1.name || t('team1Default');
+            document.getElementById('teamsTeam2Name').textContent = gameState.teams.team2.name || t('team2Default');
 
             // Jugadores actuales
             if (gameState.teams.currentMatch) {
-                document.getElementById('teamsPlayer1Name').textContent = gameState.teams.currentMatch.player1.name || 'Jugador 1';
-                document.getElementById('teamsPlayer2Name').textContent = gameState.teams.currentMatch.player2.name || 'Jugador 2';
+                document.getElementById('teamsPlayer1Name').textContent = gameState.teams.currentMatch.player1.name || t('player1Default');
+                document.getElementById('teamsPlayer2Name').textContent = gameState.teams.currentMatch.player2.name || t('player2Default');
 
                 // Banderas de los jugadores actuales
                 const flag1Code = getISO2Code(gameState.teams.currentMatch.player1.flag);
@@ -1235,15 +1236,15 @@
                 let flag2 = gameState.player2.flag;
 
                 if (gameState.gameMode === 'doubles') {
-                    player1Name = gameState.doubles.team1.name || 'Pareja 1';
-                    player2Name = gameState.doubles.team2.name || 'Pareja 2';
+                    player1Name = gameState.doubles.team1.name || t('pair1Default');
+                    player2Name = gameState.doubles.team2.name || t('pair2Default');
                     flag1 = gameState.doubles.team1.flag;
                     flag2 = gameState.doubles.team2.flag;
                 } else if (gameState.gameMode === 'teams') {
                     // En modo equipos, mostrar nombre del jugador actual
                     if (gameState.teams.currentMatch) {
-                        player1Name = gameState.teams.currentMatch.player1.name || 'Jugador 1';
-                        player2Name = gameState.teams.currentMatch.player2.name || 'Jugador 2';
+                        player1Name = gameState.teams.currentMatch.player1.name || t('player1Default');
+                        player2Name = gameState.teams.currentMatch.player2.name || t('player2Default');
                         flag1 = gameState.teams.currentMatch.player1.flag;
                         flag2 = gameState.teams.currentMatch.player2.flag;
                     }
@@ -1678,6 +1679,31 @@
                 container.appendChild(confetti);
             }
         }
+
+        // ==================== SISTEMA DE INTERNACIONALIZACIÓN ====================
+
+        // Aplicar traducciones a todos los elementos
+        function applyTranslations() {
+            const lang = getCurrentLanguage();
+
+            // Traducir elementos con data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Escuchar cambios en localStorage para sincronizar idioma
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'overlayLanguage') {
+                applyTranslations();
+            }
+        });
+
+        // Aplicar traducciones al cargar
+        applyTranslations();
     </script>
 </body>
 </html>

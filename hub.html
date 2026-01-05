@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏓 Ping Pong Overlay - Hub</title>
+    <script src="i18n.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
@@ -148,56 +149,128 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        /* Language selector */
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .lang-btn {
+            padding: 6px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
     </style>
 </head>
 <body>
     <div class="hub-container">
         <h1>🏓 Ping Pong Overlay</h1>
-        <div class="subtitle">Sistema profesional para transmisiones de tenis de mesa</div>
-        <div class="version">Versión 0.2.1</div>
+        <div class="subtitle" data-i18n="hubSubtitle">Sistema profesional para transmisiones de tenis de mesa</div>
+        <div class="version">v1.0.0</div>
+
+        <div class="language-selector">
+            <button class="lang-btn" id="langEs" onclick="switchLanguage('es')">ES</button>
+            <button class="lang-btn" id="langEn" onclick="switchLanguage('en')">EN</button>
+        </div>
 
         <div class="buttons-grid">
             <a href="control.html" target="_blank" class="btn">
                 <div class="btn-icon">🎮</div>
                 <div class="btn-content">
-                    <div class="btn-title">Panel de Control</div>
-                    <div class="btn-desc">Gestiona puntos, sets y configuración durante el partido</div>
+                    <div class="btn-title" data-i18n="controlPanelTitle">Panel de Control</div>
+                    <div class="btn-desc" data-i18n="controlPanelDesc">Gestiona puntos, sets y configuración durante el partido</div>
                 </div>
             </a>
 
             <a href="index.html" target="_blank" class="btn">
                 <div class="btn-icon">🖥️</div>
                 <div class="btn-content">
-                    <div class="btn-title">Preview del Overlay</div>
-                    <div class="btn-desc">Vista previa del marcador (se configura en OBS)</div>
+                    <div class="btn-title" data-i18n="overlayPreviewTitle">Preview del Overlay</div>
+                    <div class="btn-desc" data-i18n="overlayPreviewDesc">Vista previa del marcador (se configura en OBS)</div>
                 </div>
             </a>
 
             <a href="docs/GUIA_OBS.md" target="_blank" class="btn">
                 <div class="btn-icon">📚</div>
                 <div class="btn-content">
-                    <div class="btn-title">Guía de OBS</div>
-                    <div class="btn-desc">Cómo configurar el overlay en OBS Studio</div>
+                    <div class="btn-title" data-i18n="obsGuideTitle">Guía de OBS</div>
+                    <div class="btn-desc" data-i18n="obsGuideDesc">Cómo configurar el overlay en OBS Studio</div>
                 </div>
             </a>
         </div>
 
         <div class="instructions">
-            <h3>🚀 Inicio Rápido</h3>
+            <h3>🚀 <span data-i18n="quickStart">Inicio Rápido</span></h3>
             <ol>
-                <li>En <strong>OBS Studio</strong>, agrega una fuente <strong>Browser</strong> (Fuente de Navegador)</li>
-                <li>Marca <strong>"Local file"</strong> y selecciona <code>index.html</code></li>
-                <li>Configura: Width: 1920, Height: 1080</li>
-                <li>Abre <strong>control.html</strong> en tu navegador para controlar el marcador</li>
-                <li>¡Listo para transmitir! 🎉</li>
+                <li data-i18n-html="quickStartStep1">Abre <code>index.html</code> en tu navegador (Chrome recomendado)</li>
+                <li data-i18n-html="quickStartStep2">En <strong>OBS Studio</strong>, agrega una fuente <strong>Window Capture</strong> (Captura de Ventana)</li>
+                <li data-i18n-html="quickStartStep3">Selecciona la ventana del navegador con el overlay</li>
+                <li data-i18n-html="quickStartStep4">Abre <strong>control.html</strong> en otra pestaña para controlar el marcador</li>
+                <li data-i18n="quickStartStep5">¡Listo para transmitir! 🎉</li>
             </ol>
         </div>
 
         <div class="footer">
-            <p>Proyecto de código abierto bajo licencia MIT</p>
-            <p>📖 Documentación completa en <a href="README.md" target="_blank">README.md</a></p>
+            <p data-i18n="footerLicense">Proyecto de código abierto bajo licencia MIT</p>
+            <p>📖 <span data-i18n="footerDocs">Documentación completa en</span> <a href="README.md" target="_blank">README.md</a></p>
             <p>⭐ <a href="https://github.com/boggdan95/ping-pong-overlay" target="_blank">GitHub</a></p>
         </div>
     </div>
+
+    <script>
+        // Cambiar idioma
+        function switchLanguage(lang) {
+            setLanguage(lang);
+            applyTranslations();
+        }
+
+        // Aplicar traducciones
+        function applyTranslations() {
+            const lang = getCurrentLanguage();
+
+            // Actualizar botones de idioma
+            document.getElementById('langEs').classList.toggle('active', lang === 'es');
+            document.getElementById('langEn').classList.toggle('active', lang === 'en');
+
+            // Traducir elementos con data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // Traducir elementos con data-i18n-html (contienen HTML)
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+        }
+
+        // Aplicar traducciones al cargar
+        applyTranslations();
+    </script>
 </body>
 </html>
